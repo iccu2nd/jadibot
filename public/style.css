@@ -53,17 +53,77 @@ body {
 
 .topbar {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  padding: 28px clamp(20px, 6vw, 64px) 0;
+  gap: 16px;
+  padding: 24px clamp(20px, 6vw, 64px) 0;
 }
 .brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+.brand-mark { color: var(--cyan); }
+
+.topnav { display: flex; align-items: center; gap: 18px; }
+.topbar-sub { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
+.topnav-link { color: var(--muted); font-size: 13px; text-decoration: none; transition: color .15s; }
+.topnav-link:hover { color: var(--text); }
+.topnav-link.is-active { color: var(--text); }
 .topbar-admin { color: var(--muted); font-size: 13px; text-decoration: none; border: 1px solid var(--panel-border); border-radius: 999px; padding: 5px 14px; transition: color .15s, border-color .15s; }
 .topbar-admin:hover { color: var(--text); border-color: var(--purple-dim); }
-.brand-mark { color: var(--cyan); }
-.topbar-sub { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.hamburger span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  margin: 0 auto;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 640px) {
+  .hamburger { display: flex; }
+  .topnav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--panel-border);
+    padding: 0 clamp(20px, 6vw, 64px);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height .22s ease, opacity .18s ease, padding .22s ease;
+  }
+  .topnav.is-open {
+    max-height: 220px;
+    opacity: 1;
+    padding: 14px clamp(20px, 6vw, 64px) 18px;
+  }
+  .topnav-link, .topbar-admin, .topbar-sub { width: 100%; padding: 6px 0; border: none; }
+}
 
 .wrap {
   position: relative;
