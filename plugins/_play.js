@@ -26,10 +26,31 @@ const fmtDuration = (secs) => {
     const min = Math.floor((secs % 3600) / 60)
     const s = secs % 60
     if (h > 0) return `${h}:${String(min).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-    return `${min}:${String(min).padStart(2, '0')}`
+    return `${min}:${String(s).padStart(2, '0')}`
 }
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+const fetchAudioBuffer = async (url) => {
+    const res = await axios.get(url, {
+        responseType: 'arraybuffer',
+        timeout: TIMEOUT,
+        maxRedirects: 5,
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+            'Referer': 'https://savetube.vip/'
+        }
+    })
+    const buffer = Buffer.from(res.data)
+    const contentType = String(res.headers['content-type'] || '')
+    if (contentType.includes('text/html') || contentType.includes('application/json')) {
+        throw new Error(`Link bukan file audio (content-type: ${contentType})`)
+    }
+    if (buffer.length < 20000) {
+        throw new Error(`File audio terlalu kecil (${buffer.length} bytes)`)
+    }
+    return buffer
+}
 
 const buildThumbnails = async (sock, url) => {
     try {
@@ -88,11 +109,8 @@ const downloadAudio = async (ytUrl, quality = '128') => {
     try {
         const result = await Promise.race([
             savetubeDownload(ytUrl, quality),
-            new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('savetube timeout')), 15000)
-            )
+            new Promise((_, reject) => setTimeout(() => reject(new Error('savetube timeout')), 15000))
         ])
-
         if (result.downloadUrl) {
             return {
                 title: result.title || 'YouTube Audio',
@@ -130,20 +148,14 @@ export default {
             quality = qualityMatch[1]
             searchText = text.replace(/\b(64|128|192|256|320)\b/, '').trim()
         }
-
         if (!searchText) return m.reply('Masukkan judul atau link YouTube')
 
         let videoId = extractVideoId(searchText)
         let video = null
 
         if (videoId) {
-            try {
-                video = await yts({ videoId })
-            } catch {
-                video = null
-            }
+            video = await yts({ videoId }).catch(() => null)
         }
-
         if (!video) {
             const search = await yts(searchText).catch(() => null)
             video = search?.videos?.[0]
@@ -155,7 +167,6 @@ export default {
 
         let result = null
         let lastError = null
-
         for (let attempt = 1; attempt <= 3; attempt++) {
             try {
                 result = await downloadAudio(ytUrl, quality)
@@ -165,14 +176,9 @@ export default {
                 if (attempt < 3) await sleep(2000)
             }
         }
-
         if (!result?.url) {
             await m.react('❌')
-            return m.reply(
-                `❌ Gagal download audio.\n\n` +
-                `Error: ${lastError?.message || 'Unknown error'}\n\n` +
-                `Coba lagi nanti atau gunakan link lain.`
-            )
+            return m.reply(`❌ Gagal download audio.\n\nError: ${lastError?.message || 'Unknown error'}\n\nCoba lagi nanti atau gunakan link lain.`)
         }
 
         const title = result.title || video.title || 'Unknown'
@@ -207,14 +213,32 @@ _Audio sedang dikirim, mohon tunggu sebentar..._`
             await sock.sendMessage(m.from, { text: previewText }, { quoted: m })
         }
 
-        const audioMsg = await sock.sendAudio(m.from, result.url, true, m, {
-            seconds: durSecs,
-            ptt: false
-        }).catch(() => null)
+        let audioBuffer = null
+        let downloadError = null
+        for (let attempt = 1; attempt <= 2; attempt++) {
+            try {
+                audioBuffer = await fetchAudioBuffer(result.url)
+                break
+            } catch (error) {
+                downloadError = error
+                if (attempt < 2) await sleep(1500)
+            }
+        }
+        if (!audioBuffer) {
+            await m.react('❌')
+            return m.reply(`❌ Gagal ambil file audio dari server.\n\nError: ${downloadError?.message || 'Unknown error'}\n\nCoba lagi nanti.`)
+        }
 
+        let audioMsg = null
+        let sendError = null
+        try {
+            audioMsg = await sock.sendAudio(m.from, audioBuffer, true, m, { seconds: durSecs })
+        } catch (error) {
+            sendError = error
+        }
         if (!audioMsg) {
             await m.react('❌')
-            return m.reply('❌ Gagal kirim audio, coba lagi.')
+            return m.reply(`❌ Gagal kirim audio.\n\nError: ${sendError?.message || 'Unknown error'}\n\nCoba lagi.`)
         }
 
         await m.react('✅')
