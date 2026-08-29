@@ -10,20 +10,29 @@
 <link rel="stylesheet" href="style.css">
 <style>
   .admin-wrap { max-width: 900px; margin: 0 auto; padding: 40px clamp(20px, 6vw, 64px) 80px; position: relative; z-index: 1; }
-  .admin-toolbar { display: flex; gap: 0; flex-wrap: wrap; align-items: stretch; margin-bottom: 22px; border: 1px solid var(--panel-border); }
-  .admin-toolbar input { flex: 1; min-width: 220px; border: none; border-right: 1px solid var(--panel-border); }
-  .admin-toolbar .btn-primary { flex-shrink: 0; }
-  .bot-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; }
+  .admin-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: stretch; margin-bottom: 22px; }
+  .admin-toolbar input {
+    flex: 1; min-width: 220px;
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    outline: none;
+  }
+  .admin-toolbar input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 110, 246, 0.15); }
+  .admin-toolbar .btn-primary { flex-shrink: 0; width: auto; padding: 12px 22px; }
+  .bot-table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 13.5px; }
   .bot-table th, .bot-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line-soft); }
-  .bot-table th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: .04em; border-bottom: 1px solid var(--panel-border); }
-  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border: 1px solid currentColor; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; font-family: var(--font-mono); }
+  .bot-table th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 1px solid currentColor; border-radius: 999px; font-size: 11px; font-weight: 600; font-family: var(--font-body); }
   .pill-connected { color: var(--success); }
   .pill-reconnecting { color: var(--warn); }
   .pill-other { color: var(--muted); }
-  .empty-state { color: var(--muted); padding: 30px 0; text-align: center; font-family: var(--font-mono); font-size: 13px; }
-  .summary { color: var(--muted); font-size: 13px; margin-bottom: 14px; font-family: var(--font-mono); }
-  .stop-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger-solid); padding: 5px 10px; font-size: 12px; cursor: pointer; font-family: var(--font-mono); }
-  .stop-btn:hover { background: var(--danger); color: var(--bg); }
+  .empty-state { color: var(--muted); padding: 30px 0; text-align: center; font-family: var(--font-body); font-size: 13.5px; }
+  .summary { color: var(--muted); font-size: 13px; margin-bottom: 14px; font-family: var(--font-body); }
+  .stop-btn { background: transparent; border: 1px solid var(--danger); border-radius: var(--radius-sm); color: var(--danger-solid); padding: 5px 12px; font-size: 12px; cursor: pointer; font-family: var(--font-body); }
+  .stop-btn:hover { background: var(--danger); color: #fff; }
 </style>
 </head>
 <body>
@@ -37,9 +46,8 @@
     <span></span><span></span><span></span>
   </button>
   <nav class="topnav" id="topnav">
-    <span class="topbar-sub">daftar semua bot yang tersambung</span>
     <a class="topnav-link" href="/dashboard">Beranda</a>
-    <a class="topnav-link" href="/admin">Admin</a>
+    <a class="topbar-admin" href="/admin">Admin</a>
   </nav>
 </header>
 

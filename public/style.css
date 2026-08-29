@@ -150,7 +150,7 @@ body { position: relative; overflow-x: hidden; }
   background: var(--panel);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  padding: 24px 22px;
+  padding: 24px 20px;
   margin-bottom: 18px;
 }
 .panel-title {
@@ -239,17 +239,18 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
   gap: 9px;
   font-size: 13px;
   color: var(--muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
 }
 .status-row-settled { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--line-soft); }
 .status-dot {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--text);
   animation: blink 1.4s steps(1) infinite;
+  flex-shrink: 0;
 }
 .status-dot-on { background: var(--success); animation: none; }
 @keyframes blink { 50% { opacity: 0.15; } }
-.countdown { margin-left: auto; font-family: var(--font-mono); color: var(--text); }
+.countdown { margin-left: auto; font-family: var(--font-body); font-weight: 600; color: var(--text); }
 
 .field { margin-bottom: 22px; }
 .field label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 8px; font-family: var(--font-body); }
@@ -374,7 +375,10 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
   color: var(--text);
 }
 
-.feature-section, .plan-section { margin-top: 52px; padding-top: 40px; border-top: 1px solid var(--line-soft); }
+.feature-section, .plan-section { margin-top: 52px; padding-top: 40px; border-top: 1px solid var(--line-soft); text-align: center; }
+.feature-section .eyebrow, .plan-section .eyebrow { text-align: center; }
+.feature-section .section-title, .plan-section .section-title { text-align: center; }
+.feature-grid, .plan-grid { text-align: left; }
 
 .feature-grid {
   display: grid;
@@ -385,7 +389,7 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
   background: var(--panel);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  padding: 22px 20px;
+  padding: 24px 20px;
 }
 .feature-icon {
   display: inline-flex;
@@ -468,7 +472,7 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
   background: var(--panel);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  padding: 26px 22px;
+  padding: 24px 20px;
 }
 .plan-card-premium { background: var(--text); color: #fff; border-color: var(--text); }
 .plan-badge {
