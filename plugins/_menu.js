@@ -1,6 +1,7 @@
 import { prepareWAMessageMedia } from '@whiskeysockets/baileys'
 import { plugins } from '../lib/plugins.js'
 import { convertToOpus } from '../lib/simple.js'
+import axios from 'axios'
 import sharp from 'sharp'
 
 const fmt = { timeZone: 'Asia/Jakarta' }
@@ -56,6 +57,36 @@ async function buildThumbnails(sock, url) {
     return { small, imageMessage }
 }
 
+async function fetchAudioBuffer(url) {
+    const res = await axios.get(url, {
+        responseType: 'arraybuffer',
+        timeout: 15000,
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36'
+        }
+    })
+    const buffer = Buffer.from(res.data)
+    const contentType = String(res.headers['content-type'] || '')
+    if (contentType.includes('text/html') || contentType.includes('application/json')) {
+        throw new Error(`bukan file audio (content-type: ${contentType})`)
+    }
+    if (buffer.length < 5000) throw new Error(`file terlalu kecil (${buffer.length} bytes)`)
+    return buffer
+}
+
+async function getMenuAudioOpus() {
+    const urls = [...MENU_AUDIO_URLS].sort(() => Math.random() - 0.5).slice(0, 4)
+    for (const url of urls) {
+        try {
+            const buffer = await fetchAudioBuffer(url)
+            return await convertToOpus(buffer)
+        } catch (e) {
+            console.error(`menu audio gagal (${url}):`, e.message)
+        }
+    }
+    return null
+}
+
 export default {
     cmd: ['menu', 'allmenu', 'help'],
     category: 'main',
@@ -92,7 +123,7 @@ export default {
 
         const [{ small, imageMessage }, audioBuffer] = await Promise.all([
             buildThumbnails(sock, config.thumbnail),
-            convertToOpus(MENU_AUDIO_URLS[Math.floor(Math.random() * MENU_AUDIO_URLS.length)]).catch((e) => { console.error(e); return null })
+            getMenuAudioOpus()
         ])
 
         await sock.sendMessage(m.from, {
