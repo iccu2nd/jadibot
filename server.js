@@ -181,6 +181,22 @@ app.post('/api/admin/session/:number/stop', adminAuth, async (req, res) => {
     res.json({ ok: true })
 })
 
+// --- Admin: lihat & kelola semua pengguna yang terdaftar --------------------
+app.get('/api/admin/users', adminAuth, async (req, res) => {
+    try {
+        const users = await auth.listUsers()
+        res.json(users)
+    } catch (e) {
+        res.status(500).json({ error: e.message || 'Gagal memuat daftar pengguna.' })
+    }
+})
+
+app.delete('/api/admin/users/:id', adminAuth, async (req, res) => {
+    const ok = await auth.deleteUserById(req.params.id)
+    if (!ok) return res.status(404).json({ error: 'Pengguna tidak ditemukan.' })
+    res.json({ ok: true })
+})
+
 sessionManager.restoreAllSessions()
 
 const PORT = config.dashboardPort || 3000

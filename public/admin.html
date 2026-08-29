@@ -74,6 +74,9 @@
       <button class="admin-nav-item" type="button" data-section="bots">
         <i class="fa-solid fa-satellite-dish"></i> Bot Terhubung
       </button>
+      <button class="admin-nav-item" type="button" data-section="users">
+        <i class="fa-solid fa-users"></i> Pengguna
+      </button>
     </nav>
     <div class="admin-sidebar-foot">
       <a class="admin-nav-item" href="/"><i class="fa-solid fa-arrow-left"></i> Kembali ke situs</a>
@@ -116,6 +119,11 @@
           <span class="admin-stat-value" id="stat-features">—</span>
           <span class="admin-stat-label">Total fitur aktif</span>
         </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-icon"><i class="fa-solid fa-users"></i></span>
+          <span class="admin-stat-value" id="stat-users">—</span>
+          <span class="admin-stat-label">Total pengguna terdaftar</span>
+        </div>
       </div>
       <div class="admin-empty-hint" id="overview-hint">Masukkan admin key lalu tekan <strong>Muat</strong> untuk melihat data terbaru.</div>
     </div>
@@ -123,6 +131,11 @@
     <div class="admin-section" id="section-bots" hidden>
       <p class="summary" id="summary" hidden></p>
       <div id="table-wrap"></div>
+    </div>
+
+    <div class="admin-section" id="section-users" hidden>
+      <p class="summary" id="users-summary" hidden></p>
+      <div id="users-table-wrap"></div>
     </div>
   </section>
 </main>
