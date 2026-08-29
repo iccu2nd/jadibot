@@ -9,7 +9,6 @@ import loadUser, { saveMetadata, syncGroupParticipants, getContact, getLidMappin
 import { printChatLog } from './lib/chatlog.js'
 import { groupCache, setCachedGroupMetadata } from './lib/simple.js'
 import { checkGconlyAccess, notifyGconlyOnce } from './lib/gconly.js'
-import { hasActiveMenfesSession } from './plugins/_menfes.js'
 import { isPremiumActive } from './lib/plugins.js'
 
 const prefixes = ['.', '/', '#', '!']
@@ -83,7 +82,7 @@ export async function handleMessage(sock, config, { messages, type }) {
 
     const gconlyPremiumExempt = settings.gconlyPremiumBypass && isPremiumActive(global.db.data.users[m.sender])
 
-    if (settings.gconly && !sock.isJadibotSession && !m.isGroup && !m.isOwner && !hasActiveMenfesSession(m.sender) && !gconlyPremiumExempt) {
+    if (settings.gconly && !sock.isJadibotSession && !m.isGroup && !m.isOwner && !gconlyPremiumExempt) {
         if (settings.gconly === 'closed') return
 
         if (settings.gconly === 'join') {

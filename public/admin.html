@@ -6,29 +6,27 @@
 <title>Jadibot — Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  .admin-wrap { max-width: 900px; margin: 0 auto; padding: 32px clamp(20px, 6vw, 64px) 80px; position: relative; z-index: 1; }
-  .admin-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 22px; }
-  .admin-toolbar input { flex: 1; min-width: 220px; }
+  .admin-wrap { max-width: 900px; margin: 0 auto; padding: 40px clamp(20px, 6vw, 64px) 80px; position: relative; z-index: 1; }
+  .admin-toolbar { display: flex; gap: 0; flex-wrap: wrap; align-items: stretch; margin-bottom: 22px; border: 1px solid var(--panel-border); }
+  .admin-toolbar input { flex: 1; min-width: 220px; border: none; border-right: 1px solid var(--panel-border); }
+  .admin-toolbar .btn-primary { flex-shrink: 0; }
   .bot-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; }
-  .bot-table th, .bot-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--panel-border); }
-  .bot-table th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: .04em; }
-  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; }
-  .pill-connected { background: rgba(52,211,153,.12); color: var(--success); }
-  .pill-reconnecting { background: rgba(251,191,36,.12); color: #fbbf24; }
-  .pill-other { background: rgba(139,140,163,.12); color: var(--muted); }
-  .empty-state { color: var(--muted); padding: 30px 0; text-align: center; }
-  .summary { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
-  .stop-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger-solid); border-radius: 8px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
-  .stop-btn:hover { background: rgba(248,113,113,.1); }
+  .bot-table th, .bot-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line-soft); }
+  .bot-table th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: .04em; border-bottom: 1px solid var(--panel-border); }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border: 1px solid currentColor; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; font-family: var(--font-mono); }
+  .pill-connected { color: var(--success); }
+  .pill-reconnecting { color: var(--warn); }
+  .pill-other { color: var(--muted); }
+  .empty-state { color: var(--muted); padding: 30px 0; text-align: center; font-family: var(--font-mono); font-size: 13px; }
+  .summary { color: var(--muted); font-size: 13px; margin-bottom: 14px; font-family: var(--font-mono); }
+  .stop-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger-solid); padding: 5px 10px; font-size: 12px; cursor: pointer; font-family: var(--font-mono); }
+  .stop-btn:hover { background: var(--danger); color: var(--bg); }
 </style>
 </head>
 <body>
-
-<div class="glow glow-a"></div>
-<div class="glow glow-b"></div>
 
 <header class="topbar">
   <div class="brand">

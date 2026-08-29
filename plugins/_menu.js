@@ -42,7 +42,15 @@ function buildBoxList(items) {
     }).join('\n')
 }
 
+// Cache thumbnail per URL selama 1 jam. Sebelumnya thumbnail didownload +
+// di-resize ulang SETIAP kali .menu dipanggil -> ini penyumbang utama delay.
+const THUMB_TTL_MS = 60 * 60 * 1000
+const thumbCache = new Map()
+
 async function buildThumbnails(sock, url) {
+    const cached = thumbCache.get(url)
+    if (cached && Date.now() - cached.fetchedAt < THUMB_TTL_MS) return cached
+
     const buffer = Buffer.from(await (await fetch(url)).arrayBuffer())
     const small = await sharp(buffer).resize(320, 180, { fit: 'cover' }).jpeg({ quality: 60 }).toBuffer()
     const large = await sharp(buffer).resize(768, 432, { fit: 'cover' }).jpeg({ quality: 70 }).toBuffer()
@@ -54,13 +62,15 @@ async function buildThumbnails(sock, url) {
     imageMessage.width = 768
     imageMessage.height = 432
 
-    return { small, imageMessage }
+    const result = { small, imageMessage, fetchedAt: Date.now() }
+    thumbCache.set(url, result)
+    return result
 }
 
 async function fetchAudioBuffer(url) {
     const res = await axios.get(url, {
         responseType: 'arraybuffer',
-        timeout: 15000,
+        timeout: 6000,
         headers: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36'
         }
@@ -74,17 +84,20 @@ async function fetchAudioBuffer(url) {
     return buffer
 }
 
+// Dulu: coba sampe 4 URL berurutan, masing-masing timeout 15 detik ->
+// worst case bisa nunggu ~60 detik SEBELUM pesan menu utama kekirim, karena
+// ini di-await bareng buildThumbnails() sebelum sendMessage pertama.
+// Sekarang: cuma 1 percobaan cepat, dan dipanggil SETELAH menu utama
+// terkirim (lihat run()), jadi kalau gagal/lambat, itu gak nunda balasan.
 async function getMenuAudioOpus() {
-    const urls = [...MENU_AUDIO_URLS].sort(() => Math.random() - 0.5).slice(0, 4)
-    for (const url of urls) {
-        try {
-            const buffer = await fetchAudioBuffer(url)
-            return await convertToOpus(buffer)
-        } catch (e) {
-            console.error(`menu audio gagal (${url}):`, e.message)
-        }
+    const url = MENU_AUDIO_URLS[Math.floor(Math.random() * MENU_AUDIO_URLS.length)]
+    try {
+        const buffer = await fetchAudioBuffer(url)
+        return await convertToOpus(buffer)
+    } catch (e) {
+        console.error(`menu audio gagal (${url}):`, e.message)
+        return null
     }
-    return null
 }
 
 export default {
@@ -121,10 +134,7 @@ export default {
             `*Daftar Menu:*\n• .menu all\n` +
             categoryNames.map(name => `• .menu ${name}`).join('\n')
 
-        const [{ small, imageMessage }, audioBuffer] = await Promise.all([
-            buildThumbnails(sock, config.thumbnail),
-            getMenuAudioOpus()
-        ])
+        const { small, imageMessage } = await buildThumbnails(sock, config.thumbnail)
 
         await sock.sendMessage(m.from, {
             text: `${config.groupUrl}\n${caption}\n`,
@@ -138,8 +148,11 @@ export default {
             }
         }, { quoted: m })
 
-        if (audioBuffer) {
-            await sock.sendMessage(m.from, {
+        // Voice note dikirim belakangan, gak di-await -> gagal/lambat di sini
+        // gak akan pernah bikin balasan .menu ketunda.
+        getMenuAudioOpus().then(audioBuffer => {
+            if (!audioBuffer) return
+            sock.sendMessage(m.from, {
                 audio: audioBuffer,
                 ptt: true,
                 mimetype: 'audio/ogg; codecs=opus',
@@ -152,7 +165,7 @@ export default {
                         serverMessageId: 1
                     }
                 }
-            }, { quoted: m })
-        }
+            }, { quoted: m }).catch(() => {})
+        }).catch(() => {})
     }
 }
