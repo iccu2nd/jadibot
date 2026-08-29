@@ -4,57 +4,63 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jadibot — Admin</title>
+<meta name="theme-color" content="#6d5bf6">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
-<style>
-  .admin-wrap { max-width: 900px; margin: 0 auto; padding: 32px clamp(20px, 6vw, 64px) 80px; position: relative; z-index: 1; }
-  .admin-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: stretch; margin-bottom: 22px; }
-  .admin-toolbar input {
-    flex: 1; min-width: 220px;
-    border: 1.5px solid var(--line-soft);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    font-family: var(--font-body);
-    font-size: 14.5px;
-    outline: none;
-  }
-  .admin-toolbar input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(205, 251, 74, 0.45); }
-  .admin-toolbar .btn-primary { flex-shrink: 0; width: auto; padding: 12px 22px; }
-  .bot-table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 13.5px; }
-  .bot-table th, .bot-table td { text-align: left; padding: 12px 12px; border-bottom: 1.5px solid var(--line-soft); }
-  .bot-table th { color: var(--muted); font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em; }
-  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 1.5px solid currentColor; border-radius: 999px; font-size: 11px; font-weight: 700; font-family: var(--font-body); }
-  .pill-connected { color: var(--success); }
-  .pill-reconnecting { color: var(--warn); }
-  .pill-other { color: var(--muted); }
-  .empty-state { color: var(--muted); padding: 30px 0; text-align: center; font-family: var(--font-body); font-size: 13.5px; }
-  .summary { color: var(--muted); font-size: 13px; margin-bottom: 14px; font-family: var(--font-body); font-weight: 600; }
-  .stop-btn { background: transparent; border: 1.5px solid var(--danger); border-radius: var(--radius-xs); color: var(--danger-solid); padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: var(--font-body); }
-  .stop-btn:hover { background: var(--danger); color: #fff; }
-</style>
+<script>
+  try {
+    var t = localStorage.getItem('jadibot_theme')
+    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark')
+    }
+  } catch (e) {}
+</script>
 </head>
 <body>
 
+<div class="glow" aria-hidden="true"></div>
+
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark"><i class="fa-solid fa-robot"></i></span>
+    <span class="brand-mark"><i class="fa-solid fa-user-shield"></i></span>
     <span class="brand-name">jadibot admin</span>
   </div>
-  <button class="hamburger" id="hamburger-btn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="topnav">
-    <span></span><span></span><span></span>
-  </button>
-  <nav class="topnav" id="topnav">
-    <a class="topnav-link" href="/dashboard">Beranda</a>
-    <a class="topbar-admin" href="/admin">Admin</a>
-  </nav>
+  <div class="topbar-actions">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema terang/gelap">
+      <i class="fa-solid fa-moon"></i>
+      <i class="fa-solid fa-sun"></i>
+    </button>
+    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="topnav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </header>
+
+<div class="nav-backdrop" id="nav-backdrop"></div>
+<nav class="topnav" id="topnav" aria-label="Menu utama">
+  <div class="nav-head">
+    <span class="nav-brand"><span class="brand-mark"><i class="fa-solid fa-robot"></i></span> jadibot</span>
+    <button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="nav-group">
+    <span class="nav-group-label">Navigasi</span>
+    <a class="topnav-link" href="/dashboard"><i class="fa-solid fa-house"></i> Beranda</a>
+    <a class="topbar-admin" href="/admin"><i class="fa-solid fa-user-shield"></i> Admin</a>
+  </div>
+  <div class="nav-foot">
+    <div class="nav-foot-row">
+      <button class="nav-chip" id="nav-theme-chip" type="button"><i class="fa-solid fa-moon"></i> <span id="nav-theme-label">Gelap</span></button>
+    </div>
+  </div>
+</nav>
 
 <main class="admin-wrap">
   <section class="panel">
-    <h2 class="panel-title">Bot yang terhubung</h2>
+    <h2 class="panel-title"><i class="fa-solid fa-satellite-dish" style="color:var(--primary-solid)"></i> Bot yang terhubung</h2>
     <div class="admin-toolbar">
       <input id="input-key" type="password" placeholder="Admin key (x-admin-key)" autocomplete="off">
       <button id="btn-load" class="btn-primary"><i class="fa-solid fa-arrows-rotate"></i> Muat daftar</button>
