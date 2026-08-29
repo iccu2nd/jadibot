@@ -3,6 +3,22 @@ const btnLoad = document.getElementById('btn-load')
 const errorEl = document.getElementById('admin-error')
 const summaryEl = document.getElementById('summary')
 const tableWrap = document.getElementById('table-wrap')
+const overviewHint = document.getElementById('overview-hint')
+
+const statTotal = document.getElementById('stat-total')
+const statConnected = document.getElementById('stat-connected')
+const statReconnecting = document.getElementById('stat-reconnecting')
+const statFeatures = document.getElementById('stat-features')
+
+const sectionTitle = document.getElementById('admin-section-title')
+const sectionSub = document.getElementById('admin-section-sub')
+const navItems = document.querySelectorAll('.admin-nav-item[data-section]')
+const sections = document.querySelectorAll('.admin-section')
+
+const SECTION_COPY = {
+  overview: { title: 'Ringkasan', sub: 'Pantau kondisi server jadibot secara sekilas.' },
+  bots: { title: 'Bot Terhubung', sub: 'Kelola semua sesi bot yang lagi jalan di server ini.' }
+}
 
 const STORAGE_KEY = 'jadibot-admin-key'
 
@@ -22,7 +38,35 @@ function fmtDate(ts) {
   return new Date(ts).toLocaleString('id-ID')
 }
 
-function render(sessions) {
+// --- Navigasi sidebar: pindah antar section admin panel ---
+function setSection(name) {
+  navItems.forEach((btn) => btn.classList.toggle('is-active', btn.dataset.section === name))
+  sections.forEach((sec) => { sec.hidden = sec.id !== `section-${name}` })
+  const copy = SECTION_COPY[name]
+  if (copy) { sectionTitle.textContent = copy.title; sectionSub.textContent = copy.sub }
+}
+navItems.forEach((btn) => btn.addEventListener('click', () => setSection(btn.dataset.section)))
+
+function renderStats(sessions) {
+  const connected = sessions.filter((s) => s.status === 'connected').length
+  const reconnecting = sessions.filter((s) => s.status === 'reconnecting').length
+  statTotal.textContent = sessions.length
+  statConnected.textContent = connected
+  statReconnecting.textContent = reconnecting
+  overviewHint.hidden = true
+}
+
+async function loadFeatureCount() {
+  try {
+    const res = await fetch('/api/stats')
+    const data = await res.json()
+    statFeatures.textContent = data?.totalFeatures ?? '—'
+  } catch (e) {
+    statFeatures.textContent = '—'
+  }
+}
+
+function renderTable(sessions) {
   if (!sessions.length) {
     tableWrap.innerHTML = '<div class="empty-state">Belum ada bot yang tersambung.</div>'
     summaryEl.hidden = true
@@ -68,12 +112,14 @@ async function loadSessions() {
     const data = await res.json()
     if (!res.ok) throw new Error(data?.error || 'Gagal memuat daftar sesi.')
     sessionStorage.setItem(STORAGE_KEY, key)
-    render(data)
+    renderStats(data)
+    renderTable(data)
+    loadFeatureCount()
   } catch (e) {
     showError(e.message)
   } finally {
     btnLoad.disabled = false
-    btnLoad.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Muat daftar'
+    btnLoad.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Muat'
   }
 }
 
@@ -103,4 +149,6 @@ const savedKey = sessionStorage.getItem(STORAGE_KEY)
 if (savedKey) {
   inputKey.value = savedKey
   loadSessions()
+} else {
+  loadFeatureCount()
 }

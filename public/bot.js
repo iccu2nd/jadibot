@@ -43,12 +43,35 @@ const btnSave = el('btn-save')
 const btnDisconnect = el('btn-disconnect')
 const saveMsg = el('save-msg')
 const mineList = el('mine-list')
+const settingsEmpty = el('settings-empty')
+
+const modeConnect = el('mode-connect')
+const modeSettings = el('mode-settings')
+const modeTabConnect = el('mode-tab-connect')
+const modeTabSettings = el('mode-tab-settings')
 
 let currentNumber = null
 let currentToken = null
 let pollTimer = null
 let countdownTimer = null
 let countdownDeadline = null
+
+// --- Mode switcher: fokus "Sambungkan Nomor" vs "Bot Settings" biar nggak numpuk ---
+function setMode(mode) {
+  const isConnect = mode === 'connect'
+  modeConnect.hidden = !isConnect
+  modeSettings.hidden = isConnect
+  modeTabConnect.classList.toggle('is-active', isConnect)
+  modeTabConnect.setAttribute('aria-selected', String(isConnect))
+  modeTabSettings.classList.toggle('is-active', !isConnect)
+  modeTabSettings.setAttribute('aria-selected', String(!isConnect))
+  if (!isConnect) updateSettingsEmptyState()
+}
+function updateSettingsEmptyState() {
+  settingsEmpty.hidden = !panelSettings.hidden
+}
+modeTabConnect.addEventListener('click', () => setMode('connect'))
+modeTabSettings.addEventListener('click', () => setMode('settings'))
 
 function showOnly(panel) {
   panelConnect.hidden = true
@@ -76,6 +99,7 @@ function startCountdown() {
 function applySession(session) {
   if (session.status === 'connecting' || session.status === 'reconnecting') {
     showOnly(panelPairing)
+    setMode('connect')
     statusDot.className = 'status-dot'
     statusText.textContent = session.status === 'reconnecting'
       ? 'Terputus sebentar, mencoba menyambung ulang…'
@@ -92,6 +116,7 @@ function applySession(session) {
   if (session.status === 'connected') {
     clearInterval(countdownTimer)
     showOnly(panelSettings)
+    setMode('settings')
     settingsNumber.textContent = currentNumber
     inputOwner.value = session.settings?.ownerNumber || ''
     toggleAutoread.checked = !!session.settings?.autoread
@@ -108,6 +133,7 @@ function applySession(session) {
   panelSettings.hidden = true
   currentNumber = null
   currentToken = null
+  setMode('connect')
   renderMine()
 }
 
@@ -126,6 +152,7 @@ function poll() {
       panelSettings.hidden = true
       currentNumber = null
       currentToken = null
+      setMode('connect')
       renderMine()
     }
   }, 2500)
@@ -224,6 +251,7 @@ btnDisconnect.addEventListener('click', async () => {
   panelSettings.hidden = true
   currentNumber = null
   currentToken = null
+  updateSettingsEmptyState()
   renderMine()
 })
 
@@ -271,9 +299,17 @@ async function renderMine() {
     li.appendChild(right)
     mineList.appendChild(li)
   }
+
+  updateSettingsEmptyState()
 }
 
 renderMine()
+// Kalau udah ada nomor yang connected tersimpan, langsung buka tab Bot Settings.
+;(function initMode() {
+  const store = loadStore()
+  const numbers = Object.keys(store)
+  setMode(numbers.length ? 'settings' : 'connect')
+})()
 
 // --- Tab switching: panel pengaturan bot (Umum / Otomatisasi / Keamanan / Plugin) ---
 const tabButtons = document.querySelectorAll('.tab-btn')

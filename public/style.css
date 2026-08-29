@@ -857,6 +857,39 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
 .cta-box .btn-primary { width: auto; padding: 13px 22px; background: #fff; color: var(--primary-solid); box-shadow: none; }
 .cta-box .btn-primary:hover { background: #f2f1ff; }
 
+/* Mode switcher di halaman /bot: pisahin fokus "Sambungkan Nomor" vs "Bot Settings" */
+.mode-tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  padding: 5px;
+  margin-bottom: 20px;
+  max-width: 480px;
+}
+.mode-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.mode-tab-btn.is-active { background: var(--grad); color: #ffffff; box-shadow: var(--shadow-sm); }
+.mode-tab-btn:not(.is-active):hover { color: var(--text); }
+.mode-panel[hidden] { display: none; }
+
 /* Tabs di panel pengaturan bot */
 .settings-tabs {
   display: flex;
@@ -1004,22 +1037,116 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
 .footer-links a:hover { color: var(--primary-solid); }
 .footer-copyright { color: var(--muted-2); font-size: 12px; font-family: var(--font-body); }
 
-/* ---------------- Admin page extras ---------------- */
-.admin-wrap { max-width: 960px; margin: 0 auto; padding: 32px clamp(20px, 6vw, 64px) 80px; position: relative; z-index: 1; }
-.admin-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: stretch; margin-bottom: 22px; }
-.admin-toolbar input {
-  flex: 1; min-width: 220px;
+/* ---------------- Admin panel: sidebar + konten, terpisah jelas dari situs utama ---------------- */
+.admin-shell {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 28px clamp(16px, 4vw, 40px) 80px;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  gap: 22px;
+  align-items: start;
+}
+.admin-sidebar {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.admin-sidebar-head { display: flex; align-items: center; gap: 10px; }
+.admin-sidebar-badge {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--grad); color: #fff; font-size: 15px; flex-shrink: 0;
+}
+.admin-sidebar-title { font-family: var(--font-display); font-weight: 700; font-size: 14.5px; color: var(--text); }
+.admin-sidebar-sub { font-size: 11.5px; color: var(--muted); font-family: var(--font-body); }
+.admin-sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+.admin-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-xs);
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.admin-nav-item i { width: 16px; text-align: center; color: var(--muted-2); }
+.admin-nav-item:hover { background: var(--panel-2); color: var(--text); }
+.admin-nav-item.is-active { background: var(--primary-tint); color: var(--primary-solid); }
+.admin-nav-item.is-active i { color: var(--primary-solid); }
+.admin-sidebar-foot { border-top: 1px solid var(--line-soft); padding-top: 12px; }
+
+.admin-content { min-width: 0; }
+.admin-topbar {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.admin-content-title { font-family: var(--font-display); font-size: 21px; font-weight: 700; margin: 0 0 4px; color: var(--text); }
+.admin-content-sub { font-size: 13px; color: var(--muted); margin: 0; font-family: var(--font-body); }
+.admin-key-box { display: flex; gap: 8px; flex-wrap: wrap; }
+.admin-key-box input {
+  min-width: 220px;
   border: 1.5px solid var(--line-soft);
   border-radius: var(--radius-sm);
-  padding: 12px 14px;
+  padding: 11px 14px;
   font-family: var(--font-body);
-  font-size: 14.5px;
+  font-size: 13.5px;
   outline: none;
   background: var(--field);
   color: var(--text);
 }
-.admin-toolbar input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-tint); }
-.admin-toolbar .btn-primary { flex-shrink: 0; width: auto; padding: 12px 22px; }
+.admin-key-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-tint); }
+.admin-key-box .btn-primary { flex-shrink: 0; width: auto; padding: 11px 20px; }
+
+.admin-section[hidden] { display: none; }
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.admin-stat-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.admin-stat-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--primary-tint); color: var(--primary-solid); font-size: 13px;
+}
+.admin-stat-value { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text); }
+.admin-stat-label { font-size: 12px; color: var(--muted); font-family: var(--font-body); font-weight: 600; }
+.admin-empty-hint { color: var(--muted); font-size: 13px; font-family: var(--font-body); padding: 4px 2px; }
+
+@media (max-width: 760px) {
+  .admin-shell { grid-template-columns: 1fr; }
+  .admin-sidebar { position: static; flex-direction: row; flex-wrap: wrap; }
+  .admin-sidebar-head { width: 100%; }
+  .admin-sidebar-nav { flex-direction: row; flex: 1; flex-wrap: wrap; }
+  .admin-sidebar-foot { display: none; }
+}
+
 .bot-table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 13.5px; }
 .bot-table th, .bot-table td { text-align: left; padding: 12px 12px; border-bottom: 1px solid var(--line-soft); }
 .bot-table th { color: var(--muted); font-weight: 700; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em; }
