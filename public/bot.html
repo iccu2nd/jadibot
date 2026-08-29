@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jadibot — Bot Settings &amp; Connect</title>
-<meta name="theme-color" content="#6d5bf6">
+<meta name="theme-color" content="#2c6b8e">
 <link rel="icon" type="image/png" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,6 @@
 </head>
 <body>
 
-<div class="glow" aria-hidden="true"></div>
 
 <header class="topbar">
   <div class="brand">
@@ -82,8 +81,8 @@
 
   <section class="hero" style="margin-bottom:20px;">
     <p class="eyebrow"><i class="fa-solid fa-link"></i> Bot Settings &amp; Connect</p>
-    <h1 style="font-size:26px;">Sambungkan &amp; atur bot kamu</h1>
-    <p class="hero-sub">Dua hal, dua tempat: tautkan nomor baru di tab Sambungkan, kelola bot yang udah jalan di tab Bot Settings.</p>
+    <h1 style="font-size:26px;">Sambungkan &amp; atur bot Anda</h1>
+    <p class="hero-sub">Dua hal, dua tempat: tautkan nomor baru di tab Sambungkan, kelola bot yang sudah berjalan di tab Bot Settings.</p>
   </section>
 
   <div class="mode-tabs" role="tablist" aria-label="Mode halaman bot">
@@ -102,7 +101,7 @@
         <input id="input-number" type="tel" inputmode="numeric" placeholder="08xxxxxxxxxx" autocomplete="off" required>
         <button type="submit" id="btn-connect"><i class="fa-solid fa-link"></i> Sambungkan</button>
       </form>
-      <p class="hint">Format bebas — pakai 08xx, +62, atau kode negara lain juga bisa.</p>
+      <p class="hint">Format bebas — gunakan 08xx, +62, atau kode negara lain juga bisa.</p>
       <p class="error" id="connect-error" hidden></p>
     </section>
 
@@ -113,7 +112,7 @@
         <button class="copy-btn" id="btn-copy-code" type="button"><i class="fa-regular fa-copy"></i> Salin kode</button>
       </div>
       <ol class="steps">
-        <li>Buka WhatsApp di HP dengan nomor yang kamu masukin tadi</li>
+        <li>Buka WhatsApp di ponsel dengan nomor yang Anda masukkan tadi</li>
         <li>Ketuk <strong>Perangkat Tertaut</strong> → <strong>Tautkan dengan nomor telepon</strong></li>
         <li>Masukkan kode di atas sebelum waktu habis</li>
       </ol>
@@ -122,13 +121,13 @@
         <span id="status-text">Menunggu ditautkan…</span>
         <span class="countdown" id="countdown"></span>
       </div>
-      <p class="tab-note tab-note-muted" style="margin-top:14px;"><i class="fa-solid fa-circle-info"></i> Kalau nggak ditautkan sebelum waktu habis, sesi ini otomatis dihapus dan kamu perlu mulai ulang dari sini.</p>
+      <p class="tab-note tab-note-muted" style="margin-top:14px;"><i class="fa-solid fa-circle-info"></i> Jika belum ditautkan sebelum waktu habis, sesi ini otomatis dihapus dan Anda perlu memulai ulang dari sini.</p>
     </section>
   </div>
 
   <div id="mode-settings" class="mode-panel" hidden>
     <section class="panel" id="panel-settings" hidden>
-      <h2 class="panel-title"><i class="fa-solid fa-sliders" style="color:var(--primary-solid)"></i> Atur bot kamu</h2>
+      <h2 class="panel-title"><i class="fa-solid fa-sliders" style="color:var(--primary-solid)"></i> Atur bot Anda</h2>
       <div class="status-row status-row-settled">
         <span class="status-dot status-dot-on"></span>
         <span>Tersambung sebagai <strong id="settings-number">—</strong></span>
@@ -144,16 +143,16 @@
       <div class="tab-panel is-active" id="tab-umum" role="tabpanel">
         <div class="field">
           <label for="input-owner">Nomor owner tambahan <span class="optional">(opsional)</span></label>
-          <input id="input-owner" type="tel" inputmode="numeric" placeholder="Kosongin kalau cuma kamu (nomor bot ini) yang jadi owner">
-          <p class="field-hint">Nomor bot ini otomatis jadi owner. Isi ini kalau mau kasih akses owner ke nomor lain juga.</p>
+          <input id="input-owner" type="tel" inputmode="numeric" placeholder="Kosongkan jika hanya Anda (nomor bot ini) yang menjadi pemilik">
+          <p class="field-hint">Nomor bot ini otomatis menjadi pemilik (owner). Isi kolom ini jika ingin memberi akses owner ke nomor lain juga.</p>
         </div>
       </div>
 
       <div class="tab-panel" id="tab-otomatisasi" role="tabpanel" hidden>
         <div class="toggle-row toggle-row-first">
           <div class="toggle-copy">
-            <span class="toggle-label">Auto read</span>
-            <span class="toggle-hint">Pesan masuk otomatis ditandai terbaca</span>
+            <span class="toggle-label">Baca otomatis</span>
+            <span class="toggle-hint">Pesan masuk otomatis ditandai sudah dibaca</span>
           </div>
           <label class="switch">
             <input type="checkbox" id="toggle-autoread">
@@ -163,8 +162,8 @@
 
         <div class="toggle-row">
           <div class="toggle-copy">
-            <span class="toggle-label">Auto typing</span>
-            <span class="toggle-hint">Nunjukin "sedang mengetik…" saat proses command</span>
+            <span class="toggle-label">Mengetik otomatis</span>
+            <span class="toggle-hint">Menampilkan status "sedang mengetik…" saat memproses perintah</span>
           </div>
           <label class="switch">
             <input type="checkbox" id="toggle-autotyping">
@@ -174,13 +173,13 @@
       </div>
 
       <div class="tab-panel" id="tab-keamanan" role="tabpanel" hidden>
-        <p class="tab-note">Fitur antilink, antispam, antidelete, dan blacklist grup diatur langsung lewat command di dalam chat WhatsApp (mis. <code>.antilink on</code>) supaya perubahannya kelihatan real-time buat semua member grup.</p>
-        <p class="tab-note tab-note-muted">Kontrol dari dashboard ini nyusul di update berikutnya.</p>
+        <p class="tab-note">Fitur antilink, antispam, antidelete, dan blacklist grup diatur langsung melalui perintah di dalam obrolan WhatsApp (misalnya <code>.antilink on</code>) agar perubahannya terlihat secara real-time oleh semua anggota grup.</p>
+        <p class="tab-note tab-note-muted">Kontrol dari dashboard ini akan menyusul pada pembaruan berikutnya.</p>
       </div>
 
       <div class="tab-panel" id="tab-plugin" role="tabpanel" hidden>
-        <p class="tab-note">Semua fitur bawaan aktif otomatis. Untuk nyalain/matiin command tertentu per bot, pakai <code>.blockcmd</code> / <code>.unblockcmd</code> langsung dari chat.</p>
-        <p class="tab-note tab-note-muted">Panel enable/disable per fitur dari dashboard ini termasuk benefit paket <strong>Premium</strong> — lihat di halaman Paket Harga.</p>
+        <p class="tab-note">Semua fitur bawaan aktif secara otomatis. Untuk mengaktifkan/menonaktifkan perintah tertentu per bot, gunakan <code>.blockcmd</code> / <code>.unblockcmd</code> langsung dari obrolan.</p>
+        <p class="tab-note tab-note-muted">Panel aktif/nonaktifkan per fitur dari dashboard ini termasuk keuntungan paket <strong>Premium</strong> — lihat di halaman Paket Harga.</p>
       </div>
 
       <div class="actions">
@@ -190,10 +189,10 @@
       <p class="save-msg" id="save-msg" hidden></p>
     </section>
 
-    <p class="empty-state" id="settings-empty" hidden>Belum ada bot yang aktif dipilih. Buka salah satu nomor di bawah, atau sambungkan nomor baru dulu di tab <strong>Sambungkan Nomor</strong>.</p>
+    <p class="empty-state" id="settings-empty" hidden>Belum ada bot aktif yang dipilih. Buka salah satu nomor di bawah, atau sambungkan nomor baru terlebih dahulu di tab <strong>Sambungkan Nomor</strong>.</p>
 
     <section class="panel panel-mine" id="panel-mine" hidden>
-      <h2 class="panel-title"><i class="fa-solid fa-address-book" style="color:var(--primary-solid)"></i> Nomor kamu di browser ini</h2>
+      <h2 class="panel-title"><i class="fa-solid fa-address-book" style="color:var(--primary-solid)"></i> Nomor Anda di peramban ini</h2>
       <ul class="mine-list" id="mine-list"></ul>
     </section>
   </div>
@@ -202,7 +201,7 @@
 
 <footer class="site-footer">
   <div class="footer-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span> jadibot</div>
-  <p class="footer-copyright">© 2026 jadibot. Dibuat buat komunitas.</p>
+  <p class="footer-copyright">© 2026 Jadibot. Dibuat untuk komunitas.</p>
 </footer>
 
 <script src="nav.js"></script>

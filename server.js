@@ -39,7 +39,12 @@ app.get('/login', async (req, res) => {
 app.get('/admin', (req, res) => res.sendFile(path.join(publicDir, 'admin.html')))
 
 // --- Halaman yang wajib login ------------------------------------------------
-app.get('/dashboard', auth.requireAuthPage, (req, res) => res.sendFile(path.join(publicDir, 'dashboard.html')))
+app.get('/dashboard', auth.requireAuthPage, (req, res) => {
+    const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+    const html = fs.readFileSync(path.join(publicDir, 'dashboard.html'), 'utf8')
+        .replace('<span id="dash-user-name">—</span>', `<span id="dash-user-name">${escapeHtml(req.user.name || 'kamu')}</span>`)
+    res.send(html)
+})
 app.get('/bot', auth.requireAuthPage, (req, res) => res.sendFile(path.join(publicDir, 'bot.html')))
 
 // Nama lama tetap dialihkan (301) kalau ada yang masih nyimpen link .html/lama

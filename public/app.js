@@ -1,4 +1,4 @@
-// app.js — khusus landing page (index.html): cuma statistik ringan
+// app.js — khusus landing page (index.html): hanya statistik ringan
 // (total fitur, bot aktif) + link WA tombol upgrade. Alur sambungkan/atur
 // bot sekarang ada di bot.js (halaman /bot, wajib login).
 const el = (id) => document.getElementById(id)
