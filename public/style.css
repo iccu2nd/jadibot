@@ -1,15 +1,15 @@
 /* ============================================================
-   jadibot dashboard — clean panel style, terinspirasi tampilan
-   login Cloudflare: kartu putih dengan sudut membulat, border
-   abu-abu lembut, tombol utama biru, tanpa ornamen dekoratif
-   (garis putus-putus, notch tiket, prefiks "//", dll).
+   jadibot dashboard — flat & clean, niru langsung tampilan login
+   Cloudflare di foto referensi: halaman putih polos, kartu tanpa
+   shadow, tombol rounded solid, border tipis abu-abu, tipografi
+   Inter yang rapi. Tanpa ornamen dekoratif apa pun.
    ============================================================ */
 
 :root {
-  --bg: #f6f7f8;
+  --bg: #ffffff;
   --panel: #ffffff;
-  --panel-border: #e3e5e8;
-  --line-soft: #ebedf0;
+  --panel-border: #dfe1e5;
+  --line-soft: #eceef1;
   --text: #17181a;
   --muted: #6b7076;
   --field: #ffffff;
@@ -21,9 +21,8 @@
   --danger: #d33a2f;
   --danger-solid: #d33a2f;
 
-  --radius: 12px;
+  --radius: 10px;
   --radius-sm: 8px;
-  --shadow-card: 0 1px 2px rgba(20, 20, 30, 0.04), 0 8px 24px rgba(20, 20, 30, 0.05);
 
   --font-display: "Inter", -apple-system, "Segoe UI", sans-serif;
   --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
@@ -43,8 +42,6 @@ html, body {
 
 body { position: relative; overflow-x: hidden; }
 
-/* Dulu ada dua blob blur ungu/cyan mengambang (.glow-a/.glow-b) —
-   dihapus total, gak ada di HTML manapun lagi yang butuh itu. */
 .glow { display: none; }
 
 .topbar {
@@ -54,14 +51,12 @@ body { position: relative; overflow-x: hidden; }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 22px clamp(20px, 6vw, 64px) 18px;
-  border-bottom: 1px solid var(--panel-border);
+  padding: 20px clamp(20px, 6vw, 64px);
 }
 .brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: 0.01em; }
 .brand-mark { color: var(--text); }
 
 .topnav { display: flex; align-items: center; gap: 20px; }
-.topbar-sub { color: var(--muted); font-size: 12.5px; font-family: var(--font-mono); }
 .topnav-link { color: var(--text); font-size: 13px; text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 2px; transition: border-color .15s; }
 .topnav-link:hover, .topnav-link.is-active { border-color: var(--text); }
 .topbar-admin { color: var(--text); font-size: 13px; text-decoration: none; border: 1px solid var(--panel-border); border-radius: 999px; padding: 6px 16px; font-family: var(--font-body); font-weight: 500; transition: background .15s, color .15s, border-color .15s; }
@@ -117,57 +112,56 @@ body { position: relative; overflow-x: hidden; }
     opacity: 1;
     padding: 14px clamp(20px, 6vw, 64px) 18px;
   }
-  .topnav-link, .topbar-admin, .topbar-sub { width: 100%; padding: 8px 0; border: none; }
+  .topnav-link, .topbar-admin { width: 100%; padding: 8px 0; border: none; }
 }
 
 .wrap {
   position: relative;
   z-index: 1;
-  max-width: 620px;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 52px 20px 100px;
+  padding: 44px 20px 100px;
 }
 
-.hero { margin-bottom: 36px; }
+.hero { margin-bottom: 32px; text-align: center; }
 .eyebrow {
   font-family: var(--font-body);
   color: var(--muted);
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.01em;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
 }
 .hero h1 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(26px, 5.2vw, 36px);
-  line-height: 1.22;
-  letter-spacing: -0.015em;
-  margin: 0 0 14px;
+  font-size: clamp(24px, 6vw, 30px);
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
   color: var(--text);
 }
-.hero-sub { color: var(--muted); font-size: 15.5px; line-height: 1.6; margin: 0; max-width: 52ch; font-family: var(--font-body); }
+.hero-sub { color: var(--muted); font-size: 14.5px; line-height: 1.6; margin: 0 auto; max-width: 40ch; font-family: var(--font-body); }
 
-/* Panel = kartu putih rapi, sudut membulat, border tipis + shadow
-   halus — gaya form Cloudflare, bukan lagi motif tiket/kuitansi. */
+/* Panel = kartu putih flat, border tipis, tanpa shadow — sama
+   persis gaya form Cloudflare di foto referensi. */
 .panel {
   position: relative;
   background: var(--panel);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
-  padding: 28px 26px;
-  margin-bottom: 22px;
+  padding: 24px 22px;
+  margin-bottom: 18px;
 }
 .panel-title {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 600;
-  margin: 0 0 20px;
+  margin: 0 0 18px;
   color: var(--text);
 }
 
-.connect-form { display: flex; gap: 10px; }
+.connect-form { display: flex; flex-direction: column; gap: 12px; }
 #input-number {
   flex: 1;
   background: var(--field);
@@ -191,6 +185,7 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
   font-weight: 600;
   padding: 13px 24px;
   font-size: 14.5px;
+  width: 100%;
   transition: background 0.15s ease, color 0.15s ease;
 }
 #btn-connect:hover, .btn-primary:hover { background: var(--accent-hover); }
@@ -344,7 +339,6 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
   background: var(--panel);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
   margin-bottom: 24px;
   overflow: hidden;
 }
@@ -384,14 +378,13 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
 
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 14px;
 }
 .feature-card {
   background: var(--panel);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
   padding: 22px 20px;
 }
 .feature-icon {
@@ -467,7 +460,7 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
 /* Plan / upgrade section */
 .plan-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 16px;
 }
 .plan-card {
@@ -475,7 +468,6 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
   background: var(--panel);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
   padding: 26px 22px;
 }
 .plan-card-premium { background: var(--text); color: #fff; border-color: var(--text); }
