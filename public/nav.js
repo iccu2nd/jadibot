@@ -31,10 +31,12 @@
     if (window.innerWidth > 640) closeNav()
   })
 
-  // Tandai link yang match halaman sekarang.
-  const here = location.pathname.split('/').pop() || 'index.html'
+  // Tandai link yang match halaman sekarang. Endpoint sekarang tanpa
+  // akhiran .html (/dashboard, /admin), jadi bandingin path apa adanya,
+  // bukan nama file terakhir.
+  const here = location.pathname.replace(/\/+$/, '') || '/dashboard'
   nav.querySelectorAll('a.topnav-link').forEach((a) => {
-    const target = a.getAttribute('href').split('/').pop()
+    const target = a.getAttribute('href').replace(/\/+$/, '')
     if (target === here) a.classList.add('is-active')
   })
 })()

@@ -2,16 +2,34 @@
 // bot owner utama) ATAU di-import dari index.js supaya jalan satu proses bareng
 // bot utama (disarankan — biar sesi jadibot nggak dobel-konek dari dua proses beda).
 import 'dotenv/config'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import express from 'express'
 import chalk from 'chalk'
 import config from './config.js'
 import * as sessionManager from './lib/session-manager.js'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const publicDir = path.join(__dirname, 'public')
+
 await sessionManager.initSessionStore()
 
 const app = express()
 app.use(express.json())
-app.use(express.static('public'))
+
+// index:false biar '/' gak otomatis nyajiin index.html, dan file .html
+// gak ke-serve langsung dari nama aslinya — semua halaman lewat endpoint
+// bersih di bawah (/dashboard, /admin), bukan /index.html atau /admin.html.
+app.use(express.static(publicDir, { index: false, extensions: false }))
+
+app.get('/', (req, res) => res.redirect('/dashboard'))
+app.get('/dashboard', (req, res) => res.sendFile(path.join(publicDir, 'index.html')))
+app.get('/admin', (req, res) => res.sendFile(path.join(publicDir, 'admin.html')))
+
+// Nama lama tetap dialihkan (301) kalau ada yang masih nyimpen link .html
+app.get('/index.html', (req, res) => res.redirect(301, '/dashboard'))
+app.get('/admin.html', (req, res) => res.redirect(301, '/admin'))
+
 
 // --- Public: mulai sesi baru ---------------------------------------------
 app.post('/api/connect', async (req, res) => {
