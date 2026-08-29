@@ -295,6 +295,7 @@ body { position: relative; overflow-x: hidden; }
   background: var(--panel-2);
   border: 1px solid var(--line-soft);
 }
+.nav-user[hidden] { display: none; }
 .nav-user-avatar {
   width: 34px; height: 34px; border-radius: 50%;
   background: var(--grad); color: #fff;
@@ -1259,6 +1260,7 @@ button { cursor: pointer; font-family: var(--font-body); border: none; border-ra
 }
 
 .auth-form { display: flex; flex-direction: column; gap: 14px; }
+.auth-form[hidden] { display: none; }
 .auth-field { display: flex; flex-direction: column; gap: 6px; }
 .auth-field label { font-size: 13px; font-weight: 600; color: var(--text); font-family: var(--font-body); }
 .auth-field input {
