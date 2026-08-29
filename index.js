@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import fs from 'fs'
 import dns from 'dns'
 import chalk from 'chalk'

@@ -1,6 +1,7 @@
 // Modul ini bisa dijalankan berdiri sendiri (`npm run dashboard`, dashboard tanpa
 // bot owner utama) ATAU di-import dari index.js supaya jalan satu proses bareng
 // bot utama (disarankan — biar sesi jadibot nggak dobel-konek dari dua proses beda).
+import 'dotenv/config'
 import express from 'express'
 import chalk from 'chalk'
 import config from './config.js'

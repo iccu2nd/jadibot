@@ -1,150 +1,742 @@
 import axios from 'axios'
-import fs from 'fs'
-import fsp from 'fs/promises'
-import path from 'path'
-import os from 'os'
-import { createCanvas, GlobalFonts, loadImage } from '@napi-rs/canvas'
+import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas'
+import { mkdir, writeFile, readFile, unlink } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
+import os from 'node:os'
 
-const BG_URL = 'https://i.ibb.co/PZ683Yn4/a360199cc51d.jpg'
-const FONT_URL = 'https://raw.githubusercontent.com/reyzdesu/bot-assets/main/fonts/semiboldios.ttf'
-const FONT_PATH = path.join(os.homedir(), '.fonts', 'semiboldios.ttf')
-const FONT_FAMILY = 'SFPro-Semibold'
-const EMOJI_FONT_URL = 'https://github.com/13rac1/twemoji-color-font/releases/download/v15.0.3/TwemojiMozilla.ttf'
-const EMOJI_FONT_PATH = path.join(os.homedir(), '.fonts', 'TwemojiMozilla.ttf')
-const EMOJI_FONT_FAMILY = 'Twemoji Mozilla'
-const BG_CACHE_PATH = path.join(os.homedir(), '.cache', 'yumibot', 'iqc-bg.jpg')
+const BASE = join(os.homedir(), '.rezora-iqc')
+const FONT_DIR = join(BASE, 'fonts')
+const FONT_PATH = join(FONT_DIR, 'Inter-Regular.ttf')
+const BG_PATH = join(BASE, 'iqc-hytam.png')
+const EMOJI_PATH = join(FONT_DIR, 'emoji-apple-image.json')
 
-const BUBBLE_X_R = 0.0435
-const BUBBLE_Y_R = 0.4618
-const BUBBLE_WIDTH_R = 0.6535
-const BUBBLE_HEIGHT_R = 0.0673
-const PAD_X_R = 0.0217
-const PAD_Y_R = 0.0107
+const FONT_URL = 'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2'
+const BG_URL = 'https://raw.githubusercontent.com/ryyntwx/allimagerin/refs/heads/main/iqc-hytam.png'
+const EMOJI_URL = 'https://media.githubusercontent.com/media/Ditzzx-vibecoder/entahlah/main/emoji-apple.json'
 
-const MAX_FONT_R = 0.0462
-const MIN_FONT_R = 0.0217
-const LINE_HEIGHT_RATIO = 1.28
-const TEXT_COLOR = '#F0F0F0'
+let initialized = false
+let emojiMap = null
+const emojiCache = new Map()
 
-let ready = null
+const EMOJI_REGEX = /(\p{Emoji_Modifier_Base}\p{Emoji_Modifier}|\p{Emoji_Presentation}\uFE0F?|\p{Emoji}\uFE0F|[\u{1F1E0}-\u{1F1FF}]{2}|\p{Extended_Pictographic}\uFE0F?)/gu
 
-function ensureAssets() {
-    if (!ready) {
-        ready = (async () => {
-            const fontExists = await fsp.access(FONT_PATH).then(() => true).catch(() => false)
-            if (!fontExists) {
-                const res = await axios.get(FONT_URL, { responseType: 'arraybuffer', timeout: 20000 })
-                await fsp.mkdir(path.dirname(FONT_PATH), { recursive: true })
-                await fsp.writeFile(FONT_PATH, Buffer.from(res.data))
-            }
-            GlobalFonts.registerFromPath(FONT_PATH, FONT_FAMILY)
+async function download(url) {
+    const res = await axios.get(url, {
+        responseType: 'arraybuffer',
+        timeout: 30000,
+        maxRedirects: 5,
+        headers: {
+            'User-Agent': 'Mozilla/5.0'
+        }
+    })
+    return Buffer.from(res.data)
+}
 
-            const emojiFontExists = await fsp.access(EMOJI_FONT_PATH).then(() => true).catch(() => false)
-            if (!emojiFontExists) {
-                const res = await axios.get(EMOJI_FONT_URL, { responseType: 'arraybuffer', timeout: 30000 })
-                await fsp.mkdir(path.dirname(EMOJI_FONT_PATH), { recursive: true })
-                await fsp.writeFile(EMOJI_FONT_PATH, Buffer.from(res.data))
-            }
-            GlobalFonts.registerFromPath(EMOJI_FONT_PATH, EMOJI_FONT_FAMILY)
+async function init() {
+    if (initialized) return
 
-            const bgBuf = await fsp.readFile(BG_CACHE_PATH).catch(() => null)
-            let bgOk = false
-            if (bgBuf) {
-                try { await loadImage(bgBuf); bgOk = true } catch (e) { bgOk = false }
-            }
-            if (!bgOk) {
-                const res = await axios.get(BG_URL, { responseType: 'arraybuffer', timeout: 20000 })
-                await fsp.mkdir(path.dirname(BG_CACHE_PATH), { recursive: true })
-                await fsp.writeFile(BG_CACHE_PATH, Buffer.from(res.data))
-            }
-        })().catch(err => {
-            ready = null
-            throw err
-        })
+    await mkdir(FONT_DIR, { recursive: true })
+
+    const tasks = []
+
+    if (!existsSync(FONT_PATH)) {
+        tasks.push(
+            download(FONT_URL).then(b =>
+                writeFile(FONT_PATH, b)
+            )
+        )
     }
-    return ready
+
+    if (!existsSync(BG_PATH)) {
+        tasks.push(
+            download(BG_URL).then(b =>
+                writeFile(BG_PATH, b)
+            )
+        )
+    }
+
+    if (!existsSync(EMOJI_PATH)) {
+        tasks.push(
+            download(EMOJI_URL).then(b =>
+                writeFile(EMOJI_PATH, b)
+            )
+        )
+    }
+
+    await Promise.all(tasks)
+
+    if (!GlobalFonts.families.some(
+        x => x.family === 'InterRegular'
+    )) {
+        GlobalFonts.registerFromPath(
+            FONT_PATH,
+            'InterRegular'
+        )
+    }
+
+    emojiMap = JSON.parse(
+        await readFile(EMOJI_PATH, 'utf8')
+    )
+
+    initialized = true
 }
 
-function fontStack(fontFamily) {
-    return `"${fontFamily}", "${EMOJI_FONT_FAMILY}"`
+function getRealtime() {
+    return new Intl.DateTimeFormat(
+        'id-ID',
+        {
+            timeZone: 'Asia/Jakarta',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        }
+    ).format(new Date())
 }
 
-function wrapText(ctx, text, maxWidth, size, fontFamily) {
-    ctx.font = `${size}px ${fontStack(fontFamily)}`
-    const words = text.split(/\s+/).filter(Boolean)
+function emojiCode(emoji) {
+    return [...emoji]
+        .map(x =>
+            x.codePointAt(0)
+                .toString(16)
+                .padStart(4, '0')
+        )
+        .join('-')
+}
+
+async function getEmoji(emoji) {
+    if (emojiCache.has(emoji))
+        return emojiCache.get(emoji)
+
+    const base = emojiCode(emoji)
+
+    const keys = [
+        base,
+        base.replace(/-fe0f/gi, ''),
+        `${base.replace(/-fe0f/gi, '')}-fe0f`,
+        base.toUpperCase(),
+        base.replace(/-fe0f/gi, '').toUpperCase()
+    ]
+
+    let data
+
+    for (const key of keys) {
+        if (emojiMap?.[key]) {
+            data = emojiMap[key]
+            break
+        }
+    }
+
+    if (!data)
+        return null
+
+    const image = await loadImage(
+        Buffer.from(data, 'base64')
+    )
+
+    emojiCache.set(emoji, image)
+
+    return image
+}
+
+function measureText(ctx, text, size) {
+    ctx.font = `${size}px InterRegular`
+
+    let width = 0
+
+    for (const part of text.split(EMOJI_REGEX)) {
+        if (!part) continue
+
+        EMOJI_REGEX.lastIndex = 0
+
+        if (EMOJI_REGEX.test(part)) {
+            width += size * 1.05
+        } else {
+            width += ctx.measureText(part).width
+        }
+
+        EMOJI_REGEX.lastIndex = 0
+    }
+
+    return width
+}
+
+async function drawText(ctx, text, x, y, size) {
+    ctx.font = `${size}px InterRegular`
+    ctx.textBaseline = 'middle'
+
+    let currentX = x
+
+    for (const part of text.split(EMOJI_REGEX)) {
+        if (!part) continue
+
+        EMOJI_REGEX.lastIndex = 0
+
+        if (EMOJI_REGEX.test(part)) {
+            const img = await getEmoji(part)
+            const emojiSize = size * 1.05
+
+            if (img) {
+                ctx.drawImage(
+                    img,
+                    currentX,
+                    y - emojiSize / 2,
+                    emojiSize,
+                    emojiSize
+                )
+            } else {
+                ctx.fillText(
+                    part,
+                    currentX,
+                    y
+                )
+            }
+
+            currentX += emojiSize
+        } else {
+            ctx.fillText(
+                part,
+                currentX,
+                y
+            )
+
+            currentX += ctx.measureText(part).width
+        }
+
+        EMOJI_REGEX.lastIndex = 0
+    }
+}
+
+function wrapText(ctx, text, maxWidth, size) {
+    ctx.font = `${size}px InterRegular`
+
+    const words = String(text)
+        .split(/\s+/)
+        .filter(Boolean)
+
     const lines = []
     let current = ''
 
     for (const word of words) {
-        const test = current ? `${current} ${word}` : word
-        if (ctx.measureText(test).width <= maxWidth) {
+        const test = current
+            ? `${current} ${word}`
+            : word
+
+        if (
+            measureText(ctx, test, size) <= maxWidth
+        ) {
             current = test
         } else {
-            if (current) lines.push(current)
+            if (current)
+                lines.push(current)
+
             current = word
         }
     }
-    if (current) lines.push(current)
-    return lines
+
+    if (current)
+        lines.push(current)
+
+    return lines.length ? lines : ['']
 }
 
-function fitText(ctx, text, maxWidth, maxHeight, maxFontSize, minFontSize, fontFamily) {
-    for (let size = maxFontSize; size >= minFontSize; size--) {
-        const lines = wrapText(ctx, text, maxWidth, size, fontFamily)
-        const totalHeight = lines.length * size * LINE_HEIGHT_RATIO
-        if (totalHeight <= maxHeight) return { size, lines }
+function roundedBubble(ctx, x, y, w, h, r) {
+    ctx.beginPath()
+
+    ctx.moveTo(x + r, y)
+    ctx.lineTo(x + w - r, y)
+
+    ctx.quadraticCurveTo(
+        x + w,
+        y,
+        x + w,
+        y + r
+    )
+
+    ctx.lineTo(
+        x + w,
+        y + h - r
+    )
+
+    ctx.quadraticCurveTo(
+        x + w,
+        y + h,
+        x + w - r,
+        y + h
+    )
+
+    ctx.lineTo(
+        x + r,
+        y + h
+    )
+
+    ctx.quadraticCurveTo(
+        x + 8,
+        y + h,
+        x + 8,
+        y + h - 8
+    )
+
+    ctx.lineTo(
+        x + 8,
+        y + r
+    )
+
+    ctx.quadraticCurveTo(
+        x + 8,
+        y,
+        x + r,
+        y
+    )
+
+    ctx.closePath()
+}
+
+async function getImage(m, sock) {
+    if (m.quoted) {
+        try {
+            const buffer = await m.download()
+
+            if (
+                buffer &&
+                Buffer.isBuffer(buffer) &&
+                buffer.length
+            ) {
+                return buffer
+            }
+        } catch {}
     }
-    return { size: minFontSize, lines: wrapText(ctx, text, maxWidth, minFontSize, fontFamily) }
+
+    if (m.type === 'imageMessage') {
+        try {
+            const buffer = await m.download()
+
+            if (
+                buffer &&
+                Buffer.isBuffer(buffer) &&
+                buffer.length
+            ) {
+                return buffer
+            }
+        } catch {}
+    }
+
+    try {
+        const pp = await sock.profilePictureUrl(
+            m.sender,
+            'image'
+        )
+
+        if (pp)
+            return await download(pp)
+    } catch {}
+
+    return null
 }
 
 export default {
-    cmd: ['iqc'],
-    category: 'tools',
-    run: async (m, { sock, text, prefix, cmd }) => {
-        if (!text) return m.reply(`Masukkan teksnya.\nContoh: *${prefix + cmd} halo apa kabar*`)
+    cmd: ['iqc', 'iqchat'],
+    category: 'maker',
 
-        await m.react('⏳')
+    run: async (m, { sock, text }) => {
+        let output = null
+
         try {
-            await ensureAssets()
+            await m.react('⏳')
+            await init()
 
-            const bg = await loadImage(await fsp.readFile(BG_CACHE_PATH))
-            const canvas = createCanvas(bg.width, bg.height)
-            const ctx = canvas.getContext('2d')
-            ctx.drawImage(bg, 0, 0)
+            const parts = String(text || '')
+                .split('|')
 
-            const bubbleX = bg.width * BUBBLE_X_R
-            const bubbleY = bg.height * BUBBLE_Y_R
-            const bubbleWidth = bg.width * BUBBLE_WIDTH_R
-            const bubbleHeight = bg.height * BUBBLE_HEIGHT_R
-            const padX = bg.width * PAD_X_R
-            const padY = bg.height * PAD_Y_R
-            const maxFontSize = bg.width * MAX_FONT_R
-            const minFontSize = bg.width * MIN_FONT_R
+            const messageText =
+                parts[0]?.trim() || 'halo'
 
-            const maxWidth = bubbleWidth - padX * 2
-            const maxHeight = bubbleHeight - padY * 2
-            const { size, lines } = fitText(ctx, text, maxWidth, maxHeight, maxFontSize, minFontSize, FONT_FAMILY)
+            /*
+             * Otomatis realtime WIB.
+             * Kalau user menulis:
+             *
+             * .iqc halo | 13.45
+             *
+             * maka waktu custom tetap digunakan.
+             */
 
-            ctx.font = `${size}px ${fontStack(FONT_FAMILY)}`
-            ctx.fillStyle = TEXT_COLOR
+            const time =
+                parts[1]?.trim() ||
+                getRealtime()
+
+            const imageBuffer =
+                await getImage(m, sock)
+
+            const source = imageBuffer
+                ? await loadImage(imageBuffer)
+                : null
+
+            const canvas =
+                createCanvas(941, 1671)
+
+            const ctx =
+                canvas.getContext('2d')
+
+            const background =
+                await loadImage(
+                    await readFile(BG_PATH)
+                )
+
+            ctx.drawImage(
+                background,
+                0,
+                0,
+                941,
+                1671
+            )
+
+            /*
+             * Jam status bar
+             */
+
+            ctx.fillStyle = '#ffffff'
+            ctx.font = '27px InterRegular'
+            ctx.textAlign = 'center'
             ctx.textBaseline = 'top'
 
-            const lineHeight = size * LINE_HEIGHT_RATIO
-            const startX = bubbleX + padX
-            const startY = bubbleY + padY
+            ctx.fillText(
+                time,
+                463,
+                8
+            )
 
-            lines.forEach((line, i) => {
-                ctx.fillText(line, startX, startY + i * lineHeight)
-            })
+            /*
+             * Bubble
+             */
 
-            const buffer = canvas.toBuffer('image/png')
-            await sock.sendImage(m.from, buffer, '', m)
+            const X = 35
+            const MAX_W = 530
+            const MIN_W = 280
+            const BASE_Y = 946
+
+            const FONT_SIZE = 30
+            const LINE_HEIGHT = 44
+
+            const PAD_X = 30
+            const PAD_Y = 20
+
+            ctx.font =
+                `${FONT_SIZE}px InterRegular`
+
+            const lines = wrapText(
+                ctx,
+                messageText,
+                MAX_W - PAD_X * 2,
+                FONT_SIZE
+            )
+
+            let longest = 0
+
+            for (const line of lines) {
+                longest = Math.max(
+                    longest,
+                    measureText(
+                        ctx,
+                        line,
+                        FONT_SIZE
+                    )
+                )
+            }
+
+            const bubbleW = Math.max(
+                MIN_W,
+                Math.min(
+                    MAX_W,
+                    longest + PAD_X * 2
+                )
+            )
+
+            let imageH = 0
+
+            if (source) {
+                const ratio =
+                    source.width /
+                    source.height
+
+                imageH = Math.min(
+                    Math.round(
+                        bubbleW / ratio
+                    ),
+                    620
+                )
+            }
+
+            const textH =
+                PAD_Y +
+                lines.length * LINE_HEIGHT
+
+            const timeH = 30
+
+            const bubbleH =
+                imageH +
+                textH +
+                timeH +
+                4
+
+            const bubbleY =
+                BASE_Y - bubbleH
+
+            /*
+             * Bubble background
+             */
+
+            ctx.fillStyle = '#1c1c1e'
+
+            roundedBubble(
+                ctx,
+                X,
+                bubbleY,
+                bubbleW,
+                bubbleH,
+                28
+            )
+
+            ctx.fill()
+
+            /*
+             * Foto hanya jika ada
+             */
+
+            if (source) {
+                ctx.save()
+
+                ctx.beginPath()
+
+                ctx.moveTo(
+                    X + 28,
+                    bubbleY
+                )
+
+                ctx.lineTo(
+                    X + bubbleW - 28,
+                    bubbleY
+                )
+
+                ctx.quadraticCurveTo(
+                    X + bubbleW,
+                    bubbleY,
+                    X + bubbleW,
+                    bubbleY + 28
+                )
+
+                ctx.lineTo(
+                    X + bubbleW,
+                    bubbleY + imageH
+                )
+
+                ctx.lineTo(
+                    X + 8,
+                    bubbleY + imageH
+                )
+
+                ctx.lineTo(
+                    X + 8,
+                    bubbleY + 28
+                )
+
+                ctx.quadraticCurveTo(
+                    X + 8,
+                    bubbleY,
+                    X + 28,
+                    bubbleY
+                )
+
+                ctx.closePath()
+
+                ctx.clip()
+
+                ctx.drawImage(
+                    source,
+                    X,
+                    bubbleY,
+                    bubbleW,
+                    imageH
+                )
+
+                ctx.restore()
+            }
+
+            /*
+             * Text
+             */
+
+            ctx.fillStyle = '#ffffff'
+            ctx.font =
+                `${FONT_SIZE}px InterRegular`
+
+            ctx.textAlign = 'left'
+            ctx.textBaseline = 'middle'
+
+            for (
+                let i = 0;
+                i < lines.length;
+                i++
+            ) {
+                await drawText(
+                    ctx,
+                    lines[i],
+                    X + PAD_X,
+                    bubbleY +
+                    imageH +
+                    PAD_Y +
+                    i * LINE_HEIGHT +
+                    FONT_SIZE / 2,
+                    FONT_SIZE
+                )
+            }
+
+            /*
+             * Waktu bubble
+             */
+
+            ctx.fillStyle = '#727278'
+            ctx.font = '22px InterRegular'
+            ctx.textAlign = 'right'
+            ctx.textBaseline = 'middle'
+
+            ctx.fillText(
+                time,
+                X + bubbleW - 22,
+                bubbleY +
+                bubbleH -
+                timeH
+            )
+
+            /*
+             * Reaction bar
+             */
+
+            const emojis = [
+                '👍',
+                '❤️',
+                '😂',
+                '😮',
+                '😢',
+                '🙏'
+            ]
+
+            const CARD_H = 100
+            const CARD_W = 545
+
+            const CARD_X = X + 8
+            const CARD_Y =
+                bubbleY -
+                CARD_H -
+                18
+
+            ctx.fillStyle = '#1c1c1e'
+
+            ctx.beginPath()
+
+            ctx.roundRect(
+                CARD_X,
+                CARD_Y,
+                CARD_W,
+                CARD_H,
+                CARD_H / 2
+            )
+
+            ctx.fill()
+
+            const START_X =
+                CARD_X + 55
+
+            const SPACING = 76
+
+            for (
+                let i = 0;
+                i < emojis.length;
+                i++
+            ) {
+                const emoji =
+                    await getEmoji(
+                        emojis[i]
+                    )
+
+                if (emoji) {
+                    ctx.drawImage(
+                        emoji,
+                        START_X +
+                        i * SPACING -
+                        28,
+                        CARD_Y + 22,
+                        56,
+                        56
+                    )
+                }
+            }
+
+            ctx.fillStyle = '#8e8e93'
+            ctx.font = '37px InterRegular'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+
+            ctx.fillText(
+                '+',
+                START_X +
+                6 * SPACING -
+                8,
+                CARD_Y +
+                CARD_H / 2
+            )
+
+            /*
+             * Simpan temporary
+             */
+
+            output = join(
+                os.tmpdir(),
+                `rezora-iqc-${Date.now()}.png`
+            )
+
+            await writeFile(
+                output,
+                await canvas.encode('png')
+            )
+
+            /*
+             * Kirim melalui socket utama Rezora
+             */
+
+            await sock.sendMessage(
+                m.chat,
+                {
+                    image: await readFile(output),
+                    caption: ''
+                },
+                {
+                    quoted: m
+                }
+            )
+
             await m.react('✅')
+
         } catch (e) {
-            console.error('IQC Error:', e)
+            console.error(
+                '[IQC ERROR]',
+                e
+            )
+
             await m.react('❌')
-            m.reply(`Gagal: ${e.message}`)
-            throw e
+                .catch(() => {})
+
+            return m.reply(
+                `Gagal membuat IQC: ${e.message || e}`
+            )
+
+        } finally {
+            if (
+                output &&
+                existsSync(output)
+            ) {
+                await unlink(output)
+                    .catch(() => {})
+            }
         }
     }
 }

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jadibot — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .admin-wrap { max-width: 900px; margin: 0 auto; padding: 32px clamp(20px, 6vw, 64px) 80px; position: relative; z-index: 1; }
+  .admin-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 22px; }
+  .admin-toolbar input { flex: 1; min-width: 220px; }
+  .bot-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; }
+  .bot-table th, .bot-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--panel-border); }
+  .bot-table th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: .04em; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; }
+  .pill-connected { background: rgba(52,211,153,.12); color: var(--success); }
+  .pill-reconnecting { background: rgba(251,191,36,.12); color: #fbbf24; }
+  .pill-other { background: rgba(139,140,163,.12); color: var(--muted); }
+  .empty-state { color: var(--muted); padding: 30px 0; text-align: center; }
+  .summary { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  .stop-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger-solid); border-radius: 8px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
+  .stop-btn:hover { background: rgba(248,113,113,.1); }
+</style>
+</head>
+<body>
+
+<div class="glow glow-a"></div>
+<div class="glow glow-b"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">◆</span>
+    <span class="brand-name">jadibot admin</span>
+  </div>
+  <div class="topbar-sub">daftar semua bot yang tersambung</div>
+</header>
+
+<main class="admin-wrap">
+  <section class="panel">
+    <h2 class="panel-title">Bot yang terhubung</h2>
+    <div class="admin-toolbar">
+      <input id="input-key" type="password" placeholder="Admin key (x-admin-key)" autocomplete="off">
+      <button id="btn-load" class="btn-primary">Muat daftar</button>
+    </div>
+    <p class="error" id="admin-error" hidden></p>
+    <p class="summary" id="summary" hidden></p>
+    <div id="table-wrap"></div>
+  </section>
+</main>
+
+<script src="admin.js"></script>
+</body>
+</html>

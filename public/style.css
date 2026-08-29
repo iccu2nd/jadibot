@@ -60,6 +60,8 @@ body {
   padding: 28px clamp(20px, 6vw, 64px) 0;
 }
 .brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+.topbar-admin { color: var(--muted); font-size: 13px; text-decoration: none; border: 1px solid var(--panel-border); border-radius: 999px; padding: 5px 14px; transition: color .15s, border-color .15s; }
+.topbar-admin:hover { color: var(--text); border-color: var(--purple-dim); }
 .brand-mark { color: var(--cyan); }
 .topbar-sub { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
 
