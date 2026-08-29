@@ -6,9 +6,11 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import chalk from 'chalk'
 import config from './config.js'
 import * as sessionManager from './lib/session-manager.js'
+import * as auth from './lib/auth.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const publicDir = path.join(__dirname, 'public')
@@ -18,19 +20,72 @@ await sessionManager.initSessionStore()
 
 const app = express()
 app.use(express.json())
+app.use(cookieParser())
 
 // index:false biar '/' gak otomatis nyajiin index.html, dan file .html
 // gak ke-serve langsung dari nama aslinya — semua halaman lewat endpoint
-// bersih di bawah (/dashboard, /admin), bukan /index.html atau /admin.html.
+// bersih di bawah (/dashboard, /bot, /login, /admin), bukan /index.html dll.
 app.use(express.static(publicDir, { index: false, extensions: false }))
 
-app.get('/', (req, res) => res.redirect('/dashboard'))
-app.get('/dashboard', (req, res) => res.sendFile(path.join(publicDir, 'index.html')))
+// --- Halaman publik ---------------------------------------------------------
+app.get('/', (req, res) => res.sendFile(path.join(publicDir, 'index.html')))
+
+app.get('/login', async (req, res) => {
+    const user = await auth.getCurrentUser(req)
+    if (user) return res.redirect('/dashboard')
+    res.sendFile(path.join(publicDir, 'login.html'))
+})
+
 app.get('/admin', (req, res) => res.sendFile(path.join(publicDir, 'admin.html')))
 
-// Nama lama tetap dialihkan (301) kalau ada yang masih nyimpen link .html
-app.get('/index.html', (req, res) => res.redirect(301, '/dashboard'))
+// --- Halaman yang wajib login ------------------------------------------------
+app.get('/dashboard', auth.requireAuthPage, (req, res) => res.sendFile(path.join(publicDir, 'dashboard.html')))
+app.get('/bot', auth.requireAuthPage, (req, res) => res.sendFile(path.join(publicDir, 'bot.html')))
+
+// Nama lama tetap dialihkan (301) kalau ada yang masih nyimpen link .html/lama
+app.get('/index.html', (req, res) => res.redirect(301, '/'))
 app.get('/admin.html', (req, res) => res.redirect(301, '/admin'))
+
+// --- Auth: daftar / masuk / Google / keluar ---------------------------------
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        const user = await auth.registerWithPassword(req.body || {})
+        auth.issueSessionCookie(res, user)
+        res.json({ user })
+    } catch (e) {
+        res.status(400).json({ error: e.message || 'Gagal mendaftar.' })
+    }
+})
+
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const user = await auth.loginWithPassword(req.body || {})
+        auth.issueSessionCookie(res, user)
+        res.json({ user })
+    } catch (e) {
+        res.status(400).json({ error: e.message || 'Gagal masuk.' })
+    }
+})
+
+app.post('/api/auth/google', async (req, res) => {
+    try {
+        const user = await auth.loginWithGoogle(req.body?.credential)
+        auth.issueSessionCookie(res, user)
+        res.json({ user })
+    } catch (e) {
+        res.status(400).json({ error: e.message || 'Gagal masuk dengan Google.' })
+    }
+})
+
+app.post('/api/auth/logout', (req, res) => {
+    auth.clearSessionCookie(res)
+    res.json({ ok: true })
+})
+
+app.get('/api/auth/me', async (req, res) => {
+    const user = await auth.getCurrentUser(req)
+    res.json({ user, googleClientId: config.googleClientId || null })
+})
 
 
 // --- Public: statistik ringan buat landing page (total fitur, bot aktif,
@@ -73,8 +128,8 @@ app.post('/api/connect', async (req, res) => {
     }
 })
 
-// --- Middleware: cek token milik sesi -------------------------------------
-function auth(req, res, next) {
+// --- Middleware: cek token milik sesi (bot per nomor, beda dari login akun) -
+function sessionAuth(req, res, next) {
     const number = sessionManager.formatNumber(req.params.number)
     const session = number ? sessionManager.getSession(number) : null
     if (!session) return res.status(404).json({ error: 'Sesi tidak ditemukan.' })
@@ -86,17 +141,17 @@ function auth(req, res, next) {
     next()
 }
 
-app.get('/api/session/:number', auth, (req, res) => {
+app.get('/api/session/:number', sessionAuth, (req, res) => {
     res.json(sessionManager.publicView(sessionManager.getSession(req.sessionNumber)))
 })
 
-app.put('/api/session/:number/settings', auth, (req, res) => {
+app.put('/api/session/:number/settings', sessionAuth, (req, res) => {
     const { ownerNumber, autoread, autotyping } = req.body || {}
     const updated = sessionManager.updateSessionSettings(req.sessionNumber, { ownerNumber, autoread, autotyping })
     res.json(sessionManager.publicView(updated))
 })
 
-app.post('/api/session/:number/stop', auth, async (req, res) => {
+app.post('/api/session/:number/stop', sessionAuth, async (req, res) => {
     await sessionManager.stopSession(req.sessionNumber)
     res.json({ ok: true })
 })

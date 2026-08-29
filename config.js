@@ -31,6 +31,14 @@ export default {
     dashboardPort: 3000,
     dashboardAdminKey: 'ganti-key-admin-ini', // dipakai buat endpoint /api/admin/*, GANTI sebelum publish
 
+    // Auth (login akun: Google + email/password) — dashboard.js/lib/auth.js
+    // JWT_SECRET: kunci buat nandatangani cookie sesi login. WAJIB diganti pas production,
+    // isi lewat env var, jangan biarin default ini kepakai di server publik.
+    jwtSecret: process.env.JWT_SECRET || 'ganti-jwt-secret-ini-sebelum-publish',
+    // GOOGLE_CLIENT_ID: dari Google Cloud Console > OAuth consent > Credentials (OAuth Client ID, tipe Web).
+    // Tanpa ini tombol "Lanjutkan dengan Google" otomatis disembunyikan di halaman /login.
+    googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+
     generateHighQualityLinkPreview: false,
     consoleLog: true,
 

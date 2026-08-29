@@ -6,7 +6,7 @@
 <title>Jadibot — Tautkan Nomor Kamu</title>
 <meta name="description" content="Ubah nomor WhatsApp kamu jadi bot pribadi dalam hitungan detik. Nggak perlu server sendiri, nggak perlu scan QR.">
 <meta name="theme-color" content="#6d5bf6">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark"><i class="fa-solid fa-robot"></i></span>
+    <span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span>
     <span class="brand-name">jadibot</span>
   </div>
   <div class="topbar-actions">
@@ -45,22 +45,31 @@
 <div class="nav-backdrop" id="nav-backdrop"></div>
 <nav class="topnav" id="topnav" aria-label="Menu utama">
   <div class="nav-head">
-    <span class="nav-brand"><span class="brand-mark"><i class="fa-solid fa-robot"></i></span> jadibot</span>
+    <span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span> jadibot</span>
     <button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <div class="nav-user" id="nav-user" hidden>
+    <span class="nav-user-avatar" id="nav-user-avatar"></span>
+    <div class="nav-user-info">
+      <div class="nav-user-name" id="nav-user-name">—</div>
+      <div class="nav-user-email" id="nav-user-email">—</div>
+    </div>
   </div>
 
   <div class="nav-group">
     <span class="nav-group-label">Utama</span>
-    <a class="topnav-link" href="#top"><i class="fa-solid fa-house"></i> Beranda</a>
-    <a class="topnav-link" href="#fitur"><i class="fa-solid fa-shapes"></i> Fitur Bot</a>
-    <a class="topnav-link" href="#cara-pakai"><i class="fa-solid fa-route"></i> Cara Pakai</a>
-    <a class="topnav-link" href="#faq"><i class="fa-solid fa-circle-question"></i> Tanya Jawab</a>
+    <a class="topnav-link" href="/#top"><i class="fa-solid fa-house"></i> Beranda</a>
+    <a class="topnav-link" href="/#fitur"><i class="fa-solid fa-shapes"></i> Fitur Bot</a>
+    <a class="topnav-link" href="/#cara-pakai"><i class="fa-solid fa-route"></i> Cara Pakai</a>
+    <a class="topnav-link" href="/#faq"><i class="fa-solid fa-circle-question"></i> Tanya Jawab</a>
   </div>
 
   <div class="nav-group">
     <span class="nav-group-label">Layanan</span>
-    <a class="topnav-link" href="#upgrade"><i class="fa-solid fa-credit-card"></i> Paket Harga</a>
-    <a class="topnav-link" href="#panel-connect"><i class="fa-solid fa-user-plus"></i> Sambungkan Bot</a>
+    <a class="topnav-link" href="/dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    <a class="topnav-link" href="/bot"><i class="fa-solid fa-link"></i> Bot Settings &amp; Connect</a>
+    <a class="topnav-link" href="/#upgrade"><i class="fa-solid fa-credit-card"></i> Paket Harga</a>
     <a class="topbar-admin" href="/admin"><i class="fa-solid fa-user-shield"></i> Admin</a>
   </div>
 
@@ -68,7 +77,8 @@
     <div class="nav-foot-row">
       <button class="nav-chip" id="nav-theme-chip" type="button"><i class="fa-solid fa-moon"></i> <span id="nav-theme-label">Gelap</span></button>
     </div>
-    <a class="nav-cta" href="#panel-connect"><i class="fa-solid fa-bolt"></i> Mulai Sekarang</a>
+    <a class="nav-cta" href="/login" id="nav-get-started"><i class="fa-solid fa-bolt"></i> Get Started</a>
+    <a class="nav-cta-dark" href="/login" id="nav-account-btn"><i class="fa-solid fa-user"></i> Masuk</a>
   </div>
 </nav>
 
@@ -79,7 +89,7 @@
     <h1>Jadiin nomor WhatsApp kamu <span class="grad-text">bot pribadi</span></h1>
     <p class="hero-sub">Masukin nomor, tempel kode pairing di WhatsApp, atur siapa ownernya dan gimana botnya bersikap. Nggak perlu scan QR, nggak perlu server sendiri.</p>
     <div class="hero-actions">
-      <a class="btn-hero-primary" href="#panel-connect"><i class="fa-solid fa-link"></i> Sambungkan Nomor</a>
+      <a class="btn-hero-primary" href="/bot"><i class="fa-solid fa-link"></i> Sambungkan Nomor</a>
       <a href="#fitur"><i class="fa-solid fa-shapes"></i> Jelajahi Fitur</a>
       <a href="#upgrade"><i class="fa-solid fa-crown"></i> Lihat Paket Premium</a>
     </div>
@@ -98,102 +108,6 @@
       <span class="stat-value">24/7</span>
       <span class="stat-label">Server standby</span>
     </div>
-  </section>
-
-  <section class="panel" id="panel-connect">
-    <h2 class="panel-title"><i class="fa-solid fa-link" style="color:var(--primary-solid)"></i> 1. Tautkan nomor</h2>
-    <form id="form-connect" class="connect-form">
-      <input id="input-number" type="tel" inputmode="numeric" placeholder="08xxxxxxxxxx" autocomplete="off" required>
-      <button type="submit" id="btn-connect"><i class="fa-solid fa-link"></i> Sambungkan</button>
-    </form>
-    <p class="hint">Format bebas — pakai 08xx, +62, atau kode negara lain juga bisa.</p>
-    <p class="error" id="connect-error" hidden></p>
-  </section>
-
-  <section class="panel" id="panel-pairing" hidden>
-    <h2 class="panel-title"><i class="fa-solid fa-key" style="color:var(--primary-solid)"></i> 2. Masukkan kode ini di WhatsApp</h2>
-    <div class="pairing-box">
-      <div class="pairing-code" id="pairing-code">— — — — — —</div>
-      <button class="copy-btn" id="btn-copy-code" type="button"><i class="fa-regular fa-copy"></i> Salin kode</button>
-    </div>
-    <ol class="steps">
-      <li>Buka WhatsApp di HP dengan nomor yang kamu masukin tadi</li>
-      <li>Ketuk <strong>Perangkat Tertaut</strong> → <strong>Tautkan dengan nomor telepon</strong></li>
-      <li>Masukkan kode di atas sebelum waktu habis</li>
-    </ol>
-    <div class="status-row">
-      <span class="status-dot" id="status-dot"></span>
-      <span id="status-text">Menunggu ditautkan…</span>
-      <span class="countdown" id="countdown"></span>
-    </div>
-  </section>
-
-  <section class="panel" id="panel-settings" hidden>
-    <h2 class="panel-title"><i class="fa-solid fa-sliders" style="color:var(--primary-solid)"></i> 3. Atur bot kamu</h2>
-    <div class="status-row status-row-settled">
-      <span class="status-dot status-dot-on"></span>
-      <span>Tersambung sebagai <strong id="settings-number">—</strong></span>
-    </div>
-
-    <div class="settings-tabs" role="tablist" aria-label="Kategori pengaturan bot">
-      <button class="tab-btn is-active" type="button" role="tab" aria-selected="true" data-tab="tab-umum">Umum</button>
-      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-otomatisasi">Otomatisasi</button>
-      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-keamanan">Keamanan</button>
-      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-plugin">Plugin</button>
-    </div>
-
-    <div class="tab-panel is-active" id="tab-umum" role="tabpanel">
-      <div class="field">
-        <label for="input-owner">Nomor owner tambahan <span class="optional">(opsional)</span></label>
-        <input id="input-owner" type="tel" inputmode="numeric" placeholder="Kosongin kalau cuma kamu (nomor bot ini) yang jadi owner">
-        <p class="field-hint">Nomor bot ini otomatis jadi owner. Isi ini kalau mau kasih akses owner ke nomor lain juga.</p>
-      </div>
-    </div>
-
-    <div class="tab-panel" id="tab-otomatisasi" role="tabpanel" hidden>
-      <div class="toggle-row toggle-row-first">
-        <div class="toggle-copy">
-          <span class="toggle-label">Auto read</span>
-          <span class="toggle-hint">Pesan masuk otomatis ditandai terbaca</span>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="toggle-autoread">
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="toggle-row">
-        <div class="toggle-copy">
-          <span class="toggle-label">Auto typing</span>
-          <span class="toggle-hint">Nunjukin "sedang mengetik…" saat proses command</span>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="toggle-autotyping">
-          <span class="slider"></span>
-        </label>
-      </div>
-    </div>
-
-    <div class="tab-panel" id="tab-keamanan" role="tabpanel" hidden>
-      <p class="tab-note">Fitur antilink, antispam, antidelete, dan blacklist grup diatur langsung lewat command di dalam chat WhatsApp (mis. <code>.antilink on</code>) supaya perubahannya kelihatan real-time buat semua member grup.</p>
-      <p class="tab-note tab-note-muted">Kontrol dari dashboard ini nyusul di update berikutnya.</p>
-    </div>
-
-    <div class="tab-panel" id="tab-plugin" role="tabpanel" hidden>
-      <p class="tab-note">Semua fitur bawaan aktif otomatis. Untuk nyalain/matiin command tertentu per bot, pakai <code>.blockcmd</code> / <code>.unblockcmd</code> langsung dari chat.</p>
-      <p class="tab-note tab-note-muted">Panel enable/disable per fitur dari dashboard ini termasuk benefit paket <strong>Premium</strong> — lihat di bawah.</p>
-    </div>
-
-    <div class="actions">
-      <button id="btn-save" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan pengaturan</button>
-      <button id="btn-disconnect" class="btn-danger"><i class="fa-solid fa-plug-circle-xmark"></i> Putuskan</button>
-    </div>
-    <p class="save-msg" id="save-msg" hidden></p>
-  </section>
-
-  <section class="panel panel-mine" id="panel-mine" hidden>
-    <h2 class="panel-title"><i class="fa-solid fa-address-book" style="color:var(--primary-solid)"></i> Nomor kamu di browser ini</h2>
-    <ul class="mine-list" id="mine-list"></ul>
   </section>
 
   <section class="feature-section" id="fitur">
@@ -230,7 +144,7 @@
     <div class="cta-box">
       <h2>Yuk mulai jalanin bot kamu.</h2>
       <p>Tautkan nomor kamu sekarang atau upgrade ke Premium buat antrian prioritas dan kontrol fitur lebih leluasa.</p>
-      <a class="btn-primary" href="#upgrade" style="text-decoration:none;"><i class="fa-solid fa-arrow-up-right"></i> Lihat paket Premium</a>
+      <a class="btn-primary" href="/bot" style="text-decoration:none;"><i class="fa-solid fa-arrow-up-right"></i> Sambungkan bot kamu</a>
     </div>
   </section>
 
@@ -242,22 +156,22 @@
       <div class="howto-card">
         <span class="howto-num">1</span>
         <div class="howto-copy">
-          <h3>Masukkan nomor WhatsApp</h3>
-          <p>Ketik nomor kamu di kolom "Tautkan nomor" di atas, lalu tekan Sambungkan.</p>
+          <h3>Masuk / buat akun</h3>
+          <p>Daftar pakai email atau login sekali klik pakai akun Google kamu.</p>
         </div>
       </div>
       <div class="howto-card">
         <span class="howto-num">2</span>
         <div class="howto-copy">
-          <h3>Tempel kode pairing</h3>
-          <p>Buka WhatsApp → Perangkat Tertaut → Tautkan dengan nomor telepon, lalu masukkan kode yang muncul.</p>
+          <h3>Masukkan nomor WhatsApp</h3>
+          <p>Buka halaman Bot Settings, ketik nomor kamu, lalu tekan Sambungkan.</p>
         </div>
       </div>
       <div class="howto-card">
         <span class="howto-num">3</span>
         <div class="howto-copy">
-          <h3>Atur bot sesuai selera</h3>
-          <p>Tambahkan owner tambahan, nyalain auto read/typing, dan sesuaikan pengaturan lain di dashboard ini.</p>
+          <h3>Tempel kode pairing</h3>
+          <p>Buka WhatsApp → Perangkat Tertaut → Tautkan dengan nomor telepon, lalu masukkan kode yang muncul.</p>
         </div>
       </div>
       <div class="howto-card">
@@ -319,7 +233,7 @@
       </details>
       <details class="faq-item">
         <summary>Bot saya kok tiba-tiba terputus?<span class="chev"><i class="fa-solid fa-chevron-down"></i></span></summary>
-        <p class="faq-answer">Biasanya karena sesi WhatsApp berakhir dari sisi HP kamu (logout perangkat tertaut) atau server sedang restart. Cukup buka dashboard ini lagi dan tautkan ulang nomor kamu.</p>
+        <p class="faq-answer">Biasanya karena sesi WhatsApp berakhir dari sisi HP kamu (logout perangkat tertaut) atau server sedang restart. Cukup buka halaman Bot Settings lagi dan tautkan ulang nomor kamu.</p>
       </details>
       <details class="faq-item">
         <summary>Bagaimana cara melihat semua perintah bot?<span class="chev"><i class="fa-solid fa-chevron-down"></i></span></summary>
@@ -335,13 +249,14 @@
 </main>
 
 <footer class="site-footer">
-  <div class="footer-brand"><span class="brand-mark"><i class="fa-solid fa-robot"></i></span> jadibot</div>
+  <div class="footer-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span> jadibot</div>
   <p class="footer-tagline">nomormu, botmu sendiri</p>
   <div class="footer-links">
     <a href="#fitur">Fitur</a>
     <a href="#cara-pakai">Cara Pakai</a>
     <a href="#faq">Tanya Jawab</a>
     <a href="#upgrade">Paket Harga</a>
+    <a href="/dashboard">Dashboard</a>
     <a href="/admin">Admin</a>
   </div>
   <p class="footer-copyright">© 2026 jadibot. Dibuat buat komunitas.</p>

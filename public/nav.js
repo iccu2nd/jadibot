@@ -44,7 +44,7 @@
   })
 
   // Tandai link yang match halaman sekarang.
-  const here = location.pathname.replace(/\/+$/, '') || '/dashboard'
+  const here = location.pathname.replace(/\/+$/, '') || '/'
   nav.querySelectorAll('a.topnav-link, a.topbar-admin').forEach((a) => {
     const target = a.getAttribute('href').replace(/\/+$/, '')
     if (target && target === here) a.classList.add('is-active')
@@ -84,4 +84,65 @@
   if (topbarToggle) topbarToggle.addEventListener('click', toggleTheme)
   if (navChip) navChip.addEventListener('click', toggleTheme)
   applyLabel()
+})()
+
+// ---------------- Status login: kartu akun di drawer + tombol get started/masuk/keluar ----------------
+;(function () {
+  const navUser = document.getElementById('nav-user')
+  const avatarEl = document.getElementById('nav-user-avatar')
+  const nameEl = document.getElementById('nav-user-name')
+  const emailEl = document.getElementById('nav-user-email')
+  const getStartedBtn = document.getElementById('nav-get-started')
+  const accountBtn = document.getElementById('nav-account-btn')
+  const logoutBtn = document.getElementById('nav-logout-btn')
+
+  function bindLogout(btn) {
+    btn.addEventListener('click', async (e) => {
+      if (btn.tagName === 'A') e.preventDefault()
+      try { await fetch('/api/auth/logout', { method: 'POST' }) } catch {}
+      window.location.href = '/'
+    })
+  }
+
+  async function applyAuthState() {
+    let user = null
+    try {
+      const res = await fetch('/api/auth/me')
+      const data = await res.json()
+      user = data.user
+    } catch {}
+
+    if (user && navUser) {
+      navUser.hidden = false
+      if (nameEl) nameEl.textContent = user.name || 'Pengguna'
+      if (emailEl) emailEl.textContent = user.email || ''
+      if (avatarEl) {
+        avatarEl.innerHTML = user.avatar
+          ? `<img src="${user.avatar}" alt="">`
+          : (user.name || '?').trim().charAt(0).toUpperCase()
+      }
+    }
+
+    // Landing page: swap "Get Started" + "Masuk" jadi "Dashboard" + "Keluar" kalau udah login.
+    if (getStartedBtn && accountBtn) {
+      if (user) {
+        getStartedBtn.href = '/dashboard'
+        getStartedBtn.innerHTML = '<i class="fa-solid fa-gauge"></i> Dashboard'
+        accountBtn.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Keluar'
+        accountBtn.removeAttribute('href')
+        accountBtn.style.cursor = 'pointer'
+        bindLogout(accountBtn)
+      } else {
+        getStartedBtn.href = '/login'
+        getStartedBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> Get Started'
+        accountBtn.href = '/login'
+        accountBtn.innerHTML = '<i class="fa-solid fa-user"></i> Masuk'
+      }
+    }
+
+    // Halaman dashboard/bot: tombol Keluar berdiri sendiri.
+    if (logoutBtn) bindLogout(logoutBtn)
+  }
+
+  applyAuthState()
 })()

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jadibot — Bot Settings &amp; Connect</title>
+<meta name="theme-color" content="#6d5bf6">
+<link rel="icon" type="image/png" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<script>
+  try {
+    var t = localStorage.getItem('jadibot_theme')
+    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark')
+    }
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<div class="glow" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span>
+    <span class="brand-name">jadibot</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema terang/gelap">
+      <i class="fa-solid fa-moon"></i>
+      <i class="fa-solid fa-sun"></i>
+    </button>
+    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="topnav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="nav-backdrop" id="nav-backdrop"></div>
+<nav class="topnav" id="topnav" aria-label="Menu utama">
+  <div class="nav-head">
+    <span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span> jadibot</span>
+    <button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <div class="nav-user" id="nav-user" hidden>
+    <span class="nav-user-avatar" id="nav-user-avatar"></span>
+    <div class="nav-user-info">
+      <div class="nav-user-name" id="nav-user-name">—</div>
+      <div class="nav-user-email" id="nav-user-email">—</div>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-group-label">Utama</span>
+    <a class="topnav-link" href="/#top"><i class="fa-solid fa-house"></i> Beranda</a>
+    <a class="topnav-link" href="/#fitur"><i class="fa-solid fa-shapes"></i> Fitur Bot</a>
+    <a class="topnav-link" href="/#faq"><i class="fa-solid fa-circle-question"></i> Tanya Jawab</a>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-group-label">Layanan</span>
+    <a class="topnav-link" href="/dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    <a class="topnav-link is-active" href="/bot"><i class="fa-solid fa-link"></i> Bot Settings &amp; Connect</a>
+    <a class="topnav-link" href="/#upgrade"><i class="fa-solid fa-credit-card"></i> Paket Harga</a>
+    <a class="topbar-admin" href="/admin"><i class="fa-solid fa-user-shield"></i> Admin</a>
+  </div>
+
+  <div class="nav-foot">
+    <div class="nav-foot-row">
+      <button class="nav-chip" id="nav-theme-chip" type="button"><i class="fa-solid fa-moon"></i> <span id="nav-theme-label">Gelap</span></button>
+    </div>
+    <button class="nav-cta-dark" id="nav-logout-btn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+
+  <section class="hero" style="margin-bottom:20px;">
+    <p class="eyebrow"><i class="fa-solid fa-link"></i> Bot Settings &amp; Connect</p>
+    <h1 style="font-size:26px;">Sambungkan &amp; atur bot kamu</h1>
+    <p class="hero-sub">Tautkan nomor WhatsApp, tempel kode pairing, lalu atur owner dan otomatisasi bot kamu di satu tempat.</p>
+  </section>
+
+  <section class="panel" id="panel-connect">
+    <h2 class="panel-title"><i class="fa-solid fa-link" style="color:var(--primary-solid)"></i> 1. Tautkan nomor</h2>
+    <form id="form-connect" class="connect-form">
+      <input id="input-number" type="tel" inputmode="numeric" placeholder="08xxxxxxxxxx" autocomplete="off" required>
+      <button type="submit" id="btn-connect"><i class="fa-solid fa-link"></i> Sambungkan</button>
+    </form>
+    <p class="hint">Format bebas — pakai 08xx, +62, atau kode negara lain juga bisa.</p>
+    <p class="error" id="connect-error" hidden></p>
+  </section>
+
+  <section class="panel" id="panel-pairing" hidden>
+    <h2 class="panel-title"><i class="fa-solid fa-key" style="color:var(--primary-solid)"></i> 2. Masukkan kode ini di WhatsApp</h2>
+    <div class="pairing-box">
+      <div class="pairing-code" id="pairing-code">— — — — — —</div>
+      <button class="copy-btn" id="btn-copy-code" type="button"><i class="fa-regular fa-copy"></i> Salin kode</button>
+    </div>
+    <ol class="steps">
+      <li>Buka WhatsApp di HP dengan nomor yang kamu masukin tadi</li>
+      <li>Ketuk <strong>Perangkat Tertaut</strong> → <strong>Tautkan dengan nomor telepon</strong></li>
+      <li>Masukkan kode di atas sebelum waktu habis</li>
+    </ol>
+    <div class="status-row">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">Menunggu ditautkan…</span>
+      <span class="countdown" id="countdown"></span>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-settings" hidden>
+    <h2 class="panel-title"><i class="fa-solid fa-sliders" style="color:var(--primary-solid)"></i> 3. Atur bot kamu</h2>
+    <div class="status-row status-row-settled">
+      <span class="status-dot status-dot-on"></span>
+      <span>Tersambung sebagai <strong id="settings-number">—</strong></span>
+    </div>
+
+    <div class="settings-tabs" role="tablist" aria-label="Kategori pengaturan bot">
+      <button class="tab-btn is-active" type="button" role="tab" aria-selected="true" data-tab="tab-umum">Umum</button>
+      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-otomatisasi">Otomatisasi</button>
+      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-keamanan">Keamanan</button>
+      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-plugin">Plugin</button>
+    </div>
+
+    <div class="tab-panel is-active" id="tab-umum" role="tabpanel">
+      <div class="field">
+        <label for="input-owner">Nomor owner tambahan <span class="optional">(opsional)</span></label>
+        <input id="input-owner" type="tel" inputmode="numeric" placeholder="Kosongin kalau cuma kamu (nomor bot ini) yang jadi owner">
+        <p class="field-hint">Nomor bot ini otomatis jadi owner. Isi ini kalau mau kasih akses owner ke nomor lain juga.</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-otomatisasi" role="tabpanel" hidden>
+      <div class="toggle-row toggle-row-first">
+        <div class="toggle-copy">
+          <span class="toggle-label">Auto read</span>
+          <span class="toggle-hint">Pesan masuk otomatis ditandai terbaca</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-autoread">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-copy">
+          <span class="toggle-label">Auto typing</span>
+          <span class="toggle-hint">Nunjukin "sedang mengetik…" saat proses command</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-autotyping">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-keamanan" role="tabpanel" hidden>
+      <p class="tab-note">Fitur antilink, antispam, antidelete, dan blacklist grup diatur langsung lewat command di dalam chat WhatsApp (mis. <code>.antilink on</code>) supaya perubahannya kelihatan real-time buat semua member grup.</p>
+      <p class="tab-note tab-note-muted">Kontrol dari dashboard ini nyusul di update berikutnya.</p>
+    </div>
+
+    <div class="tab-panel" id="tab-plugin" role="tabpanel" hidden>
+      <p class="tab-note">Semua fitur bawaan aktif otomatis. Untuk nyalain/matiin command tertentu per bot, pakai <code>.blockcmd</code> / <code>.unblockcmd</code> langsung dari chat.</p>
+      <p class="tab-note tab-note-muted">Panel enable/disable per fitur dari dashboard ini termasuk benefit paket <strong>Premium</strong> — lihat di halaman Paket Harga.</p>
+    </div>
+
+    <div class="actions">
+      <button id="btn-save" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan pengaturan</button>
+      <button id="btn-disconnect" class="btn-danger"><i class="fa-solid fa-plug-circle-xmark"></i> Putuskan</button>
+    </div>
+    <p class="save-msg" id="save-msg" hidden></p>
+  </section>
+
+  <section class="panel panel-mine" id="panel-mine" hidden>
+    <h2 class="panel-title"><i class="fa-solid fa-address-book" style="color:var(--primary-solid)"></i> Nomor kamu di browser ini</h2>
+    <ul class="mine-list" id="mine-list"></ul>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span> jadibot</div>
+  <p class="footer-copyright">© 2026 jadibot. Dibuat buat komunitas.</p>
+</footer>
+
+<script src="nav.js"></script>
+<script src="bot.js"></script>
+</body>
+</html>
