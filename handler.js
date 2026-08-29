@@ -60,7 +60,17 @@ async function antiDelete(sock, raw) {
 
 export async function handleMessage(sock, config, { messages, type }) {
     if (type !== 'notify') return
-    const raw = messages[0]
+    // Dulu cuma messages[0] yang diproses — kalau WhatsApp ngirim lebih dari
+    // satu pesan baru dalam satu event 'notify' yang sama (biasa kejadian pas
+    // koneksi sempat putus-nyambung sebentar atau ada pesan numpuk masuk
+    // bareng), sisanya kesilap gitu aja tanpa dibalas sama sekali — kelihatan
+    // kayak "bot gak merespon" padahal pesannya emang gak pernah diproses.
+    // Sekarang semua pesan dalam batch diproses, paralel (bukan nunggu satu-satu),
+    // biar satu pesan yang berat gak nunda balasan ke pesan lain di batch yang sama.
+    await Promise.all(messages.map(raw => handleSingleMessage(sock, config, raw)))
+}
+
+async function handleSingleMessage(sock, config, raw) {
     if (!raw?.message) return
 
     const rawType = getContentType(raw.message)
@@ -155,7 +165,17 @@ export async function handleMessage(sock, config, { messages, type }) {
     if (!m.isOwner && user?.banned) return
 
     if (!m.isOwner && cmd !== 'verify' && !user?.registered) {
-        const pp = await sock.profilePictureUrl(m.sender, 'image').catch(() => null)
+        // Ini jalan di SETIAP command dari user yang belum verifikasi — kalau
+        // profilePictureUrl() lambat/nge-hang (server WA lambat, privasi PP
+        // dibatasi, dll), dulu gak ada batas waktu sama sekali, jadi bisa
+        // nunda balasan pertama bot ke user baru lumayan lama tanpa kelihatan
+        // kenapa. Sekarang dikasih timeout singkat + fallback: kalau PP gak
+        // kelar dalam waktu itu, tombol verifikasi tetap langsung terkirim
+        // (tanpa gambar PP), bukan nunggu.
+        const pp = await Promise.race([
+            sock.profilePictureUrl(m.sender, 'image').catch(() => null),
+            new Promise(resolve => setTimeout(() => resolve(null), PP_FETCH_TIMEOUT_MS))
+        ])
         return sock.sendInteractiveButton(m.from, {
             body: config.text.notRegistered,
             footer: 'Registration Message',
