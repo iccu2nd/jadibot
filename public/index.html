@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jadibot — Tautkan Nomor Kamu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="glow glow-a"></div>
+<div class="glow glow-b"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">◆</span>
+    <span class="brand-name">jadibot</span>
+  </div>
+  <div class="topbar-sub">nomormu, botmu sendiri</div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Tautkan nomor via kode pairing</p>
+    <h1>Ubah nomor WhatsApp kamu<br>jadi bot pribadi.</h1>
+    <p class="hero-sub">Masukin nomor, tempel kode pairing di WhatsApp, atur siapa ownernya dan gimana botnya bersikap. Nggak perlu scan QR, nggak perlu server sendiri.</p>
+  </section>
+
+  <section class="panel" id="panel-connect">
+    <h2 class="panel-title">1. Tautkan nomor</h2>
+    <form id="form-connect" class="connect-form">
+      <input id="input-number" type="tel" inputmode="numeric" placeholder="08xxxxxxxxxx" autocomplete="off" required>
+      <button type="submit" id="btn-connect">Sambungkan</button>
+    </form>
+    <p class="hint">Format bebas — pakai 08xx, +62, atau kode negara lain juga bisa.</p>
+    <p class="error" id="connect-error" hidden></p>
+  </section>
+
+  <section class="panel" id="panel-pairing" hidden>
+    <h2 class="panel-title">2. Masukkan kode ini di WhatsApp</h2>
+    <div class="pairing-box">
+      <div class="pairing-code" id="pairing-code">— — — — — —</div>
+      <button class="copy-btn" id="btn-copy-code" type="button">Salin kode</button>
+    </div>
+    <ol class="steps">
+      <li>Buka WhatsApp di HP dengan nomor yang kamu masukin tadi</li>
+      <li>Ketuk <strong>Perangkat Tertaut</strong> → <strong>Tautkan dengan nomor telepon</strong></li>
+      <li>Masukkan kode di atas sebelum waktu habis</li>
+    </ol>
+    <div class="status-row">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">Menunggu ditautkan…</span>
+      <span class="countdown" id="countdown"></span>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-settings" hidden>
+    <h2 class="panel-title">3. Atur bot kamu</h2>
+    <div class="status-row status-row-settled">
+      <span class="status-dot status-dot-on"></span>
+      <span>Tersambung sebagai <strong id="settings-number">—</strong></span>
+    </div>
+
+    <div class="field">
+      <label for="input-owner">Nomor owner tambahan <span class="optional">(opsional)</span></label>
+      <input id="input-owner" type="tel" inputmode="numeric" placeholder="Kosongin kalau cuma kamu (nomor bot ini) yang jadi owner">
+      <p class="field-hint">Nomor bot ini otomatis jadi owner. Isi ini kalau mau kasih akses owner ke nomor lain juga.</p>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-copy">
+        <span class="toggle-label">Auto read</span>
+        <span class="toggle-hint">Pesan masuk otomatis ditandai terbaca</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="toggle-autoread">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-copy">
+        <span class="toggle-label">Auto typing</span>
+        <span class="toggle-hint">Nunjukin "sedang mengetik…" saat proses command</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="toggle-autotyping">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="actions">
+      <button id="btn-save" class="btn-primary">Simpan pengaturan</button>
+      <button id="btn-disconnect" class="btn-danger">Putuskan bot</button>
+    </div>
+    <p class="save-msg" id="save-msg" hidden></p>
+  </section>
+
+  <section class="panel panel-mine" id="panel-mine" hidden>
+    <h2 class="panel-title">Nomor kamu di browser ini</h2>
+    <ul class="mine-list" id="mine-list"></ul>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
