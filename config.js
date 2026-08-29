@@ -29,7 +29,7 @@ export default {
 
     // Dashboard web jadibot (server.js)
     dashboardPort: 3000,
-    dashboardAdminKey: 'admin#123', // dipakai buat endpoint /api/admin/*, GANTI sebelum publish
+    dashboardAdminKey: 'ganti-key-admin-ini', // dipakai buat endpoint /api/admin/*, GANTI sebelum publish
 
     generateHighQualityLinkPreview: false,
     consoleLog: true,

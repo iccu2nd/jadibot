@@ -31,6 +31,7 @@ console.log = (...args) => {
 }
 
 let storesReady = false
+let pluginsReady = false
 
 const startBot = async () => {
     if (!storesReady) {
@@ -39,7 +40,17 @@ const startBot = async () => {
         await initSessionStore()
         storesReady = true
     }
-    await loadPlugins()
+    // loadPlugins() nge-scan + import ulang ~230 file plugin dari disk — mahal
+    // (bisa detikan). startBot() dipanggil lagi tiap kali socket reconnect
+    // (bukan cuma pas bener-bener pertama kali nyala), jadi kalau ini dipanggil
+    // setiap saat, tiap reconnect (termasuk putus-nyambung jaringan sesaat)
+    // bikin bot "nge-hang" nunggu semua plugin di-reload ulang sebelum socket
+    // baru dibuat. Cukup sekali di awal proses; plugin yang diedit pas bot
+    // jalan tetap ke-reload otomatis lewat fs.watch (reloadPlugin) di bawah.
+    if (!pluginsReady) {
+        await loadPlugins()
+        pluginsReady = true
+    }
     const { sock, saveCreds } = await createSocket(config)
     await wrapSocket(sock)
 
