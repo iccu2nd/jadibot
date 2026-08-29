@@ -56,7 +56,7 @@ let pollTimer = null
 let countdownTimer = null
 let countdownDeadline = null
 
-// --- Mode switcher: fokus "Sambungkan Nomor" vs "Bot Settings" agar tidak menumpuk ---
+// --- Mode switcher: fokus "Sambungkan Nomor" vs "Bot Settings" biar nggak numpuk ---
 function setMode(mode) {
   const isConnect = mode === 'connect'
   modeConnect.hidden = !isConnect

@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jadibot — Tautkan Nomor Anda</title>
-<meta name="description" content="Ubah nomor WhatsApp Anda menjadi bot pribadi dalam hitungan detik. Tidak perlu server sendiri, tidak perlu memindai kode QR.">
-<meta name="theme-color" content="#2c6b8e">
+<title>Botzora — Tautkan Nomor Kamu</title>
+<meta name="description" content="Ubah nomor WhatsApp kamu jadi bot pribadi dalam hitungan detik. Nggak perlu server sendiri, nggak perlu scan QR.">
+<meta name="theme-color" content="#6d5bf6">
 <link rel="icon" type="image/png" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,9 +13,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
 <script>
-  // Terapkan tema sebelum render agar tidak ada kedipan warna (FOUC).
+  // Terapkan tema sebelum render supaya nggak ada kedipan warna (FOUC).
   try {
-    var t = localStorage.getItem('jadibot_theme')
+    var t = localStorage.getItem('Botzora_theme')
     if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.setAttribute('data-theme', 'dark')
     }
@@ -24,11 +24,12 @@
 </head>
 <body>
 
+<div class="glow" aria-hidden="true"></div>
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span>
-    <span class="brand-name">jadibot</span>
+    <span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span>
+    <span class="brand-name">Botzora</span>
   </div>
   <div class="topbar-actions">
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema terang/gelap">
@@ -44,7 +45,7 @@
 <div class="nav-backdrop" id="nav-backdrop"></div>
 <nav class="topnav" id="topnav" aria-label="Menu utama">
   <div class="nav-head">
-    <span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span> jadibot</span>
+    <span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span> Botzora</span>
     <button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
@@ -56,7 +57,7 @@
     </div>
   </div>
 
-  <div class="nav-group" id="nav-group-utama">
+  <div class="nav-group">
     <span class="nav-group-label">Utama</span>
     <a class="topnav-link" href="/#top"><i class="fa-solid fa-house"></i> Beranda</a>
     <a class="topnav-link" href="/#fitur"><i class="fa-solid fa-shapes"></i> Fitur Bot</a>
@@ -76,20 +77,34 @@
     <div class="nav-foot-row">
       <button class="nav-chip" id="nav-theme-chip" type="button"><i class="fa-solid fa-moon"></i> <span id="nav-theme-label">Gelap</span></button>
     </div>
-    <a class="nav-cta" href="/login" id="nav-get-started"><i class="fa-solid fa-bolt"></i> Mulai Sekarang</a>
+    <a class="nav-cta" href="/login" id="nav-get-started"><i class="fa-solid fa-bolt"></i> Get Started</a>
     <a class="nav-cta-dark" href="/login" id="nav-account-btn"><i class="fa-solid fa-user"></i> Masuk</a>
   </div>
 </nav>
 
 <main class="wrap" id="top">
 
-  <section class="hero">
-    <p class="eyebrow"><i class="fa-solid fa-comment-dots"></i> Bot WhatsApp Pribadi &amp; Mudah</p>
-    <h1>Ubah nomor WhatsApp Anda menjadi <span class="grad-text">bot pribadi</span></h1>
-    <p class="hero-sub">Masukkan nomor, tempelkan kode pairing di WhatsApp, lalu atur siapa pemiliknya dan bagaimana bot bersikap. Tidak perlu memindai kode QR, tidak perlu server sendiri.</p>
-    <div class="hero-actions">
-      <a class="btn-hero-primary" href="/bot"><i class="fa-solid fa-link"></i> Sambungkan Nomor</a>
-      <a href="#fitur"><i class="fa-solid fa-shapes"></i> Jelajahi Fitur</a>
+  <section class="hero hero-product">
+    <div class="hero-copy">
+      <p class="eyebrow"><i class="fa-solid fa-circle-nodes"></i> WhatsApp bot platform</p>
+      <h1>Nomor WhatsApp kamu. <span class="grad-text">Kontrol penuh.</span></h1>
+      <p class="hero-sub">Hubungkan nomor WhatsApp, kelola session, dan jalankan ratusan fitur bot dari satu tempat. Tanpa QR dan tanpa perlu menyiapkan server sendiri.</p>
+      <div class="hero-actions">
+        <a class="btn-hero-primary" href="/bot"><i class="fa-solid fa-link"></i> Sambungkan nomor</a>
+        <a href="#cara-pakai"><i class="fa-solid fa-arrow-down"></i> Lihat cara kerja</a>
+      </div>
+      <div class="hero-meta"><span><i class="fa-solid fa-shield-halved"></i> Pairing code</span><span><i class="fa-solid fa-server"></i> Server 24/7</span><span><i class="fa-solid fa-sliders"></i> Bot settings</span></div>
+    </div>
+    <div class="product-preview" aria-label="Preview dashboard Botzora">
+      <div class="preview-top"><div class="preview-brand"><span class="preview-dot"></span> Botzora</div><span class="preview-live"><i class="fa-solid fa-circle"></i> Live</span></div>
+      <div class="preview-main">
+        <div class="preview-sidebar"><span class="preview-side-active"><i class="fa-solid fa-chart-line"></i> Overview</span><span><i class="fa-solid fa-link"></i> Sessions</span><span><i class="fa-solid fa-sliders"></i> Settings</span></div>
+        <div class="preview-content">
+          <div class="preview-heading"><div><small>Workspace</small><strong>Bot overview</strong></div><span class="preview-user"><i class="fa-solid fa-user"></i></span></div>
+          <div class="preview-stats"><div><small>Active bots</small><b id="preview-bots">—</b></div><div><small>Features</small><b id="preview-features">—</b></div></div>
+          <div class="preview-session"><div class="session-title"><span><i class="fa-solid fa-mobile-screen-button"></i> WhatsApp session</span><em><i class="fa-solid fa-circle"></i> Connected</em></div><div class="session-number">+62 •••• •••• <span>online</span></div><div class="session-line"><span></span></div></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -111,7 +126,7 @@
   <section class="feature-section" id="fitur">
     <p class="eyebrow section-eyebrow"><i class="fa-solid fa-shapes"></i> Apa aja yang bisa dilakuin</p>
     <h2 class="section-title">Ratusan fitur, siap pakai dari hari pertama.</h2>
-    <p class="section-sub">Semua fitur inti langsung aktif begitu bot Anda tersambung — tidak perlu memasang apa pun lagi.</p>
+    <p class="section-sub">Semua fitur inti langsung aktif begitu bot kamu tersambung — nggak perlu instal apa-apa lagi.</p>
     <div class="feature-grid">
       <div class="feature-card">
         <span class="feature-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
@@ -122,47 +137,47 @@
       <div class="feature-card">
         <span class="feature-icon" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span>
         <h3><span class="highlight">Otomatisasi</span></h3>
-        <p>Baca otomatis, mengetik otomatis, mulai ulang otomatis, dan rekap harian — bot Anda berjalan sendiri tanpa perlu dipantau terus-menerus.</p>
+        <p>Auto read, auto typing, auto restart, dan streak harian — bot kamu jalan sendiri tanpa dipantau terus.</p>
         <span class="feature-tag"><span class="tag-dot"><i class="fa-solid fa-check"></i></span> Aktif otomatis</span>
       </div>
       <div class="feature-card">
         <span class="feature-icon" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
         <h3><span class="highlight">AI</span> &amp; Hiburan</h3>
-        <p>Obrolan AI, perkakas stiker/webp, permainan grup, hingga fitur hiburan harian untuk meramaikan grup Anda.</p>
+        <p>Chat AI, sticker/webp tools, game grup, sampai fitur iseng harian buat rame-ramein grup kamu.</p>
         <span class="feature-tag"><span class="tag-dot"><i class="fa-solid fa-check"></i></span> Aktif otomatis</span>
       </div>
       <div class="feature-card">
         <span class="feature-icon" aria-hidden="true"><i class="fa-solid fa-user-shield"></i></span>
         <h3><span class="highlight">Kontrol</span> Owner</h3>
-        <p>Siaran pesan, peringatan/blokir anggota, pengaturan akses perintah, hingga pencadangan — semua berada di tangan Anda sebagai pemilik bot.</p>
+        <p>Broadcast, warn/ban, atur akses command, sampai backup — semua di tangan kamu sebagai owner bot.</p>
         <span class="feature-tag"><span class="tag-dot"><i class="fa-solid fa-check"></i></span> Aktif otomatis</span>
       </div>
     </div>
 
     <div class="cta-box">
-      <h2>Mulai jalankan bot Anda sekarang.</h2>
-      <p>Tautkan nomor Anda sekarang atau tingkatkan ke Premium untuk antrean prioritas dan kontrol fitur yang lebih leluasa.</p>
-      <a class="btn-primary" href="/bot" style="text-decoration:none;"><i class="fa-solid fa-arrow-up-right"></i> Sambungkan bot Anda</a>
+      <h2>Yuk mulai jalanin bot kamu.</h2>
+      <p>Tautkan nomor kamu sekarang atau upgrade ke Premium buat antrian prioritas dan kontrol fitur lebih leluasa.</p>
+      <a class="btn-primary" href="/bot" style="text-decoration:none;"><i class="fa-solid fa-arrow-up-right"></i> Sambungkan bot kamu</a>
     </div>
   </section>
 
   <section class="howto-section" id="cara-pakai">
-    <p class="eyebrow section-eyebrow"><i class="fa-solid fa-route"></i> Mudah, tanpa ribet</p>
-    <h2 class="section-title">Cara menautkan bot Anda.</h2>
-    <p class="section-sub">Empat langkah singkat dan bot Anda langsung berjalan di grup atau obrolan pribadi.</p>
+    <p class="eyebrow section-eyebrow"><i class="fa-solid fa-route"></i> Gampang, nggak ribet</p>
+    <h2 class="section-title">Cara menautkan bot kamu.</h2>
+    <p class="section-sub">Empat langkah singkat dan bot kamu langsung jalan di grup atau chat pribadi.</p>
     <div class="howto-grid">
       <div class="howto-card">
         <span class="howto-num">1</span>
         <div class="howto-copy">
-          <h3>Masuk atau buat akun</h3>
-          <p>Daftar menggunakan email atau masuk sekali klik dengan akun Google Anda.</p>
+          <h3>Masuk / buat akun</h3>
+          <p>Daftar pakai email atau login sekali klik pakai akun Google kamu.</p>
         </div>
       </div>
       <div class="howto-card">
         <span class="howto-num">2</span>
         <div class="howto-copy">
           <h3>Masukkan nomor WhatsApp</h3>
-          <p>Buka halaman Bot Settings, ketik nomor Anda, lalu tekan Sambungkan.</p>
+          <p>Buka halaman Bot Settings, ketik nomor kamu, lalu tekan Sambungkan.</p>
         </div>
       </div>
       <div class="howto-card">
@@ -176,7 +191,7 @@
         <span class="howto-num">4</span>
         <div class="howto-copy">
           <h3>Mulai pakai di grup</h3>
-          <p>Bot langsung aktif — ketik <code>.menu</code> di obrolan mana pun untuk melihat semua perintah yang tersedia.</p>
+          <p>Bot langsung aktif — ketik <code>.menu</code> di chat manapun buat lihat semua command yang tersedia.</p>
         </div>
       </div>
     </div>
@@ -184,8 +199,8 @@
 
   <section class="plan-section" id="upgrade">
     <p class="eyebrow section-eyebrow"><i class="fa-solid fa-crown"></i> Punya lebih banyak keleluasaan</p>
-    <h2 class="section-title">Tingkatkan untuk pengalaman yang lebih baik.</h2>
-    <p class="section-sub">Mulai gratis terlebih dahulu, tingkatkan kapan saja jika membutuhkan performa dan kontrol lebih.</p>
+    <h2 class="section-title">Upgrade buat pengalaman yang lebih enak.</h2>
+    <p class="section-sub">Mulai gratis dulu, upgrade kapan aja kalau butuh performa dan kontrol lebih.</p>
     <div class="plan-grid">
       <div class="plan-card">
         <div class="plan-head">
@@ -222,24 +237,24 @@
     <p class="section-sub">Belum ketemu jawabannya? Hubungi admin lewat WhatsApp di tombol upgrade Premium di atas.</p>
     <div class="faq-list">
       <details class="faq-item">
-        <summary>Apakah jadibot benar-benar gratis?<span class="chev"><i class="fa-solid fa-chevron-down"></i></span></summary>
-        <p class="faq-answer">Ya. Anda dapat menautkan satu nomor menjadi bot dengan semua fitur dasar aktif tanpa biaya. Paket Premium bersifat opsional untuk yang membutuhkan antrean prioritas dan kontrol tambahan.</p>
+        <summary>Apakah Botzora benar-benar gratis?<span class="chev"><i class="fa-solid fa-chevron-down"></i></span></summary>
+        <p class="faq-answer">Iya. Kamu bisa tautkan satu nomor jadi bot dengan semua fitur dasar aktif tanpa biaya. Paket Premium sifatnya opsional buat yang butuh antrian prioritas dan kontrol tambahan.</p>
       </details>
       <details class="faq-item">
         <summary>Apakah harus scan QR code?<span class="chev"><i class="fa-solid fa-chevron-down"></i></span></summary>
-        <p class="faq-answer">Tidak. Jadibot menggunakan metode kode pairing — Anda cukup memasukkan nomor, menempelkan kode 8 digit yang muncul ke WhatsApp, dan bot langsung tersambung.</p>
+        <p class="faq-answer">Nggak. Botzora pakai metode pairing code — kamu tinggal masukin nomor, tempel kode 8 digit yang muncul ke WhatsApp, dan bot langsung tersambung.</p>
       </details>
       <details class="faq-item">
         <summary>Bot saya kok tiba-tiba terputus?<span class="chev"><i class="fa-solid fa-chevron-down"></i></span></summary>
-        <p class="faq-answer">Biasanya karena sesi WhatsApp berakhir dari sisi ponsel Anda (keluar dari perangkat tertaut) atau server sedang memulai ulang. Buka kembali halaman Bot Settings dan tautkan ulang nomor Anda.</p>
+        <p class="faq-answer">Biasanya karena sesi WhatsApp berakhir dari sisi HP kamu (logout perangkat tertaut) atau server sedang restart. Cukup buka halaman Bot Settings lagi dan tautkan ulang nomor kamu.</p>
       </details>
       <details class="faq-item">
         <summary>Bagaimana cara melihat semua perintah bot?<span class="chev"><i class="fa-solid fa-chevron-down"></i></span></summary>
-        <p class="faq-answer">Ketik <code>.menu</code> di obrolan pribadi atau grup mana pun tempat bot Anda aktif — daftar lengkap fitur akan muncul beserta cara pakainya.</p>
+        <p class="faq-answer">Ketik <code>.menu</code> di chat pribadi atau grup manapun tempat bot kamu aktif — daftar lengkap fitur akan muncul beserta cara pakainya.</p>
       </details>
       <details class="faq-item">
         <summary>Apa bedanya paket Free dan Premium?<span class="chev"><i class="fa-solid fa-chevron-down"></i></span></summary>
-        <p class="faq-answer">Free cocok untuk pemakaian santai sehari-hari. Premium menambahkan prioritas antrean server, panel aktif/nonaktifkan fitur per bot, prefix khusus, dan jalur dukungan langsung ke admin.</p>
+        <p class="faq-answer">Free cocok buat pemakaian santai sehari-hari. Premium menambahkan prioritas antrian server, panel enable/disable fitur per bot, prefix custom, dan jalur support langsung ke admin.</p>
       </details>
     </div>
   </section>
@@ -247,8 +262,8 @@
 </main>
 
 <footer class="site-footer">
-  <div class="footer-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span> jadibot</div>
-  <p class="footer-tagline">Nomor Anda, bot Anda sendiri</p>
+  <div class="footer-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span> Botzora</div>
+  <p class="footer-tagline">nomormu, botmu sendiri</p>
   <div class="footer-links">
     <a href="#fitur">Fitur</a>
     <a href="#cara-pakai">Cara Pakai</a>
@@ -257,7 +272,7 @@
     <a href="/dashboard">Dashboard</a>
     <a href="/admin">Admin</a>
   </div>
-  <p class="footer-copyright">© 2026 Jadibot. Dibuat untuk komunitas.</p>
+  <p class="footer-copyright">© 2026 Botzora. Dibuat buat komunitas.</p>
 </footer>
 
 <script src="nav.js"></script>

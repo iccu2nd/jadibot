@@ -11,7 +11,18 @@ async function apiGet(number, token) {
   return res.json()
 }
 
-// --- Statistik ringan, sama seperti landing page ---
+// --- Sapaan nama + isi ulang tautan Bot Settings kalau perlu ---
+async function loadMe() {
+  try {
+    const res = await fetch('/api/auth/me')
+    const data = await res.json()
+    const nameEl = el('dash-user-name')
+    if (nameEl) nameEl.textContent = data.user?.name || 'kamu'
+  } catch {}
+}
+loadMe()
+
+// --- Statistik ringan, sama kayak landing page ---
 async function loadStats() {
   try {
     const res = await fetch('/api/stats')

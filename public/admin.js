@@ -9,10 +9,6 @@ const statTotal = document.getElementById('stat-total')
 const statConnected = document.getElementById('stat-connected')
 const statReconnecting = document.getElementById('stat-reconnecting')
 const statFeatures = document.getElementById('stat-features')
-const statUsers = document.getElementById('stat-users')
-
-const usersSummaryEl = document.getElementById('users-summary')
-const usersTableWrap = document.getElementById('users-table-wrap')
 
 const sectionTitle = document.getElementById('admin-section-title')
 const sectionSub = document.getElementById('admin-section-sub')
@@ -21,8 +17,7 @@ const sections = document.querySelectorAll('.admin-section')
 
 const SECTION_COPY = {
   overview: { title: 'Ringkasan', sub: 'Pantau kondisi server jadibot secara sekilas.' },
-  bots: { title: 'Bot Terhubung', sub: 'Kelola semua sesi bot yang sedang berjalan di server ini.' },
-  users: { title: 'Pengguna', sub: 'Kelola semua akun yang terdaftar di jadibot.' }
+  bots: { title: 'Bot Terhubung', sub: 'Kelola semua sesi bot yang lagi jalan di server ini.' }
 }
 
 const STORAGE_KEY = 'jadibot-admin-key'
@@ -50,10 +45,7 @@ function setSection(name) {
   const copy = SECTION_COPY[name]
   if (copy) { sectionTitle.textContent = copy.title; sectionSub.textContent = copy.sub }
 }
-navItems.forEach((btn) => btn.addEventListener('click', () => {
-  setSection(btn.dataset.section)
-  if (btn.dataset.section === 'users') loadUsers()
-}))
+navItems.forEach((btn) => btn.addEventListener('click', () => setSection(btn.dataset.section)))
 
 function renderStats(sessions) {
   const connected = sessions.filter((s) => s.status === 'connected').length
@@ -123,7 +115,6 @@ async function loadSessions() {
     renderStats(data)
     renderTable(data)
     loadFeatureCount()
-    loadUsers()
   } catch (e) {
     showError(e.message)
   } finally {
@@ -146,78 +137,6 @@ async function stopSession(number) {
       throw new Error(data?.error || 'Gagal memutuskan sesi.')
     }
     loadSessions()
-  } catch (e) {
-    showError(e.message)
-  }
-}
-
-function providerLabel(provider) {
-  return provider === 'google' ? 'Google' : 'Email'
-}
-
-function renderUsersTable(users) {
-  if (!users.length) {
-    usersTableWrap.innerHTML = '<div class="empty-state">Belum ada pengguna yang terdaftar.</div>'
-    usersSummaryEl.hidden = true
-    return
-  }
-
-  usersSummaryEl.hidden = false
-  usersSummaryEl.textContent = `${users.length} akun terdaftar.`
-
-  const rows = users.map(u => `
-    <tr>
-      <td>${u.name}</td>
-      <td>${u.email || '—'}</td>
-      <td><span class="pill pill-other">${providerLabel(u.provider)}</span></td>
-      <td>${fmtDate(u.createdAt)}</td>
-      <td><button class="stop-btn" data-id="${u.id}"><i class="fa-solid fa-user-xmark"></i> Hapus</button></td>
-    </tr>
-  `).join('')
-
-  usersTableWrap.innerHTML = `
-    <table class="bot-table">
-      <thead>
-        <tr><th>Nama</th><th>Email</th><th>Masuk lewat</th><th>Terdaftar sejak</th><th></th></tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `
-
-  usersTableWrap.querySelectorAll('.stop-btn').forEach(btn => {
-    btn.addEventListener('click', () => deleteUser(btn.dataset.id))
-  })
-}
-
-async function loadUsers() {
-  const key = inputKey.value.trim() || sessionStorage.getItem(STORAGE_KEY)
-  if (!key) return showError('Masukkan admin key dulu.')
-  showError('')
-  try {
-    const res = await fetch('/api/admin/users', { headers: { 'x-admin-key': key } })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data?.error || 'Gagal memuat daftar pengguna.')
-    statUsers.textContent = data.length
-    renderUsersTable(data)
-  } catch (e) {
-    showError(e.message)
-  }
-}
-
-async function deleteUser(id) {
-  const key = inputKey.value.trim() || sessionStorage.getItem(STORAGE_KEY)
-  if (!key) return
-  if (!confirm('Hapus akun ini? Tindakan ini tidak bisa dibatalkan.')) return
-  try {
-    const res = await fetch(`/api/admin/users/${id}`, {
-      method: 'DELETE',
-      headers: { 'x-admin-key': key }
-    })
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      throw new Error(data?.error || 'Gagal menghapus pengguna.')
-    }
-    loadUsers()
   } catch (e) {
     showError(e.message)
   }

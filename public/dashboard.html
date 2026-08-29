@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jadibot — Dashboard</title>
-<meta name="theme-color" content="#2c6b8e">
+<title>Botzora — Dashboard</title>
+<meta name="theme-color" content="#6d5bf6">
 <link rel="icon" type="image/png" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="style.css">
 <script>
   try {
-    var t = localStorage.getItem('jadibot_theme')
+    var t = localStorage.getItem('Botzora_theme')
     if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.setAttribute('data-theme', 'dark')
     }
@@ -22,11 +22,12 @@
 </head>
 <body>
 
+<div class="glow" aria-hidden="true"></div>
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span>
-    <span class="brand-name">jadibot</span>
+    <span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span>
+    <span class="brand-name">Botzora</span>
   </div>
   <div class="topbar-actions">
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema terang/gelap">
@@ -42,7 +43,7 @@
 <div class="nav-backdrop" id="nav-backdrop"></div>
 <nav class="topnav" id="topnav" aria-label="Menu utama">
   <div class="nav-head">
-    <span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="jadibot"></span> jadibot</span>
+    <span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span> Botzora</span>
     <button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
@@ -54,7 +55,7 @@
     </div>
   </div>
 
-  <div class="nav-group" id="nav-group-utama">
+  <div class="nav-group">
     <span class="nav-group-label">Utama</span>
     <a class="topnav-link" href="/#top"><i class="fa-solid fa-house"></i> Beranda</a>
     <a class="topnav-link" href="/#fitur"><i class="fa-solid fa-shapes"></i> Fitur Bot</a>
@@ -80,8 +81,8 @@
 <main class="wrap" id="top" style="max-width:720px;">
 
   <section class="dash-hero">
-    <h1>Halo, <span id="dash-user-name">—</span> 👋</h1>
-    <p>Ini ringkasan akun Anda. Sambungkan bot baru atau atur yang sudah ada kapan saja.</p>
+    <h1>Halo, <span id="dash-user-name">—</span> </h1>
+    <p>Ini ringkasan akun kamu. Sambungkan bot baru atau atur yang udah ada kapan aja.</p>
   </section>
 
   <section class="stats-strip" id="stats-strip" aria-label="Statistik layanan">
@@ -112,20 +113,20 @@
       <span class="quick-card-icon"><i class="fa-solid fa-shapes"></i></span>
       <div>
         <h3>Fitur Bot</h3>
-        <p>Lihat semua fitur yang aktif otomatis di bot Anda.</p>
+        <p>Lihat semua fitur yang aktif otomatis di bot kamu.</p>
       </div>
     </a>
     <a class="quick-card" href="/#upgrade">
       <span class="quick-card-icon"><i class="fa-solid fa-crown"></i></span>
       <div>
         <h3>Upgrade Premium</h3>
-        <p>Antrean prioritas, panel plugin, dan prefix khusus.</p>
+        <p>Antrian prioritas, panel plugin, dan prefix custom.</p>
       </div>
     </a>
   </div>
 
   <section class="panel panel-mine" id="panel-mine" hidden>
-    <h2 class="panel-title"><i class="fa-solid fa-address-book" style="color:var(--primary-solid)"></i> Nomor Anda di peramban ini</h2>
+    <h2 class="panel-title"><i class="fa-solid fa-address-book" style="color:var(--primary-solid)"></i> Nomor kamu di browser ini</h2>
     <ul class="mine-list" id="mine-list"></ul>
   </section>
 

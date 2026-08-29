@@ -29,13 +29,13 @@ function setMode(mode) {
     formLogin.hidden = true
     formRegister.hidden = false
     title.textContent = 'Buat akun baru'
-    subtitle.textContent = 'Gratis, langsung bisa sambungkan bot Anda.'
+    subtitle.textContent = 'Gratis, langsung bisa sambungkan bot kamu.'
     switchHint.innerHTML = 'Sudah punya akun? <a href="#" id="auth-switch-link">Masuk di sini</a>'
   } else {
     formLogin.hidden = false
     formRegister.hidden = true
-    title.textContent = 'Masuk ke akun Anda'
-    subtitle.textContent = 'Kelola bot WhatsApp Anda dari dashboard.'
+    title.textContent = 'Masuk ke akun kamu'
+    subtitle.textContent = 'Kelola bot WhatsApp kamu dari dashboard.'
     switchHint.innerHTML = 'Belum punya akun? <a href="#" id="auth-switch-link">Daftar di sini</a>'
   }
   bindSwitchLink(mode)
