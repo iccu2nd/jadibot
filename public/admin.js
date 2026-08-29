@@ -39,7 +39,7 @@ function render(sessions) {
       <td><span class="pill ${statusPillClass(s.status)}">${s.status}</span></td>
       <td>${fmtDate(s.connectedAt)}</td>
       <td>${s.settings?.ownerNumber || '—'}</td>
-      <td><button class="stop-btn" data-number="${s.number}">Putuskan</button></td>
+      <td><button class="stop-btn" data-number="${s.number}"><i class="fa-solid fa-plug-circle-xmark"></i> Putuskan</button></td>
     </tr>
   `).join('')
 
@@ -62,7 +62,7 @@ async function loadSessions() {
   if (!key) return showError('Masukkan admin key dulu.')
   showError('')
   btnLoad.disabled = true
-  btnLoad.textContent = 'Memuat…'
+  btnLoad.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin"></i> Memuat…'
   try {
     const res = await fetch('/api/admin/sessions', { headers: { 'x-admin-key': key } })
     const data = await res.json()
@@ -73,7 +73,7 @@ async function loadSessions() {
     showError(e.message)
   } finally {
     btnLoad.disabled = false
-    btnLoad.textContent = 'Muat daftar'
+    btnLoad.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Muat daftar'
   }
 }
 

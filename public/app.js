@@ -148,7 +148,7 @@ formConnect.addEventListener('submit', async (ev) => {
   ev.preventDefault()
   connectError.hidden = true
   btnConnect.disabled = true
-  btnConnect.textContent = 'Menyambungkan…'
+  btnConnect.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menyambungkan…'
   try {
     const res = await fetch('/api/connect', {
       method: 'POST',
@@ -166,7 +166,7 @@ formConnect.addEventListener('submit', async (ev) => {
     connectError.hidden = false
   } finally {
     btnConnect.disabled = false
-    btnConnect.textContent = 'Sambungkan'
+    btnConnect.innerHTML = 'Sambungkan'
   }
 })
 
@@ -175,8 +175,8 @@ btnCopyCode.addEventListener('click', async () => {
   if (!code || code.includes('…')) return
   try {
     await navigator.clipboard.writeText(code)
-    btnCopyCode.textContent = 'Tersalin ✓'
-    setTimeout(() => { btnCopyCode.textContent = 'Salin kode' }, 1500)
+    btnCopyCode.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin'
+    setTimeout(() => { btnCopyCode.innerHTML = '<i class="fa-regular fa-copy"></i> Salin kode' }, 1500)
   } catch {}
 })
 
@@ -254,12 +254,12 @@ async function renderMine() {
     right.appendChild(badge)
 
     const openBtn = document.createElement('button')
-    openBtn.textContent = 'buka'
+    openBtn.innerHTML = '<i class="fa-solid fa-arrow-right"></i> buka'
     openBtn.addEventListener('click', () => openSession(number, store[number]))
     right.appendChild(openBtn)
 
     const forgetBtn = document.createElement('button')
-    forgetBtn.textContent = 'lupakan'
+    forgetBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i> lupakan'
     forgetBtn.addEventListener('click', () => { forgetSession(number); renderMine() })
     right.appendChild(forgetBtn)
 

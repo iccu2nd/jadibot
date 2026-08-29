@@ -8,14 +8,15 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark">◆</span>
+    <span class="brand-mark"><i class="fa-solid fa-robot"></i></span>
     <span class="brand-name">jadibot</span>
   </div>
   <button class="hamburger" id="hamburger-btn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="topnav">
@@ -55,7 +56,7 @@
     <h2 class="panel-title">1. Tautkan nomor</h2>
     <form id="form-connect" class="connect-form">
       <input id="input-number" type="tel" inputmode="numeric" placeholder="08xxxxxxxxxx" autocomplete="off" required>
-      <button type="submit" id="btn-connect">Sambungkan</button>
+      <button type="submit" id="btn-connect"><i class="fa-solid fa-link"></i> Sambungkan</button>
     </form>
     <p class="hint">Format bebas — pakai 08xx, +62, atau kode negara lain juga bisa.</p>
     <p class="error" id="connect-error" hidden></p>
@@ -65,7 +66,7 @@
     <h2 class="panel-title">2. Masukkan kode ini di WhatsApp</h2>
     <div class="pairing-box">
       <div class="pairing-code" id="pairing-code">— — — — — —</div>
-      <button class="copy-btn" id="btn-copy-code" type="button">Salin kode</button>
+      <button class="copy-btn" id="btn-copy-code" type="button"><i class="fa-regular fa-copy"></i> Salin kode</button>
     </div>
     <ol class="steps">
       <li>Buka WhatsApp di HP dengan nomor yang kamu masukin tadi</li>
@@ -136,8 +137,8 @@
     </div>
 
     <div class="actions">
-      <button id="btn-save" class="btn-primary">Simpan pengaturan</button>
-      <button id="btn-disconnect" class="btn-danger">Putuskan bot</button>
+      <button id="btn-save" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan pengaturan</button>
+      <button id="btn-disconnect" class="btn-danger"><i class="fa-solid fa-plug-circle-xmark"></i> Putuskan</button>
     </div>
     <p class="save-msg" id="save-msg" hidden></p>
   </section>
@@ -152,33 +153,35 @@
     <h2 class="section-title">Ratusan fitur, siap pakai dari hari pertama.</h2>
     <div class="feature-grid">
       <div class="feature-card">
-        <span class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
-        </span>
-        <h3>Moderasi &amp; Grup</h3>
+        <span class="feature-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+        <h3><span class="highlight">Moderasi</span> &amp; Grup</h3>
         <p>Antilink, antispam, antidelete, blacklist, welcome/goodbye otomatis, sampai kick/promote lewat command.</p>
+        <span class="feature-tag"><span class="tag-dot"><i class="fa-solid fa-check"></i></span> Aktif otomatis</span>
       </div>
-      <div class="feature-card">
-        <span class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>
-        </span>
-        <h3>Otomatisasi</h3>
+      <div class="feature-card is-dark">
+        <span class="feature-icon" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span>
+        <h3><span class="highlight">Otomatisasi</span></h3>
         <p>Auto read, auto typing, auto restart, dan streak harian — bot kamu jalan sendiri tanpa dipantau terus.</p>
+        <span class="feature-tag"><span class="tag-dot"><i class="fa-solid fa-check"></i></span> Aktif otomatis</span>
       </div>
-      <div class="feature-card">
-        <span class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></svg>
-        </span>
-        <h3>AI &amp; Hiburan</h3>
+      <div class="feature-card is-dark">
+        <span class="feature-icon" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+        <h3><span class="highlight">AI</span> &amp; Hiburan</h3>
         <p>Chat AI, sticker/webp tools, game grup, sampai fitur iseng harian buat rame-ramein grup kamu.</p>
+        <span class="feature-tag"><span class="tag-dot"><i class="fa-solid fa-check"></i></span> Aktif otomatis</span>
       </div>
       <div class="feature-card">
-        <span class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v4H4zM4 10h10v10H4zM16 10h4v10h-4z"/></svg>
-        </span>
-        <h3>Kontrol Owner</h3>
+        <span class="feature-icon" aria-hidden="true"><i class="fa-solid fa-user-shield"></i></span>
+        <h3><span class="highlight">Kontrol</span> Owner</h3>
         <p>Broadcast, warn/ban, atur akses command, sampai backup — semua di tangan kamu sebagai owner bot.</p>
+        <span class="feature-tag"><span class="tag-dot"><i class="fa-solid fa-check"></i></span> Aktif otomatis</span>
       </div>
+    </div>
+
+    <div class="cta-box">
+      <h2>Yuk mulai jalanin bot kamu.</h2>
+      <p>Tautkan nomor kamu sekarang atau upgrade ke Premium buat antrian prioritas dan kontrol fitur lebih leluasa.</p>
+      <a class="btn-primary" href="#upgrade" style="text-decoration:none;"><i class="fa-solid fa-arrow-up-right"></i> Lihat paket Premium</a>
     </div>
   </section>
 
@@ -210,7 +213,7 @@
           <li>Prefix custom &amp; branding bot sendiri</li>
           <li>Support langsung ke admin</li>
         </ul>
-        <a class="btn-primary btn-upgrade" id="btn-upgrade" href="#" target="_blank" rel="noopener">Upgrade ke Premium</a>
+        <a class="btn-primary btn-upgrade" id="btn-upgrade" href="#" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right"></i> Upgrade ke Premium</a>
       </div>
     </div>
   </section>
