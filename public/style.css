@@ -1,29 +1,32 @@
 /* ============================================================
-   jadibot dashboard — tiket klaim untuk nomor WhatsApp kamu.
-   Palet: putih penuh + tinta hitam. Aksen warna cuma dipakai
-   sebagai teks/garis status (bukan latar/glow), jadi halaman ini
-   kebaca kayak kuitansi/boarding-pass, bukan template SaaS gelap.
+   jadibot dashboard — clean panel style, terinspirasi tampilan
+   login Cloudflare: kartu putih dengan sudut membulat, border
+   abu-abu lembut, tombol utama biru, tanpa ornamen dekoratif
+   (garis putus-putus, notch tiket, prefiks "//", dll).
    ============================================================ */
 
 :root {
-  --bg: #ffffff;
+  --bg: #f6f7f8;
   --panel: #ffffff;
-  --panel-border: #111111;
-  --line-soft: #d9d7d0;
-  --text: #111111;
-  --muted: #5c5c58;
-  --field: #faf9f6;
+  --panel-border: #e3e5e8;
+  --line-soft: #ebedf0;
+  --text: #17181a;
+  --muted: #6b7076;
+  --field: #ffffff;
 
-  /* dulu purple/cyan neon — sekarang cuma dipakai sebagai warna
-     teks/garis tipis untuk kode & status, gak ada isian/gradient */
-  --ink-accent: #111111;
-  --success: #1f7a4d;
+  --accent: #3b6ef6;
+  --accent-hover: #2f5adf;
+  --success: #16794f;
   --warn: #9a6b00;
-  --danger: #a3271d;
-  --danger-solid: #a3271d;
+  --danger: #d33a2f;
+  --danger-solid: #d33a2f;
 
-  --font-display: "IBM Plex Mono", monospace;
-  --font-body: "Source Serif 4", Georgia, serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-card: 0 1px 2px rgba(20, 20, 30, 0.04), 0 8px 24px rgba(20, 20, 30, 0.05);
+
+  --font-display: "Inter", -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 }
 
@@ -61,8 +64,8 @@ body { position: relative; overflow-x: hidden; }
 .topbar-sub { color: var(--muted); font-size: 12.5px; font-family: var(--font-mono); }
 .topnav-link { color: var(--text); font-size: 13px; text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 2px; transition: border-color .15s; }
 .topnav-link:hover, .topnav-link.is-active { border-color: var(--text); }
-.topbar-admin { color: var(--text); font-size: 13px; text-decoration: none; border: 1px solid var(--panel-border); border-radius: 0; padding: 5px 14px; font-family: var(--font-mono); transition: background .15s, color .15s; }
-.topbar-admin:hover { background: var(--text); color: var(--bg); }
+.topbar-admin { color: var(--text); font-size: 13px; text-decoration: none; border: 1px solid var(--panel-border); border-radius: 999px; padding: 6px 16px; font-family: var(--font-body); font-weight: 500; transition: background .15s, color .15s, border-color .15s; }
+.topbar-admin:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
 
 .hamburger {
   display: none;
@@ -74,7 +77,7 @@ body { position: relative; overflow-x: hidden; }
   padding: 0;
   background: transparent;
   border: 1px solid var(--panel-border);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -125,114 +128,88 @@ body { position: relative; overflow-x: hidden; }
   padding: 52px 20px 100px;
 }
 
-.hero { margin-bottom: 44px; }
+.hero { margin-bottom: 36px; }
 .eyebrow {
-  font-family: var(--font-mono);
-  color: var(--text);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin: 0 0 14px;
+  font-family: var(--font-body);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  margin: 0 0 12px;
 }
-.eyebrow::before { content: "// "; color: var(--muted); }
 .hero h1 {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(28px, 5.6vw, 40px);
-  line-height: 1.18;
-  letter-spacing: -0.01em;
-  margin: 0 0 16px;
+  font-weight: 700;
+  font-size: clamp(26px, 5.2vw, 36px);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  margin: 0 0 14px;
   color: var(--text);
 }
-.hero-sub { color: var(--muted); font-size: 16px; line-height: 1.65; margin: 0; max-width: 52ch; font-family: var(--font-body); }
+.hero-sub { color: var(--muted); font-size: 15.5px; line-height: 1.6; margin: 0; max-width: 52ch; font-family: var(--font-body); }
 
-/* Panel = selembar kertas dengan garis tegas, bukan card melayang
-   dengan shadow blur. Tab kecil di kiri-atas tiap panel jadi motif
-   "tiket sobek" — elemen ciri khas halaman ini, karena alurnya
-   memang literal 3 langkah berurutan. */
+/* Panel = kartu putih rapi, sudut membulat, border tipis + shadow
+   halus — gaya form Cloudflare, bukan lagi motif tiket/kuitansi. */
 .panel {
   position: relative;
   background: var(--panel);
   border: 1px solid var(--panel-border);
-  border-radius: 0;
-  padding: 30px 26px 26px;
-  margin-bottom: 28px;
-}
-.panel::before {
-  content: "";
-  position: absolute;
-  top: -1px; left: 22px;
-  width: 34px; height: 3px;
-  background: var(--text);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 28px 26px;
+  margin-bottom: 22px;
 }
 .panel-title {
   font-family: var(--font-display);
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
   margin: 0 0 20px;
   color: var(--text);
 }
 
-.connect-form { display: flex; gap: 0; border: 1px solid var(--panel-border); }
+.connect-form { display: flex; gap: 10px; }
 #input-number {
   flex: 1;
   background: var(--field);
-  border: none;
-  border-right: 1px solid var(--panel-border);
-  padding: 14px 16px;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
   color: var(--text);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 15px;
   outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
 }
-#input-number:focus { background: #fff; }
-#input-number::placeholder { color: #9a978d; }
+#input-number:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 110, 246, 0.15); }
+#input-number::placeholder { color: #9a9ea3; }
 
-button { cursor: pointer; font-family: var(--font-mono); border: none; border-radius: 0; }
+button { cursor: pointer; font-family: var(--font-body); border: none; border-radius: var(--radius-sm); }
 
 #btn-connect, .btn-primary {
-  background: var(--text);
-  color: var(--bg);
+  background: var(--accent);
+  color: #ffffff;
   font-weight: 600;
-  padding: 14px 24px;
-  font-size: 13.5px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  padding: 13px 24px;
+  font-size: 14.5px;
   transition: background 0.15s ease, color 0.15s ease;
 }
-#btn-connect:hover, .btn-primary:hover { background: #333331; }
-#btn-connect:disabled { opacity: 0.4; cursor: default; }
+#btn-connect:hover, .btn-primary:hover { background: var(--accent-hover); }
+#btn-connect:disabled { opacity: 0.5; cursor: default; }
 
 .hint, .field-hint { color: var(--muted); font-size: 12.5px; margin: 12px 0 0; font-family: var(--font-body); }
-.error { color: var(--danger-solid); font-size: 13px; margin: 12px 0 0; font-family: var(--font-mono); }
-.error::before { content: "! "; }
+.error { color: var(--danger-solid); font-size: 13px; margin: 12px 0 0; font-family: var(--font-body); }
 
-/* Kode pairing digambar sebagai potongan tiket: garis putus-putus
-   dengan "lubang perforasi" bundar di kedua ujungnya. */
 .pairing-box {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: var(--field);
-  border: 1px dashed var(--panel-border);
-  padding: 24px 26px;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 22px 24px;
   margin-bottom: 20px;
 }
-.pairing-box::before, .pairing-box::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 18px; height: 18px;
-  background: var(--bg);
-  border: 1px solid var(--panel-border);
-  border-radius: 50%;
-  transform: translateY(-50%);
-}
-.pairing-box::before { left: -10px; }
-.pairing-box::after { right: -10px; }
 .pairing-code {
   font-family: var(--font-mono);
   font-size: clamp(22px, 5vw, 30px);
@@ -243,6 +220,7 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 .copy-btn {
   background: transparent;
   border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
   color: var(--text);
   padding: 9px 14px;
   font-size: 12px;
@@ -278,20 +256,22 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 @keyframes blink { 50% { opacity: 0.15; } }
 .countdown { margin-left: auto; font-family: var(--font-mono); color: var(--text); }
 
-.field { margin-bottom: 24px; }
-.field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.02em; }
-.optional { color: var(--muted); font-weight: 400; text-transform: none; }
+.field { margin-bottom: 22px; }
+.field label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 8px; font-family: var(--font-body); }
+.optional { color: var(--muted); font-weight: 400; }
 .field input {
   width: 100%;
   background: var(--field);
   border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
   padding: 12px 14px;
   color: var(--text);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 14.5px;
   outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
 }
-.field input:focus { background: #fff; }
+.field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 110, 246, 0.15); }
 
 .toggle-row {
   display: flex;
@@ -301,7 +281,7 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
   border-top: 1px solid var(--line-soft);
 }
 .toggle-copy { display: flex; flex-direction: column; gap: 3px; }
-.toggle-label { font-size: 14px; font-weight: 600; font-family: var(--font-mono); }
+.toggle-label { font-size: 14.5px; font-weight: 600; font-family: var(--font-body); }
 .toggle-hint { font-size: 12.5px; color: var(--muted); font-family: var(--font-body); }
 
 .switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
@@ -321,30 +301,26 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 .switch input:checked + .slider { background: var(--text); }
 .switch input:checked + .slider::before { transform: translateX(18px); background: var(--bg); }
 
-.actions { display: flex; gap: 0; margin-top: 26px; border: 1px solid var(--panel-border); }
+.actions { display: flex; gap: 10px; margin-top: 24px; }
 .actions .btn-primary { flex: 1; }
 .btn-danger {
-  background: var(--bg);
-  border: none;
-  border-left: 1px solid var(--panel-border);
+  background: #fff;
+  border: 1px solid var(--panel-border);
   color: var(--danger-solid);
-  padding: 14px 18px;
-  font-size: 13px;
+  padding: 13px 18px;
+  font-size: 14px;
   font-weight: 600;
-  text-transform: uppercase;
 }
-.btn-danger:hover { background: var(--danger); color: var(--bg); }
-.save-msg { color: var(--success); font-size: 13px; margin: 14px 0 0; font-family: var(--font-mono); }
-.save-msg::before { content: "✓ "; }
+.btn-danger:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+.save-msg { color: var(--success); font-size: 13px; margin: 14px 0 0; font-family: var(--font-body); }
 
-.panel-mine .mine-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; border: 1px solid var(--panel-border); }
+.panel-mine .mine-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .panel-mine li {
   display: flex; align-items: center; justify-content: space-between;
-  background: var(--bg); border-bottom: 1px solid var(--line-soft);
-  padding: 12px 14px; font-family: var(--font-mono); font-size: 13.5px;
+  background: var(--field); border: 1px solid var(--panel-border); border-radius: var(--radius-sm);
+  padding: 12px 14px; font-family: var(--font-body); font-size: 13.5px;
 }
-.panel-mine li:last-child { border-bottom: none; }
-.mine-status { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; padding: 3px 8px; border: 1px solid currentColor; }
+.mine-status { font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: 0.02em; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; }
 .mine-status.connected { color: var(--success); }
 .mine-status.connecting, .mine-status.reconnecting { color: var(--warn); }
 .mine-status.gone { color: var(--muted); }
@@ -359,19 +335,22 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 
 /* ============================================================
    Tambahan: stats strip, feature showcase, plan/upgrade section,
-   tabbed settings, footer. Ngikutin motif "tiket/kuitansi" yang
-   sama — garis tegas, tanpa shadow/gradient, ikon SVG garis tipis
-   (bukan emoji).
+   tabbed settings, footer. Kartu putih rounded + shadow halus,
+   selaras sama gaya panel di atas — bukan garis tegas/kotak-kotak.
    ============================================================ */
 
 .stats-strip {
   display: flex;
+  background: var(--panel);
   border: 1px solid var(--panel-border);
-  margin-bottom: 28px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 24px;
+  overflow: hidden;
 }
 .stat-item {
   flex: 1;
-  padding: 16px 14px;
+  padding: 18px 14px;
   text-align: center;
   border-right: 1px solid var(--line-soft);
 }
@@ -379,57 +358,55 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 .stat-value {
   display: block;
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   font-size: clamp(18px, 4vw, 22px);
   color: var(--text);
 }
 .stat-label {
   display: block;
   margin-top: 4px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  font-family: var(--font-body);
 }
 
 .section-title {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   font-size: clamp(20px, 4.4vw, 26px);
-  line-height: 1.25;
+  line-height: 1.28;
   letter-spacing: -0.01em;
-  margin: 0 0 26px;
+  margin: 0 0 24px;
   color: var(--text);
 }
 
-.feature-section, .plan-section { margin-top: 56px; padding-top: 44px; border-top: 1px solid var(--line-soft); }
+.feature-section, .plan-section { margin-top: 52px; padding-top: 40px; border-top: 1px solid var(--line-soft); }
 
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  border: 1px solid var(--panel-border);
+  gap: 14px;
 }
 .feature-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
   padding: 22px 20px;
-  border-right: 1px solid var(--line-soft);
-  border-bottom: 1px solid var(--line-soft);
 }
-.feature-card:nth-child(2n) { border-right: none; }
-.feature-card:nth-last-child(-n+2) { border-bottom: none; }
 .feature-icon {
   display: inline-flex;
-  width: 30px; height: 30px;
+  width: 32px; height: 32px;
   align-items: center; justify-content: center;
-  border: 1px solid var(--panel-border);
-  color: var(--text);
+  border-radius: var(--radius-sm);
+  background: rgba(59, 110, 246, 0.1);
+  color: var(--accent);
   margin-bottom: 12px;
 }
 .feature-icon svg { width: 16px; height: 16px; }
 .feature-card h3 {
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 600;
   margin: 0 0 8px;
   color: var(--text);
@@ -444,8 +421,6 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 
 @media (max-width: 560px) {
   .feature-grid { grid-template-columns: 1fr; }
-  .feature-card:nth-child(2n) { border-right: 1px solid var(--line-soft); }
-  .feature-card:last-child { border-bottom: none; }
   .stats-strip { flex-direction: column; }
   .stat-item { border-right: none; border-bottom: 1px solid var(--line-soft); }
   .stat-item:last-child { border-bottom: none; }
@@ -454,28 +429,28 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 /* Tabs di panel pengaturan bot */
 .settings-tabs {
   display: flex;
-  gap: 0;
-  border: 1px solid var(--panel-border);
+  gap: 4px;
+  background: var(--field);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  padding: 4px;
   margin-bottom: 24px;
   overflow-x: auto;
 }
 .tab-btn {
   flex: 1;
   white-space: nowrap;
-  background: var(--bg);
-  border: none;
-  border-right: 1px solid var(--panel-border);
-  padding: 11px 14px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  background: transparent;
+  border-radius: 6px;
+  padding: 9px 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
   color: var(--muted);
   transition: background .15s ease, color .15s ease;
 }
-.tab-btn:last-child { border-right: none; }
-.tab-btn.is-active { background: var(--text); color: var(--bg); }
-.tab-btn:not(.is-active):hover { background: var(--field); color: var(--text); }
+.tab-btn.is-active { background: var(--panel); color: var(--text); box-shadow: 0 1px 2px rgba(20,20,30,0.08); }
+.tab-btn:not(.is-active):hover { color: var(--text); }
 .tab-panel[hidden] { display: none; }
 .toggle-row-first { border-top: none; padding-top: 0; }
 .tab-note { font-size: 13.5px; line-height: 1.6; color: var(--text); font-family: var(--font-body); margin: 0 0 10px; }
@@ -484,6 +459,7 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
   font-family: var(--font-mono);
   background: var(--field);
   border: 1px solid var(--line-soft);
+  border-radius: 4px;
   padding: 1px 5px;
   font-size: 12.5px;
 }
@@ -492,40 +468,40 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 .plan-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
+  gap: 16px;
 }
 .plan-card {
   position: relative;
+  background: var(--panel);
   border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
   padding: 26px 22px;
 }
-.plan-card-premium { background: var(--text); color: var(--bg); }
+.plan-card-premium { background: var(--text); color: #fff; border-color: var(--text); }
 .plan-badge {
   position: absolute;
-  top: -1px; right: 20px;
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--panel-border);
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  padding: 3px 8px;
+  top: -11px; right: 20px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
 }
 .plan-head h3 {
   font-family: var(--font-display);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0 0 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
 }
-.plan-price { font-family: var(--font-mono); font-size: 13px; margin: 0 0 18px; opacity: 0.8; }
+.plan-price { font-family: var(--font-body); font-size: 13px; margin: 0 0 18px; opacity: 0.75; }
 .plan-list { list-style: none; margin: 0 0 22px; padding: 0; font-family: var(--font-body); font-size: 13.5px; line-height: 2; }
 .plan-list li { padding-left: 18px; position: relative; }
-.plan-list li::before { content: "—"; position: absolute; left: 0; opacity: 0.6; }
-.plan-card-premium .btn-upgrade { background: var(--bg); color: var(--text); }
-.plan-card-premium .btn-upgrade:hover { background: #eeece6; }
+.plan-list li::before { content: "•"; position: absolute; left: 0; opacity: 0.6; }
+.plan-card-premium .btn-upgrade { background: #fff; color: var(--text); }
+.plan-card-premium .btn-upgrade:hover { background: #eef1f8; }
 .btn-upgrade { display: block; width: 100%; text-align: center; text-decoration: none; box-sizing: border-box; }
 
 @media (max-width: 560px) {
@@ -538,9 +514,7 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
   gap: 8px;
   padding: 26px 20px 40px;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-family: var(--font-body);
+  font-size: 13px;
 }
 .site-footer-sep { opacity: 0.5; }
