@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jadibot — Tautkan Nomor Kamu</title>
+<meta name="description" content="Ubah nomor WhatsApp kamu jadi bot pribadi dalam hitungan detik. Nggak perlu server sendiri, nggak perlu scan QR.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -21,7 +23,9 @@
   </button>
   <nav class="topnav" id="topnav">
     <span class="topbar-sub">nomormu, botmu sendiri</span>
-    <a class="topnav-link" href="/dashboard">Beranda</a>
+    <a class="topnav-link" href="#fitur">Fitur</a>
+    <a class="topnav-link" href="#upgrade">Upgrade</a>
+    <a class="topnav-link" href="#panel-connect">Beranda</a>
     <a class="topbar-admin" href="/admin">admin</a>
   </nav>
 </header>
@@ -32,6 +36,21 @@
     <p class="eyebrow">Tautkan nomor via kode pairing</p>
     <h1>Ubah nomor WhatsApp kamu<br>jadi bot pribadi.</h1>
     <p class="hero-sub">Masukin nomor, tempel kode pairing di WhatsApp, atur siapa ownernya dan gimana botnya bersikap. Nggak perlu scan QR, nggak perlu server sendiri.</p>
+  </section>
+
+  <section class="stats-strip" id="stats-strip" aria-label="Statistik layanan">
+    <div class="stat-item">
+      <span class="stat-value" id="stat-features">—</span>
+      <span class="stat-label">Total fitur</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value" id="stat-bots">—</span>
+      <span class="stat-label">Bot aktif sekarang</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">24/7</span>
+      <span class="stat-label">Server standby</span>
+    </div>
   </section>
 
   <section class="panel" id="panel-connect">
@@ -69,32 +88,53 @@
       <span>Tersambung sebagai <strong id="settings-number">—</strong></span>
     </div>
 
-    <div class="field">
-      <label for="input-owner">Nomor owner tambahan <span class="optional">(opsional)</span></label>
-      <input id="input-owner" type="tel" inputmode="numeric" placeholder="Kosongin kalau cuma kamu (nomor bot ini) yang jadi owner">
-      <p class="field-hint">Nomor bot ini otomatis jadi owner. Isi ini kalau mau kasih akses owner ke nomor lain juga.</p>
+    <div class="settings-tabs" role="tablist" aria-label="Kategori pengaturan bot">
+      <button class="tab-btn is-active" type="button" role="tab" aria-selected="true" data-tab="tab-umum">Umum</button>
+      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-otomatisasi">Otomatisasi</button>
+      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-keamanan">Keamanan</button>
+      <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-plugin">Plugin</button>
     </div>
 
-    <div class="toggle-row">
-      <div class="toggle-copy">
-        <span class="toggle-label">Auto read</span>
-        <span class="toggle-hint">Pesan masuk otomatis ditandai terbaca</span>
+    <div class="tab-panel is-active" id="tab-umum" role="tabpanel">
+      <div class="field">
+        <label for="input-owner">Nomor owner tambahan <span class="optional">(opsional)</span></label>
+        <input id="input-owner" type="tel" inputmode="numeric" placeholder="Kosongin kalau cuma kamu (nomor bot ini) yang jadi owner">
+        <p class="field-hint">Nomor bot ini otomatis jadi owner. Isi ini kalau mau kasih akses owner ke nomor lain juga.</p>
       </div>
-      <label class="switch">
-        <input type="checkbox" id="toggle-autoread">
-        <span class="slider"></span>
-      </label>
     </div>
 
-    <div class="toggle-row">
-      <div class="toggle-copy">
-        <span class="toggle-label">Auto typing</span>
-        <span class="toggle-hint">Nunjukin "sedang mengetik…" saat proses command</span>
+    <div class="tab-panel" id="tab-otomatisasi" role="tabpanel" hidden>
+      <div class="toggle-row toggle-row-first">
+        <div class="toggle-copy">
+          <span class="toggle-label">Auto read</span>
+          <span class="toggle-hint">Pesan masuk otomatis ditandai terbaca</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-autoread">
+          <span class="slider"></span>
+        </label>
       </div>
-      <label class="switch">
-        <input type="checkbox" id="toggle-autotyping">
-        <span class="slider"></span>
-      </label>
+
+      <div class="toggle-row">
+        <div class="toggle-copy">
+          <span class="toggle-label">Auto typing</span>
+          <span class="toggle-hint">Nunjukin "sedang mengetik…" saat proses command</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-autotyping">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-keamanan" role="tabpanel" hidden>
+      <p class="tab-note">Fitur antilink, antispam, antidelete, dan blacklist grup diatur langsung lewat command di dalam chat WhatsApp (mis. <code>.antilink on</code>) supaya perubahannya kelihatan real-time buat semua member grup.</p>
+      <p class="tab-note tab-note-muted">Kontrol dari dashboard ini nyusul di update berikutnya.</p>
+    </div>
+
+    <div class="tab-panel" id="tab-plugin" role="tabpanel" hidden>
+      <p class="tab-note">Semua fitur bawaan aktif otomatis. Untuk nyalain/matiin command tertentu per bot, pakai <code>.blockcmd</code> / <code>.unblockcmd</code> langsung dari chat.</p>
+      <p class="tab-note tab-note-muted">Panel enable/disable per fitur dari dashboard ini termasuk benefit paket <strong>Premium</strong> — lihat di bawah.</p>
     </div>
 
     <div class="actions">
@@ -109,7 +149,81 @@
     <ul class="mine-list" id="mine-list"></ul>
   </section>
 
+  <section class="feature-section" id="fitur">
+    <p class="eyebrow">Apa aja yang bisa dilakuin</p>
+    <h2 class="section-title">Ratusan fitur, siap pakai dari hari pertama.</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <span class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+        </span>
+        <h3>Moderasi &amp; Grup</h3>
+        <p>Antilink, antispam, antidelete, blacklist, welcome/goodbye otomatis, sampai kick/promote lewat command.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+        </span>
+        <h3>Otomatisasi</h3>
+        <p>Auto read, auto typing, auto restart, dan streak harian — bot kamu jalan sendiri tanpa dipantau terus.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></svg>
+        </span>
+        <h3>AI &amp; Hiburan</h3>
+        <p>Chat AI, sticker/webp tools, game grup, sampai fitur iseng harian buat rame-ramein grup kamu.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v4H4zM4 10h10v10H4zM16 10h4v10h-4z"/></svg>
+        </span>
+        <h3>Kontrol Owner</h3>
+        <p>Broadcast, warn/ban, atur akses command, sampai backup — semua di tangan kamu sebagai owner bot.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="plan-section" id="upgrade">
+    <p class="eyebrow">Punya lebih banyak keleluasaan</p>
+    <h2 class="section-title">Upgrade buat pengalaman yang lebih enak.</h2>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="plan-head">
+          <h3>Free</h3>
+          <p class="plan-price">Rp 0</p>
+        </div>
+        <ul class="plan-list">
+          <li>Tautkan 1 nomor jadi bot</li>
+          <li>Semua fitur dasar aktif</li>
+          <li>Antrian server standar</li>
+          <li>Auto-restart bergantung beban server</li>
+        </ul>
+      </div>
+      <div class="plan-card plan-card-premium">
+        <span class="plan-badge">Direkomendasikan</span>
+        <div class="plan-head">
+          <h3>Premium</h3>
+          <p class="plan-price" id="plan-price">Hubungi admin</p>
+        </div>
+        <ul class="plan-list">
+          <li>Prioritas antrian &amp; koneksi lebih stabil</li>
+          <li>Panel enable/disable fitur per bot</li>
+          <li>Prefix custom &amp; branding bot sendiri</li>
+          <li>Support langsung ke admin</li>
+        </ul>
+        <a class="btn-primary btn-upgrade" id="btn-upgrade" href="#" target="_blank" rel="noopener">Upgrade ke Premium</a>
+      </div>
+    </div>
+  </section>
+
 </main>
+
+<footer class="site-footer">
+  <span>jadibot</span>
+  <span class="site-footer-sep">·</span>
+  <span>nomormu, botmu sendiri</span>
+</footer>
 
 <script src="nav.js"></script>
 <script src="app.js"></script>

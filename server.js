@@ -2,6 +2,7 @@
 // bot owner utama) ATAU di-import dari index.js supaya jalan satu proses bareng
 // bot utama (disarankan — biar sesi jadibot nggak dobel-konek dari dua proses beda).
 import 'dotenv/config'
+import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import express from 'express'
@@ -11,6 +12,7 @@ import * as sessionManager from './lib/session-manager.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const publicDir = path.join(__dirname, 'public')
+const pluginsDir = path.join(__dirname, 'plugins')
 
 await sessionManager.initSessionStore()
 
@@ -30,6 +32,28 @@ app.get('/admin', (req, res) => res.sendFile(path.join(publicDir, 'admin.html'))
 app.get('/index.html', (req, res) => res.redirect(301, '/dashboard'))
 app.get('/admin.html', (req, res) => res.redirect(301, '/admin'))
 
+
+// --- Public: statistik ringan buat landing page (total fitur, bot aktif,
+// nomor WA admin buat tombol upgrade) — dihitung dari disk & session store,
+// bukan angka hardcode, jadi selalu jujur sama kondisi server. ---------------
+app.get('/api/stats', (req, res) => {
+    let totalFeatures = 0
+    try {
+        totalFeatures = fs.readdirSync(pluginsDir).filter((f) => f.endsWith('.js')).length
+    } catch (e) {}
+
+    let totalBots = 0
+    try {
+        totalBots = sessionManager.listSessions().length
+    } catch (e) {}
+
+    res.json({
+        totalFeatures,
+        totalBots,
+        contactNumber: config.ownerNumber?.[0] || null,
+        premiumPriceLabel: 'Hubungi admin'
+    })
+})
 
 // --- Public: mulai sesi baru ---------------------------------------------
 app.post('/api/connect', async (req, res) => {

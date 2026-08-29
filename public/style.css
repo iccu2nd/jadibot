@@ -356,3 +356,191 @@ button { cursor: pointer; font-family: var(--font-mono); border: none; border-ra
 @media (prefers-reduced-motion: reduce) {
   .status-dot { animation: none; }
 }
+
+/* ============================================================
+   Tambahan: stats strip, feature showcase, plan/upgrade section,
+   tabbed settings, footer. Ngikutin motif "tiket/kuitansi" yang
+   sama — garis tegas, tanpa shadow/gradient, ikon SVG garis tipis
+   (bukan emoji).
+   ============================================================ */
+
+.stats-strip {
+  display: flex;
+  border: 1px solid var(--panel-border);
+  margin-bottom: 28px;
+}
+.stat-item {
+  flex: 1;
+  padding: 16px 14px;
+  text-align: center;
+  border-right: 1px solid var(--line-soft);
+}
+.stat-item:last-child { border-right: none; }
+.stat-value {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(18px, 4vw, 22px);
+  color: var(--text);
+}
+.stat-label {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(20px, 4.4vw, 26px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 26px;
+  color: var(--text);
+}
+
+.feature-section, .plan-section { margin-top: 56px; padding-top: 44px; border-top: 1px solid var(--line-soft); }
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border: 1px solid var(--panel-border);
+}
+.feature-card {
+  padding: 22px 20px;
+  border-right: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.feature-card:nth-child(2n) { border-right: none; }
+.feature-card:nth-last-child(-n+2) { border-bottom: none; }
+.feature-icon {
+  display: inline-flex;
+  width: 30px; height: 30px;
+  align-items: center; justify-content: center;
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.feature-icon svg { width: 16px; height: 16px; }
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--text);
+}
+.feature-card p {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .feature-grid { grid-template-columns: 1fr; }
+  .feature-card:nth-child(2n) { border-right: 1px solid var(--line-soft); }
+  .feature-card:last-child { border-bottom: none; }
+  .stats-strip { flex-direction: column; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--line-soft); }
+  .stat-item:last-child { border-bottom: none; }
+}
+
+/* Tabs di panel pengaturan bot */
+.settings-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--panel-border);
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.tab-btn {
+  flex: 1;
+  white-space: nowrap;
+  background: var(--bg);
+  border: none;
+  border-right: 1px solid var(--panel-border);
+  padding: 11px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  transition: background .15s ease, color .15s ease;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.is-active { background: var(--text); color: var(--bg); }
+.tab-btn:not(.is-active):hover { background: var(--field); color: var(--text); }
+.tab-panel[hidden] { display: none; }
+.toggle-row-first { border-top: none; padding-top: 0; }
+.tab-note { font-size: 13.5px; line-height: 1.6; color: var(--text); font-family: var(--font-body); margin: 0 0 10px; }
+.tab-note-muted { color: var(--muted); font-size: 12.5px; }
+.tab-note code {
+  font-family: var(--font-mono);
+  background: var(--field);
+  border: 1px solid var(--line-soft);
+  padding: 1px 5px;
+  font-size: 12.5px;
+}
+
+/* Plan / upgrade section */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+.plan-card {
+  position: relative;
+  border: 1px solid var(--panel-border);
+  padding: 26px 22px;
+}
+.plan-card-premium { background: var(--text); color: var(--bg); }
+.plan-badge {
+  position: absolute;
+  top: -1px; right: 20px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+}
+.plan-head h3 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.plan-price { font-family: var(--font-mono); font-size: 13px; margin: 0 0 18px; opacity: 0.8; }
+.plan-list { list-style: none; margin: 0 0 22px; padding: 0; font-family: var(--font-body); font-size: 13.5px; line-height: 2; }
+.plan-list li { padding-left: 18px; position: relative; }
+.plan-list li::before { content: "—"; position: absolute; left: 0; opacity: 0.6; }
+.plan-card-premium .btn-upgrade { background: var(--bg); color: var(--text); }
+.plan-card-premium .btn-upgrade:hover { background: #eeece6; }
+.btn-upgrade { display: block; width: 100%; text-align: center; text-decoration: none; box-sizing: border-box; }
+
+@media (max-width: 560px) {
+  .plan-grid { grid-template-columns: 1fr; }
+}
+
+.site-footer {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 26px 20px 40px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.site-footer-sep { opacity: 0.5; }

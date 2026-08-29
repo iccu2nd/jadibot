@@ -270,3 +270,38 @@ async function renderMine() {
 }
 
 renderMine()
+
+// --- Tab switching: panel pengaturan bot (Umum / Otomatisasi / Keamanan / Plugin) ---
+const tabButtons = document.querySelectorAll('.tab-btn')
+const tabPanels = document.querySelectorAll('.tab-panel')
+tabButtons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    tabButtons.forEach((b) => { b.classList.remove('is-active'); b.setAttribute('aria-selected', 'false') })
+    tabPanels.forEach((p) => { p.hidden = true; p.classList.remove('is-active') })
+    btn.classList.add('is-active')
+    btn.setAttribute('aria-selected', 'true')
+    const target = document.getElementById(btn.dataset.tab)
+    if (target) { target.hidden = false; target.classList.add('is-active') }
+  })
+})
+
+// --- Stats strip + tombol upgrade (angka & nomor WA diambil dari server) ---
+async function loadStats() {
+  try {
+    const res = await fetch('/api/stats')
+    if (!res.ok) return
+    const data = await res.json()
+    const statFeatures = el('stat-features')
+    const statBots = el('stat-bots')
+    const planPrice = el('plan-price')
+    const btnUpgrade = el('btn-upgrade')
+    if (statFeatures && typeof data.totalFeatures === 'number') statFeatures.textContent = `${data.totalFeatures}+`
+    if (statBots && typeof data.totalBots === 'number') statBots.textContent = data.totalBots
+    if (btnUpgrade && data.contactNumber) {
+      const text = encodeURIComponent('Halo, saya mau upgrade ke paket Premium jadibot.')
+      btnUpgrade.href = `https://wa.me/${data.contactNumber}?text=${text}`
+    }
+    if (planPrice && data.premiumPriceLabel) planPrice.textContent = data.premiumPriceLabel
+  } catch {}
+}
+loadStats()
