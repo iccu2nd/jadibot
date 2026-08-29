@@ -1,134 +1,27 @@
-<!doctype html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Botzora — Admin</title>
-<meta name="theme-color" content="#6d5bf6">
-<link rel="icon" type="image/png" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="style.css">
-<script>
-  try {
-    var t = localStorage.getItem('Botzora_theme')
-    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.setAttribute('data-theme', 'dark')
-    }
-  } catch (e) {}
-</script>
-</head>
-<body>
-
-<div class="glow" aria-hidden="true"></div>
-
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin — Botzora</title><link rel="icon" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><link rel="stylesheet" href="style.css"><script>try{var t=localStorage.getItem('jadibot_theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script></head>
 <header class="topbar">
-  <div class="brand">
-    <span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span>
-    <span class="brand-name">Botzora admin</span>
-  </div>
+  <a class="brand" href="/"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span><span class="brand-name">botzora</span></a>
   <div class="topbar-actions">
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema terang/gelap">
-      <i class="fa-solid fa-moon"></i>
-      <i class="fa-solid fa-sun"></i>
-    </button>
-    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="topnav">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema"><i class="fa-solid fa-moon"></i><i class="fa-solid fa-sun"></i></button>
+    <button class="hamburger" id="hamburger-btn" type="button" aria-controls="topnav" aria-expanded="false" aria-label="Buka menu"><span></span><span></span><span></span></button>
   </div>
 </header>
-
 <div class="nav-backdrop" id="nav-backdrop"></div>
 <nav class="topnav" id="topnav" aria-label="Menu utama">
-  <div class="nav-head">
-    <span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span> Botzora</span>
-    <button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button>
-  </div>
-  <div class="nav-group">
-    <span class="nav-group-label">Navigasi</span>
-    <a class="topnav-link" href="/"><i class="fa-solid fa-house"></i> Beranda</a>
-    <a class="topnav-link" href="/dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-    <a class="topbar-admin" href="/admin"><i class="fa-solid fa-user-shield"></i> Admin</a>
-  </div>
-  <div class="nav-foot">
-    <div class="nav-foot-row">
-      <button class="nav-chip" id="nav-theme-chip" type="button"><i class="fa-solid fa-moon"></i> <span id="nav-theme-label">Gelap</span></button>
-    </div>
-  </div>
+ <div class="nav-head"><span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt=""></span>botzora</span><button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button></div>
+ <div class="nav-user" id="nav-user" hidden><span class="nav-user-avatar" id="nav-user-avatar"></span><div><div class="nav-user-name" id="nav-user-name">—</div><div class="nav-user-email" id="nav-user-email">—</div></div></div>
+ <div class="nav-group" id="nav-group-utama"><span class="nav-group-label">Explore</span>
+  <a class="topnav-link" href="/#top"><i class="fa-solid fa-house"></i>Beranda</a><a class="topnav-link" href="/#fitur"><i class="fa-solid fa-terminal"></i>Fitur Bot</a><a class="topnav-link" href="/#faq"><i class="fa-solid fa-circle-question"></i>FAQ</a>
+ </div>
+ <div class="nav-group"><span class="nav-group-label">Workspace</span>
+  <a class="topnav-link" href="/dashboard"><i class="fa-solid fa-chart-line"></i>Dashboard</a><a class="topnav-link" href="/bot"><i class="fa-solid fa-plug"></i>Bot & Sessions</a><a class="topbar-admin" href="/admin"><i class="fa-solid fa-shield-halved"></i>Admin</a>
+ </div>
+ <div class="nav-foot"><button class="nav-chip" id="nav-theme-chip" type="button"><i class="fa-solid fa-moon"></i><span id="nav-theme-label">Gelap</span></button><a class="nav-cta-dark" id="nav-get-started" href="/login"><i class="fa-solid fa-arrow-right"></i>Mulai di dashboard</a><a class="nav-cta-dark" id="nav-account-btn" href="/login"><i class="fa-solid fa-user"></i>Masuk</a><button class="nav-cta-dark" id="nav-logout-btn" type="button" hidden><i class="fa-solid fa-right-from-bracket"></i>Keluar</button></div>
 </nav>
-
 <main class="admin-shell">
-  <aside class="admin-sidebar">
-    <div class="admin-sidebar-head">
-      <span class="admin-sidebar-badge"><i class="fa-solid fa-user-shield"></i></span>
-      <div>
-        <div class="admin-sidebar-title">Admin Panel</div>
-        <div class="admin-sidebar-sub">Botzora</div>
-      </div>
-    </div>
-    <nav class="admin-sidebar-nav">
-      <button class="admin-nav-item is-active" type="button" data-section="overview">
-        <i class="fa-solid fa-chart-simple"></i> Ringkasan
-      </button>
-      <button class="admin-nav-item" type="button" data-section="bots">
-        <i class="fa-solid fa-satellite-dish"></i> Bot Terhubung
-      </button>
-    </nav>
-    <div class="admin-sidebar-foot">
-      <a class="admin-nav-item" href="/"><i class="fa-solid fa-arrow-left"></i> Kembali ke situs</a>
-    </div>
-  </aside>
-
-  <section class="admin-content">
-    <header class="admin-topbar">
-      <div>
-        <h1 class="admin-content-title" id="admin-section-title">Ringkasan</h1>
-        <p class="admin-content-sub" id="admin-section-sub">Pantau kondisi server Botzora secara sekilas.</p>
-      </div>
-      <div class="admin-key-box">
-        <input id="input-key" type="password" placeholder="Admin key (x-admin-key)" autocomplete="off">
-        <button id="btn-load" class="btn-primary"><i class="fa-solid fa-arrows-rotate"></i> Muat</button>
-      </div>
-    </header>
-
-    <p class="error" id="admin-error" hidden></p>
-
-    <div class="admin-section is-active" id="section-overview">
-      <div class="admin-stat-grid">
-        <div class="admin-stat-card">
-          <span class="admin-stat-icon"><i class="fa-solid fa-layer-group"></i></span>
-          <span class="admin-stat-value" id="stat-total">—</span>
-          <span class="admin-stat-label">Total sesi bot</span>
-        </div>
-        <div class="admin-stat-card">
-          <span class="admin-stat-icon"><i class="fa-solid fa-plug-circle-check"></i></span>
-          <span class="admin-stat-value" id="stat-connected">—</span>
-          <span class="admin-stat-label">Sedang terhubung</span>
-        </div>
-        <div class="admin-stat-card">
-          <span class="admin-stat-icon"><i class="fa-solid fa-arrows-rotate"></i></span>
-          <span class="admin-stat-value" id="stat-reconnecting">—</span>
-          <span class="admin-stat-label">Menyambung ulang</span>
-        </div>
-        <div class="admin-stat-card">
-          <span class="admin-stat-icon"><i class="fa-solid fa-shapes"></i></span>
-          <span class="admin-stat-value" id="stat-features">—</span>
-          <span class="admin-stat-label">Total fitur aktif</span>
-        </div>
-      </div>
-      <div class="admin-empty-hint" id="overview-hint">Masukkan admin key lalu tekan <strong>Muat</strong> buat lihat data terbaru.</div>
-    </div>
-
-    <div class="admin-section" id="section-bots" hidden>
-      <p class="summary" id="summary" hidden></p>
-      <div id="table-wrap"></div>
-    </div>
-  </section>
-</main>
-
-<script src="nav.js"></script>
-<script src="admin.js"></script>
-</body>
-</html>
+<aside class="admin-sidebar"><div class="admin-sidebar-head"><span class="admin-sidebar-badge"><i class="fa-solid fa-shield-halved"></i></span><div><div class="admin-sidebar-title">Operations</div><div class="admin-sidebar-sub">Botzora admin</div></div></div><nav class="admin-sidebar-nav"><button class="admin-nav-item is-active" data-section="overview" type="button"><i class="fa-solid fa-chart-line"></i>Overview</button><button class="admin-nav-item" data-section="bots" type="button"><i class="fa-solid fa-plug"></i>Bot sessions</button><button class="admin-nav-item" data-section="users" type="button"><i class="fa-solid fa-users"></i>Users</button></nav><div class="admin-sidebar-foot"><a class="admin-nav-item" href="/"><i class="fa-solid fa-arrow-left"></i>Kembali ke situs</a></div></aside>
+<section class="admin-content"><header class="admin-topbar"><div><p class="eyebrow">Operations</p><h1 class="admin-content-title" id="admin-section-title">Overview</h1><p class="admin-content-sub" id="admin-section-sub">Pantau kesehatan sesi bot dan akun dari satu tempat.</p></div><div class="admin-key-box"><input id="input-key" type="password" autocomplete="off" placeholder="Admin key"><button class="btn-primary" id="btn-load"><i class="fa-solid fa-arrows-rotate"></i>Muat data</button></div></header><p class="error" id="admin-error" hidden></p>
+<div class="admin-section is-active" id="section-overview"><div class="admin-stat-grid"><div class="admin-stat-card"><span class="admin-stat-icon"><i class="fa-solid fa-layer-group"></i></span><span class="admin-stat-value" id="stat-total">—</span><span class="admin-stat-label">Total sessions</span></div><div class="admin-stat-card"><span class="admin-stat-icon"><i class="fa-solid fa-link"></i></span><span class="admin-stat-value" id="stat-connected">—</span><span class="admin-stat-label">Connected</span></div><div class="admin-stat-card"><span class="admin-stat-icon"><i class="fa-solid fa-arrows-rotate"></i></span><span class="admin-stat-value" id="stat-reconnecting">—</span><span class="admin-stat-label">Reconnecting</span></div><div class="admin-stat-card"><span class="admin-stat-icon"><i class="fa-solid fa-terminal"></i></span><span class="admin-stat-value" id="stat-features">—</span><span class="admin-stat-label">Available features</span></div><div class="admin-stat-card"><span class="admin-stat-icon"><i class="fa-solid fa-users"></i></span><span class="admin-stat-value" id="stat-users">—</span><span class="admin-stat-label">Registered users</span></div></div><div class="admin-empty-hint" id="overview-hint">Masukkan admin key lalu muat data untuk melihat angka terbaru.</div></div>
+<div class="admin-section" id="section-bots" hidden><p class="summary" id="summary" hidden></p><div id="table-wrap"></div></div>
+<div class="admin-section" id="section-users" hidden><p class="summary" id="users-summary" hidden></p><div id="users-table-wrap"></div></div>
+</section></main><script src="nav.js"></script><script src="admin.js"></script></body></html>

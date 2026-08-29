@@ -39,7 +39,12 @@ app.get('/login', async (req, res) => {
 app.get('/admin', (req, res) => res.sendFile(path.join(publicDir, 'admin.html')))
 
 // --- Halaman yang wajib login ------------------------------------------------
-app.get('/dashboard', auth.requireAuthPage, (req, res) => res.sendFile(path.join(publicDir, 'dashboard.html')))
+app.get('/dashboard', auth.requireAuthPage, (req, res) => {
+    const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+    const html = fs.readFileSync(path.join(publicDir, 'dashboard.html'), 'utf8')
+        .replace('<span id="dash-user-name">—</span>', `<span id="dash-user-name">${escapeHtml(req.user.name || 'kamu')}</span>`)
+    res.send(html)
+})
 app.get('/bot', auth.requireAuthPage, (req, res) => res.sendFile(path.join(publicDir, 'bot.html')))
 
 // Nama lama tetap dialihkan (301) kalau ada yang masih nyimpen link .html/lama
@@ -173,6 +178,22 @@ app.post('/api/admin/session/:number/stop', adminAuth, async (req, res) => {
     const number = sessionManager.formatNumber(req.params.number)
     if (!sessionManager.getSession(number)) return res.status(404).json({ error: 'Sesi tidak ditemukan.' })
     await sessionManager.stopSession(number)
+    res.json({ ok: true })
+})
+
+// --- Admin: lihat & kelola semua pengguna yang terdaftar --------------------
+app.get('/api/admin/users', adminAuth, async (req, res) => {
+    try {
+        const users = await auth.listUsers()
+        res.json(users)
+    } catch (e) {
+        res.status(500).json({ error: e.message || 'Gagal memuat daftar pengguna.' })
+    }
+})
+
+app.delete('/api/admin/users/:id', adminAuth, async (req, res) => {
+    const ok = await auth.deleteUserById(req.params.id)
+    if (!ok) return res.status(404).json({ error: 'Pengguna tidak ditemukan.' })
     res.json({ ok: true })
 })
 

@@ -1,211 +1,38 @@
-<!doctype html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Botzora — Bot Settings &amp; Connect</title>
-<meta name="theme-color" content="#6d5bf6">
-<link rel="icon" type="image/png" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="style.css">
-<script>
-  try {
-    var t = localStorage.getItem('Botzora_theme')
-    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.setAttribute('data-theme', 'dark')
-    }
-  } catch (e) {}
-</script>
-</head>
-<body>
-
-<div class="glow" aria-hidden="true"></div>
-
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bot & Sessions — Botzora</title><link rel="icon" href="https://i.ibb.co/ccwYGLBq/18afb294007b.png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><link rel="stylesheet" href="style.css"><script>try{var t=localStorage.getItem('jadibot_theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script></head>
 <header class="topbar">
-  <div class="brand">
-    <span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span>
-    <span class="brand-name">Botzora</span>
-  </div>
+  <a class="brand" href="/"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span><span class="brand-name">botzora</span></a>
   <div class="topbar-actions">
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema terang/gelap">
-      <i class="fa-solid fa-moon"></i>
-      <i class="fa-solid fa-sun"></i>
-    </button>
-    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="topnav">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema"><i class="fa-solid fa-moon"></i><i class="fa-solid fa-sun"></i></button>
+    <button class="hamburger" id="hamburger-btn" type="button" aria-controls="topnav" aria-expanded="false" aria-label="Buka menu"><span></span><span></span><span></span></button>
   </div>
 </header>
-
 <div class="nav-backdrop" id="nav-backdrop"></div>
 <nav class="topnav" id="topnav" aria-label="Menu utama">
-  <div class="nav-head">
-    <span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span> Botzora</span>
-    <button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button>
-  </div>
-
-  <div class="nav-user" id="nav-user" hidden>
-    <span class="nav-user-avatar" id="nav-user-avatar"></span>
-    <div class="nav-user-info">
-      <div class="nav-user-name" id="nav-user-name">—</div>
-      <div class="nav-user-email" id="nav-user-email">—</div>
-    </div>
-  </div>
-
-  <div class="nav-group">
-    <span class="nav-group-label">Utama</span>
-    <a class="topnav-link" href="/#top"><i class="fa-solid fa-house"></i> Beranda</a>
-    <a class="topnav-link" href="/#fitur"><i class="fa-solid fa-shapes"></i> Fitur Bot</a>
-    <a class="topnav-link" href="/#faq"><i class="fa-solid fa-circle-question"></i> Tanya Jawab</a>
-  </div>
-
-  <div class="nav-group">
-    <span class="nav-group-label">Layanan</span>
-    <a class="topnav-link" href="/dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-    <a class="topnav-link is-active" href="/bot"><i class="fa-solid fa-link"></i> Bot Settings &amp; Connect</a>
-    <a class="topnav-link" href="/#upgrade"><i class="fa-solid fa-credit-card"></i> Paket Harga</a>
-    <a class="topbar-admin" href="/admin"><i class="fa-solid fa-user-shield"></i> Admin</a>
-  </div>
-
-  <div class="nav-foot">
-    <div class="nav-foot-row">
-      <button class="nav-chip" id="nav-theme-chip" type="button"><i class="fa-solid fa-moon"></i> <span id="nav-theme-label">Gelap</span></button>
-    </div>
-    <button class="nav-cta-dark" id="nav-logout-btn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
-  </div>
+ <div class="nav-head"><span class="nav-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt=""></span>botzora</span><button class="nav-close" id="nav-close" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button></div>
+ <div class="nav-user" id="nav-user" hidden><span class="nav-user-avatar" id="nav-user-avatar"></span><div><div class="nav-user-name" id="nav-user-name">—</div><div class="nav-user-email" id="nav-user-email">—</div></div></div>
+ <div class="nav-group" id="nav-group-utama"><span class="nav-group-label">Explore</span>
+  <a class="topnav-link" href="/#top"><i class="fa-solid fa-house"></i>Beranda</a><a class="topnav-link" href="/#fitur"><i class="fa-solid fa-terminal"></i>Fitur Bot</a><a class="topnav-link" href="/#faq"><i class="fa-solid fa-circle-question"></i>FAQ</a>
+ </div>
+ <div class="nav-group"><span class="nav-group-label">Workspace</span>
+  <a class="topnav-link" href="/dashboard"><i class="fa-solid fa-chart-line"></i>Dashboard</a><a class="topnav-link" href="/bot"><i class="fa-solid fa-plug"></i>Bot & Sessions</a><a class="topbar-admin" href="/admin"><i class="fa-solid fa-shield-halved"></i>Admin</a>
+ </div>
+ <div class="nav-foot"><button class="nav-chip" id="nav-theme-chip" type="button"><i class="fa-solid fa-moon"></i><span id="nav-theme-label">Gelap</span></button><a class="nav-cta-dark" id="nav-get-started" href="/login"><i class="fa-solid fa-arrow-right"></i>Mulai di dashboard</a><a class="nav-cta-dark" id="nav-account-btn" href="/login"><i class="fa-solid fa-user"></i>Masuk</a><button class="nav-cta-dark" id="nav-logout-btn" type="button" hidden><i class="fa-solid fa-right-from-bracket"></i>Keluar</button></div>
 </nav>
-
 <main class="wrap" id="top">
-
-  <section class="hero" style="margin-bottom:20px;">
-    <p class="eyebrow"><i class="fa-solid fa-link"></i> Bot Settings &amp; Connect</p>
-    <h1 style="font-size:26px;">Sambungkan &amp; atur bot kamu</h1>
-    <p class="hero-sub">Dua hal, dua tempat: tautkan nomor baru di tab Sambungkan, kelola bot yang udah jalan di tab Bot Settings.</p>
-  </section>
-
-  <div class="mode-tabs" role="tablist" aria-label="Mode halaman bot">
-    <button class="mode-tab-btn is-active" type="button" role="tab" aria-selected="true" data-mode="connect" id="mode-tab-connect">
-      <i class="fa-solid fa-link"></i> Sambungkan Nomor
-    </button>
-    <button class="mode-tab-btn" type="button" role="tab" aria-selected="false" data-mode="settings" id="mode-tab-settings">
-      <i class="fa-solid fa-sliders"></i> Bot Settings
-    </button>
-  </div>
-
-  <div id="mode-connect" class="mode-panel">
-    <section class="panel" id="panel-connect">
-      <h2 class="panel-title"><i class="fa-solid fa-link" style="color:var(--primary-solid)"></i> 1. Tautkan nomor</h2>
-      <form id="form-connect" class="connect-form">
-        <input id="input-number" type="tel" inputmode="numeric" placeholder="08xxxxxxxxxx" autocomplete="off" required>
-        <button type="submit" id="btn-connect"><i class="fa-solid fa-link"></i> Sambungkan</button>
-      </form>
-      <p class="hint">Format bebas — pakai 08xx, +62, atau kode negara lain juga bisa.</p>
-      <p class="error" id="connect-error" hidden></p>
-    </section>
-
-    <section class="panel" id="panel-pairing" hidden>
-      <h2 class="panel-title"><i class="fa-solid fa-key" style="color:var(--primary-solid)"></i> 2. Masukkan kode ini di WhatsApp</h2>
-      <div class="pairing-box">
-        <div class="pairing-code" id="pairing-code">— — — — — —</div>
-        <button class="copy-btn" id="btn-copy-code" type="button"><i class="fa-regular fa-copy"></i> Salin kode</button>
-      </div>
-      <ol class="steps">
-        <li>Buka WhatsApp di HP dengan nomor yang kamu masukin tadi</li>
-        <li>Ketuk <strong>Perangkat Tertaut</strong> → <strong>Tautkan dengan nomor telepon</strong></li>
-        <li>Masukkan kode di atas sebelum waktu habis</li>
-      </ol>
-      <div class="status-row">
-        <span class="status-dot" id="status-dot"></span>
-        <span id="status-text">Menunggu ditautkan…</span>
-        <span class="countdown" id="countdown"></span>
-      </div>
-      <p class="tab-note tab-note-muted" style="margin-top:14px;"><i class="fa-solid fa-circle-info"></i> Kalau nggak ditautkan sebelum waktu habis, sesi ini otomatis dihapus dan kamu perlu mulai ulang dari sini.</p>
-    </section>
-  </div>
-
-  <div id="mode-settings" class="mode-panel" hidden>
-    <section class="panel" id="panel-settings" hidden>
-      <h2 class="panel-title"><i class="fa-solid fa-sliders" style="color:var(--primary-solid)"></i> Atur bot kamu</h2>
-      <div class="status-row status-row-settled">
-        <span class="status-dot status-dot-on"></span>
-        <span>Tersambung sebagai <strong id="settings-number">—</strong></span>
-      </div>
-
-      <div class="settings-tabs" role="tablist" aria-label="Kategori pengaturan bot">
-        <button class="tab-btn is-active" type="button" role="tab" aria-selected="true" data-tab="tab-umum">Umum</button>
-        <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-otomatisasi">Otomatisasi</button>
-        <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-keamanan">Keamanan</button>
-        <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="tab-plugin">Plugin</button>
-      </div>
-
-      <div class="tab-panel is-active" id="tab-umum" role="tabpanel">
-        <div class="field">
-          <label for="input-owner">Nomor owner tambahan <span class="optional">(opsional)</span></label>
-          <input id="input-owner" type="tel" inputmode="numeric" placeholder="Kosongin kalau cuma kamu (nomor bot ini) yang jadi owner">
-          <p class="field-hint">Nomor bot ini otomatis jadi owner. Isi ini kalau mau kasih akses owner ke nomor lain juga.</p>
-        </div>
-      </div>
-
-      <div class="tab-panel" id="tab-otomatisasi" role="tabpanel" hidden>
-        <div class="toggle-row toggle-row-first">
-          <div class="toggle-copy">
-            <span class="toggle-label">Auto read</span>
-            <span class="toggle-hint">Pesan masuk otomatis ditandai terbaca</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="toggle-autoread">
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <div class="toggle-copy">
-            <span class="toggle-label">Auto typing</span>
-            <span class="toggle-hint">Nunjukin "sedang mengetik…" saat proses command</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="toggle-autotyping">
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <div class="tab-panel" id="tab-keamanan" role="tabpanel" hidden>
-        <p class="tab-note">Fitur antilink, antispam, antidelete, dan blacklist grup diatur langsung lewat command di dalam chat WhatsApp (mis. <code>.antilink on</code>) supaya perubahannya kelihatan real-time buat semua member grup.</p>
-        <p class="tab-note tab-note-muted">Kontrol dari dashboard ini nyusul di update berikutnya.</p>
-      </div>
-
-      <div class="tab-panel" id="tab-plugin" role="tabpanel" hidden>
-        <p class="tab-note">Semua fitur bawaan aktif otomatis. Untuk nyalain/matiin command tertentu per bot, pakai <code>.blockcmd</code> / <code>.unblockcmd</code> langsung dari chat.</p>
-        <p class="tab-note tab-note-muted">Panel enable/disable per fitur dari dashboard ini termasuk benefit paket <strong>Premium</strong> — lihat di halaman Paket Harga.</p>
-      </div>
-
-      <div class="actions">
-        <button id="btn-save" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan pengaturan</button>
-        <button id="btn-disconnect" class="btn-danger"><i class="fa-solid fa-plug-circle-xmark"></i> Putuskan</button>
-      </div>
-      <p class="save-msg" id="save-msg" hidden></p>
-    </section>
-
-    <p class="empty-state" id="settings-empty" hidden>Belum ada bot yang aktif dipilih. Buka salah satu nomor di bawah, atau sambungkan nomor baru dulu di tab <strong>Sambungkan Nomor</strong>.</p>
-
-    <section class="panel panel-mine" id="panel-mine" hidden>
-      <h2 class="panel-title"><i class="fa-solid fa-address-book" style="color:var(--primary-solid)"></i> Nomor kamu di browser ini</h2>
-      <ul class="mine-list" id="mine-list"></ul>
-    </section>
-  </div>
-
-</main>
-
-<footer class="site-footer">
-  <div class="footer-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt="Botzora"></span> Botzora</div>
-  <p class="footer-copyright">© 2026 Botzora. Dibuat buat komunitas.</p>
-</footer>
-
-<script src="nav.js"></script>
-<script src="bot.js"></script>
-</body>
-</html>
+<section class="dash-hero"><div><p class="eyebrow">Session management</p><h1>Bot & Sessions</h1></div><p>Sambungkan nomor, tunggu pairing, lalu kelola konfigurasi sesi yang benar-benar tersedia di server.</p></section>
+<div class="mode-tabs" role="tablist" aria-label="Bot workspace"><button class="mode-tab-btn is-active" id="mode-tab-connect" data-mode="connect" role="tab" aria-selected="true"><i class="fa-solid fa-plug"></i> Connect</button><button class="mode-tab-btn" id="mode-tab-settings" data-mode="settings" role="tab" aria-selected="false"><i class="fa-solid fa-sliders"></i> Configuration</button></div>
+<div class="mode-panel" id="mode-connect">
+<section class="panel" id="panel-connect"><p class="eyebrow">01 / Connection</p><h2 class="panel-title">Start a WhatsApp session</h2><p class="hint">Masukkan nomor yang ingin dijadikan sesi bot. Format 08xx, +62, atau kode negara lain diterima.</p><form class="connect-form" id="form-connect"><input id="input-number" type="tel" inputmode="numeric" autocomplete="off" placeholder="08xxxxxxxxxx" required><button class="btn-primary" id="btn-connect" type="submit"><i class="fa-solid fa-plug"></i>Sambungkan</button></form><p class="error" id="connect-error" hidden></p></section>
+<section class="panel" id="panel-pairing" hidden><p class="eyebrow">02 / Pairing</p><h2 class="panel-title">Tautkan perangkat</h2><div class="pairing-box"><div><div class="stage-kicker">Pairing code</div><div class="pairing-code" id="pairing-code">— — — — — —</div></div><button class="copy-btn" id="btn-copy-code" type="button"><i class="fa-regular fa-copy"></i>Salin kode</button></div><ol class="steps"><li>Buka WhatsApp pada nomor yang baru dimasukkan.</li><li>Pilih Perangkat Tertaut → Tautkan dengan nomor telepon.</li><li>Masukkan kode sebelum timer berakhir.</li></ol><div class="status-row"><span class="status-dot" id="status-dot"></span><span id="status-text">Menunggu ditautkan…</span><span class="countdown" id="countdown"></span></div><p class="tab-note tab-note-muted">Sesi yang belum berhasil ditautkan akan kedaluwarsa dan perlu dibuat ulang.</p></section>
+</div>
+<div class="mode-panel" id="mode-settings" hidden>
+<section class="panel" id="panel-settings" hidden><div style="display:flex;justify-content:space-between;gap:15px;align-items:start"><div><p class="eyebrow">Configuration</p><h2 class="panel-title">Bot settings</h2></div><div class="status-row status-row-settled"><span class="status-dot status-dot-on"></span><span>Connected <strong id="settings-number">—</strong></span></div></div>
+<div class="settings-tabs" role="tablist" aria-label="Kategori konfigurasi"><button class="tab-btn is-active" data-tab="tab-umum" role="tab" aria-selected="true">General</button><button class="tab-btn" data-tab="tab-otomatisasi" role="tab" aria-selected="false">Automation</button><button class="tab-btn" data-tab="tab-keamanan" role="tab" aria-selected="false">Security</button><button class="tab-btn" data-tab="tab-plugin" role="tab" aria-selected="false">Plugins</button></div>
+<div class="tab-panel is-active" id="tab-umum" role="tabpanel"><p class="eyebrow">General</p><div class="field"><label for="input-owner">Additional owner <span class="optional">optional</span></label><input id="input-owner" type="tel" inputmode="numeric" placeholder="Nomor owner tambahan"><p class="field-hint">Nomor bot ini tetap menjadi owner utama. Isi bila akses owner perlu diberikan ke nomor lain.</p></div></div>
+<div class="tab-panel" id="tab-otomatisasi" role="tabpanel" hidden><p class="eyebrow">Automation</p><div class="toggle-row toggle-row-first"><div class="toggle-copy"><span class="toggle-label">Auto Read</span><span class="toggle-hint">Tandai pesan masuk sebagai sudah dibaca.</span></div><label class="switch"><input id="toggle-autoread" type="checkbox"><span class="slider"></span></label></div><div class="toggle-row"><div class="toggle-copy"><span class="toggle-label">Auto Typing</span><span class="toggle-hint">Tampilkan status mengetik saat bot memproses perintah.</span></div><label class="switch"><input id="toggle-autotyping" type="checkbox"><span class="slider"></span></label></div></div>
+<div class="tab-panel" id="tab-keamanan" role="tabpanel" hidden><p class="eyebrow">Security</p><p class="tab-note">Anti-link, anti-spam, anti-delete, dan blacklist saat ini dikendalikan lewat command di WhatsApp agar perubahan berlaku langsung di percakapan.</p><p class="tab-note tab-note-muted">Kontrol visual untuk fitur ini belum tersedia pada API sesi saat ini.</p></div>
+<div class="tab-panel" id="tab-plugin" role="tabpanel" hidden><p class="eyebrow">Plugins</p><p class="tab-note">Fitur bawaan aktif otomatis. Pengaktifan atau pemblokiran command per bot menggunakan <code>.blockcmd</code> dan <code>.unblockcmd</code>.</p><p class="tab-note tab-note-muted">Panel granular per fitur merupakan kemampuan Premium.</p></div>
+<div class="actions"><button class="btn-primary" id="btn-save"><i class="fa-solid fa-check"></i>Simpan perubahan</button><button class="btn-danger" id="btn-disconnect"><i class="fa-solid fa-plug-circle-xmark"></i>Putuskan sesi</button></div><p class="save-msg" id="save-msg" hidden></p></section>
+<p class="empty-state" id="settings-empty" hidden>Pilih sesi dari daftar di bawah atau sambungkan nomor baru untuk mulai mengatur bot.</p>
+<section class="panel panel-mine" id="panel-mine" hidden><h2 class="panel-title">Stored sessions</h2><ul class="mine-list" id="mine-list"></ul></section>
+</div></main><footer class="site-footer"><div class="footer-brand"><span class="brand-mark is-logo"><img src="https://i.ibb.co/ccwYGLBq/18afb294007b.png" alt=""></span>botzora</div><span>Session management</span><span>© 2026 Botzora</span></footer><script src="nav.js"></script><script src="bot.js"></script></body></html>

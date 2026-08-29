@@ -95,6 +95,7 @@
   const getStartedBtn = document.getElementById('nav-get-started')
   const accountBtn = document.getElementById('nav-account-btn')
   const logoutBtn = document.getElementById('nav-logout-btn')
+  const navGroupUtama = document.getElementById('nav-group-utama')
 
   function bindLogout(btn) {
     btn.addEventListener('click', async (e) => {
@@ -123,7 +124,11 @@
       }
     }
 
-    // Landing page: swap "Get Started" + "Masuk" jadi "Dashboard" + "Keluar" kalau udah login.
+    // Sudah login → link "Utama" (Beranda/Fitur Bot/Cara Pakai/Tanya Jawab) tidak
+    // relevan lagi di drawer, disembunyikan agar menu fokus ke Dashboard/Bot/Admin.
+    if (navGroupUtama) navGroupUtama.hidden = !!user
+
+    // Landing page: swap "Mulai Sekarang" + "Masuk" jadi "Dashboard" + "Keluar" kalau udah login.
     if (getStartedBtn && accountBtn) {
       if (user) {
         getStartedBtn.href = '/dashboard'
@@ -134,7 +139,7 @@
         bindLogout(accountBtn)
       } else {
         getStartedBtn.href = '/login'
-        getStartedBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> Get Started'
+        getStartedBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> Mulai Sekarang'
         accountBtn.href = '/login'
         accountBtn.innerHTML = '<i class="fa-solid fa-user"></i> Masuk'
       }
