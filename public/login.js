@@ -1,4 +1,5 @@
 const el = (id) => document.getElementById(id)
+const REMEMBER_KEY = 'botzora_remember_email'
 
 function nextUrl() {
   const params = new URLSearchParams(location.search)
@@ -14,63 +15,80 @@ function hideError() {
   el('auth-error').hidden = true
 }
 
-// ---------------- Tab switching: Masuk / Daftar ----------------
-const tabs = document.querySelectorAll('.auth-tab')
 const formLogin = el('form-login')
 const formRegister = el('form-register')
 const title = el('auth-title')
 const subtitle = el('auth-subtitle')
 const switchHint = el('auth-switch-hint')
+const topSwitch = el('auth-top-switch')
 
 function setMode(mode) {
   hideError()
-  tabs.forEach((t) => t.classList.toggle('is-active', t.dataset.mode === mode))
   if (mode === 'register') {
     formLogin.hidden = true
     formRegister.hidden = false
     title.textContent = 'Buat akun baru'
     subtitle.textContent = 'Gratis, langsung bisa sambungkan bot Anda.'
     switchHint.innerHTML = 'Sudah punya akun? <a href="#" id="auth-switch-link">Masuk di sini</a>'
+    topSwitch.textContent = 'Masuk'
   } else {
     formLogin.hidden = false
     formRegister.hidden = true
-    title.textContent = 'Masuk ke akun Anda'
-    subtitle.textContent = 'Kelola bot WhatsApp Anda dari dashboard.'
+    title.textContent = 'Masuk ke Botzora'
+    subtitle.textContent = 'Kelola bot WhatsApp Anda dari satu dashboard.'
     switchHint.innerHTML = 'Belum punya akun? <a href="#" id="auth-switch-link">Daftar di sini</a>'
+    topSwitch.textContent = 'Daftar'
   }
   bindSwitchLink(mode)
 }
 
 function bindSwitchLink(currentMode) {
   const link = el('auth-switch-link')
-  if (!link) return
-  link.addEventListener('click', (e) => {
-    e.preventDefault()
-    setMode(currentMode === 'register' ? 'login' : 'register')
-  })
+  if (link) link.addEventListener('click', (e) => { e.preventDefault(); setMode(currentMode === 'register' ? 'login' : 'register') })
 }
 
-tabs.forEach((btn) => btn.addEventListener('click', () => setMode(btn.dataset.mode)))
+topSwitch.addEventListener('click', () => setMode(formLogin.hidden ? 'login' : 'register'))
 bindSwitchLink('login')
 
-// ---------------- Login (email/password) ----------------
+document.querySelectorAll('.auth-eye').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const input = el(btn.dataset.target)
+    const icon = btn.querySelector('i')
+    const show = input.type === 'password'
+    input.type = show ? 'text' : 'password'
+    icon.className = show ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'
+    btn.setAttribute('aria-label', show ? 'Sembunyikan password' : 'Tampilkan password')
+  })
+})
+
+try {
+  const savedEmail = localStorage.getItem(REMEMBER_KEY)
+  if (savedEmail) el('login-email').value = savedEmail
+} catch {}
+
+function persistRememberedEmail(email) {
+  try {
+    if (el('remember-email').checked) localStorage.setItem(REMEMBER_KEY, email)
+    else localStorage.removeItem(REMEMBER_KEY)
+  } catch {}
+}
+
 formLogin.addEventListener('submit', async (e) => {
   e.preventDefault()
   hideError()
   const btn = el('login-submit')
   btn.disabled = true
   btn.textContent = 'Memproses…'
+  const email = el('login-email').value
   try {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: el('login-email').value,
-        password: el('login-password').value
-      })
+      body: JSON.stringify({ email, password: el('login-password').value })
     })
     const data = await res.json()
     if (!res.ok) throw new Error(data.error || 'Gagal masuk.')
+    persistRememberedEmail(email)
     window.location.href = nextUrl()
   } catch (err) {
     showError(err.message)
@@ -80,7 +98,6 @@ formLogin.addEventListener('submit', async (e) => {
   }
 })
 
-// ---------------- Daftar (email/password) ----------------
 formRegister.addEventListener('submit', async (e) => {
   e.preventDefault()
   hideError()
@@ -108,7 +125,6 @@ formRegister.addEventListener('submit', async (e) => {
   }
 })
 
-// ---------------- Google Identity Services ----------------
 async function handleGoogleCredential(response) {
   hideError()
   try {
@@ -137,15 +153,12 @@ async function initGoogle() {
       el('google-note').hidden = false
       return
     }
-    google.accounts.id.initialize({
-      client_id: data.googleClientId,
-      callback: handleGoogleCredential
-    })
+    google.accounts.id.initialize({ client_id: data.googleClientId, callback: handleGoogleCredential })
     google.accounts.id.renderButton(el('google-signin-btn'), {
       theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'filled_black' : 'outline',
       size: 'large',
-      width: 340,
-      shape: 'pill'
+      width: 424,
+      shape: 'rectangular'
     })
   } catch (e) {
     el('google-note').hidden = false
