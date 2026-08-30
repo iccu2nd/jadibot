@@ -4,8 +4,11 @@ import path from 'path'
 export default {
   cmd: ['sf2'],
   category: 'owner',
-  run: async (m, { text, isOwner }) => {
+  run: async (m, { text, isOwner, sock }) => {
     if (!isOwner) return m.reply('Owner only.')
+    // .sf2 lebih parah dari .sf: base path-nya seluruh root project, bukan
+    // cuma folder plugins. Wajib diblokir juga buat sesi jadibot.
+    if (sock?.isJadibotSession) return m.reply('Fitur ini tidak tersedia untuk sesi jadibot.')
     const base = path.resolve('.')
 
     if (!text) return m.reply('Usage: .sf2 path/to/file.js code | reply code')

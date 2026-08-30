@@ -141,18 +141,55 @@ async function handleGoogleCredential(response) {
   }
 }
 
+// GSI diberi tag <script async defer>, jadi kapan tepatnya `google` siap di
+// window itu nggak pasti — kadang belum siap saat halaman load (koneksi
+// lambat), kadang udah (dari cache). Sebelumnya dicoba sekali pakai
+// setTimeout tetap 150ms: kalau GSI belum siap di momen itu tombolnya nggak
+// pernah dicoba render ulang, makanya kadang ilang dan baru muncul pas
+// refresh (giliran gsi ke-cache/lebih cepat). Sekarang di-poll sampai siap
+// (atau sampai batas waktu habis) supaya tombolnya konsisten muncul setiap
+// kali halaman dibuka, bukan tergantung kecepatan koneksi saat itu.
+function waitForGoogleScript(timeoutMs = 8000, intervalMs = 150) {
+  return new Promise((resolve) => {
+    const start = Date.now()
+    ;(function poll() {
+      if (typeof google !== 'undefined' && google.accounts?.id) return resolve(true)
+      if (Date.now() - start >= timeoutMs) return resolve(false)
+      setTimeout(poll, intervalMs)
+    })()
+  })
+}
+
 async function initGoogle() {
+  let data
   try {
     const res = await fetch('/api/auth/me')
-    const data = await res.json()
-    if (data.user) {
-      window.location.href = '/dashboard'
-      return
-    }
-    if (!data.googleClientId || typeof google === 'undefined') {
-      el('google-note').hidden = false
-      return
-    }
+    data = await res.json()
+  } catch (e) {
+    el('google-note').hidden = false
+    return
+  }
+
+  if (data.user) {
+    window.location.href = '/dashboard'
+    return
+  }
+  if (!data.googleClientId) {
+    el('google-note').hidden = false
+    return
+  }
+
+  const ready = await waitForGoogleScript()
+  if (!ready) {
+    // GSI beneran gagal load (mis. offline / diblokir) — tampilkan catatan
+    // tapi tetap coba render sekali lagi kalau ternyata siap belakangan.
+    el('google-note').hidden = false
+    const late = await waitForGoogleScript(15000, 500)
+    if (!late) return
+    el('google-note').hidden = true
+  }
+
+  try {
     google.accounts.id.initialize({ client_id: data.googleClientId, callback: handleGoogleCredential })
     google.accounts.id.renderButton(el('google-signin-btn'), {
       theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'filled_black' : 'outline',
@@ -164,4 +201,4 @@ async function initGoogle() {
     el('google-note').hidden = false
   }
 }
-window.addEventListener('load', () => setTimeout(initGoogle, 150))
+window.addEventListener('DOMContentLoaded', initGoogle)

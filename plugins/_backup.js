@@ -31,6 +31,12 @@ export default {
     category: 'owner',
     run: async (m, { sock, isOwner }) => {
         if (!isOwner) return m.reply("Fitur ini khusus untuk owner.")
+        // Owner di sini bisa berarti "owner sesi jadibot" (nomor yang dipakai
+        // buat connect lewat /bot) — bukan cuma admin/pemilik deployment ini.
+        // .backup nge-zip seluruh source project, jadi kalau dibolehkan di
+        // sesi jadibot, siapa pun yang connect nomor bisa ambil source code
+        // bot ini secara utuh. Diblokir khusus untuk sesi jadibot.
+        if (sock.isJadibotSession) return m.reply("Fitur ini tidak tersedia untuk sesi jadibot.")
 
         m.reply("Sedang membuat backup script, mohon tunggu...")
 

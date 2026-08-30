@@ -4,8 +4,13 @@ import path from 'path'
 export default {
   cmd: ['sf'],
   category: 'owner',
-  run: async (m, { text, isOwner }) => {
+  run: async (m, { text, isOwner, sock }) => {
     if (!isOwner) return m.reply('Owner only.')
+    // Sama alasannya kayak .backup: "owner" di sesi jadibot itu owner
+    // per-sesi (nomor yang connect lewat /bot), bukan admin deployment ini.
+    // .sf nulis file arbitrary ke folder plugins — kalau dibolehkan di
+    // jadibot, itu setara remote code execution buat siapa pun yang connect.
+    if (sock?.isJadibotSession) return m.reply('Fitur ini tidak tersedia untuk sesi jadibot.')
     const base = path.resolve('./plugins')
 
     if (!text) return m.reply('Usage: .sf name code | reply code')

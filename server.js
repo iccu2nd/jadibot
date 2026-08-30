@@ -45,7 +45,11 @@ app.get('/dashboard', auth.requireAuthPage, (req, res) => {
         .replace('<span id="dash-user-name">—</span>', `<span id="dash-user-name">${escapeHtml(req.user.name || 'kamu')}</span>`)
     res.send(html)
 })
-app.get('/bot', auth.requireAuthPage, (req, res) => res.sendFile(path.join(publicDir, 'bot.html')))
+// '/bot' sengaja publik (nggak lewat requireAuthPage): sambungkan & atur bot
+// sudah jalan cukup pakai token sesi per nomor (lihat sessionAuth di bawah),
+// jadi login akun bukan syarat buat mulai pakai bot. Login/daftar tetap ada
+// buat yang mau sesi kesimpen ke akun & dibuka dari perangkat lain.
+app.get('/bot', (req, res) => res.sendFile(path.join(publicDir, 'bot.html')))
 
 // Nama lama tetap dialihkan (301) kalau ada yang masih nyimpen link .html/lama
 app.get('/index.html', (req, res) => res.redirect(301, '/'))
@@ -113,6 +117,49 @@ app.get('/api/stats', (req, res) => {
         contactNumber: config.ownerNumber?.[0] || null,
         premiumPriceLabel: 'Hubungi admin'
     })
+})
+
+// --- Public: daftar fitur lengkap (buat modal "Semua Fitur" di hamburger) --
+// Dibaca langsung dari file plugin di disk (bukan dari plugin map di proses
+// bot) biar tetap jalan walau server.js dijalankan berdiri sendiri, sama
+// kayak /api/stats di atas. Command kategori 'owner' disembunyikan karena
+// itu bukan buat pengguna umum.
+let featuresCache = { at: 0, data: null }
+async function readFeatures() {
+    if (featuresCache.data && Date.now() - featuresCache.at < 60_000) return featuresCache.data
+
+    const grouped = {}
+    let total = 0
+    let files = []
+    try {
+        files = fs.readdirSync(pluginsDir).filter((f) => f.endsWith('.js'))
+    } catch (e) {}
+
+    for (const file of files) {
+        try {
+            const mod = await import(`file://${path.join(pluginsDir, file)}`)
+            const fn = mod.default
+            if (!fn || typeof fn !== 'object') continue
+            const cmds = Array.isArray(fn.cmd) ? fn.cmd : (fn.cmd ? [fn.cmd] : [])
+            if (!cmds.length) continue
+            const category = fn.owner ? 'owner' : ((Array.isArray(fn.tags) && fn.tags[0]) || fn.category || 'tools')
+            if (category === 'owner') continue
+            if (!grouped[category]) grouped[category] = []
+            grouped[category].push(cmds[0])
+            total += 1
+        } catch (e) {}
+    }
+
+    featuresCache = { at: Date.now(), data: { total, categories: grouped } }
+    return featuresCache.data
+}
+
+app.get('/api/features', async (req, res) => {
+    try {
+        res.json(await readFeatures())
+    } catch (e) {
+        res.status(500).json({ error: 'Gagal memuat daftar fitur.' })
+    }
 })
 
 // --- Public: mulai sesi baru ---------------------------------------------

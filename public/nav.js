@@ -151,3 +151,86 @@
 
   applyAuthState()
 })()
+
+// ---------------- Modal "Semua Fitur" (dari hamburger) ----------------
+;(function () {
+  const trigger = document.getElementById('nav-all-features')
+  if (!trigger) return
+
+  const CATEGORY_LABEL = {
+    info: 'Info', tools: 'Tools', group: 'Group Management', owner: 'Owner',
+    ai: 'AI', fun: 'Entertainment', downloader: 'Downloader', sticker: 'Sticker',
+    game: 'Game', rpg: 'RPG', economy: 'Economy', premium: 'Premium'
+  }
+  const labelFor = (c) => CATEGORY_LABEL[c] || (c.charAt(0).toUpperCase() + c.slice(1))
+
+  let modal, listEl, countEl, closeNav
+  let loaded = false
+
+  function buildModal() {
+    modal = document.createElement('div')
+    modal.className = 'features-modal'
+    modal.hidden = true
+    modal.innerHTML = `
+      <div class="features-modal-backdrop" id="features-modal-backdrop"></div>
+      <div class="features-modal-card" role="dialog" aria-modal="true" aria-label="Semua fitur bot">
+        <div class="features-modal-head">
+          <div><h3>Semua Fitur Bot</h3><p id="features-modal-count">Memuat daftar fitur…</p></div>
+          <button class="nav-close" type="button" id="features-modal-close" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="features-modal-body" id="features-modal-list"></div>
+      </div>`
+    document.body.appendChild(modal)
+    listEl = modal.querySelector('#features-modal-list')
+    countEl = modal.querySelector('#features-modal-count')
+    modal.querySelector('#features-modal-backdrop').addEventListener('click', closeModal)
+    modal.querySelector('#features-modal-close').addEventListener('click', closeModal)
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) closeModal() })
+  }
+
+  function openModal() {
+    if (!modal) buildModal()
+    modal.hidden = false
+    document.body.style.overflow = 'hidden'
+    if (!loaded) loadFeatures()
+  }
+
+  function closeModal() {
+    if (!modal) return
+    modal.hidden = true
+    document.body.style.overflow = ''
+  }
+
+  async function loadFeatures() {
+    try {
+      const res = await fetch('/api/features')
+      const data = await res.json()
+      loaded = true
+      const categories = data.categories || {}
+      const cats = Object.keys(categories).sort()
+      if (!cats.length) {
+        countEl.textContent = 'Daftar fitur belum tersedia.'
+        return
+      }
+      countEl.textContent = `${data.total || 0} command aktif di ${cats.length} kategori.`
+      listEl.innerHTML = cats.map((cat) => `
+        <div class="features-cat">
+          <div class="features-cat-title">${labelFor(cat)}<span>${categories[cat].length}</span></div>
+          <div class="features-cmds">${categories[cat].map((c) => `<code>.${c}</code>`).join('')}</div>
+        </div>`).join('')
+    } catch (e) {
+      countEl.textContent = 'Gagal memuat daftar fitur. Coba lagi nanti.'
+    }
+  }
+
+  trigger.addEventListener('click', () => {
+    // Drawer hamburger mungkin masih terbuka — tutup dulu biar nggak dobel di atas modal.
+    const drawer = document.getElementById('topnav')
+    const backdrop = document.getElementById('nav-backdrop')
+    const btn = document.getElementById('hamburger-btn')
+    if (drawer) drawer.classList.remove('is-open')
+    if (backdrop) backdrop.classList.remove('is-open')
+    if (btn) btn.setAttribute('aria-expanded', 'false')
+    openModal()
+  })
+})()

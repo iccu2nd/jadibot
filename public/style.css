@@ -120,3 +120,20 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{
 @media(max-width:600px){
   body{font-size:13px}.topbar{padding:0 14px}.wrap{width:calc(100% - 28px);padding:30px 0 52px}.hero{padding:15px 0 40px}.hero h1{font-size:39px}.hero-sub{font-size:14px}.stage-body,.feature-showcase{grid-template-columns:1fr}.stage-panel{min-height:0;border-right:0}.stage-panel+.stage-panel{border-top:1px solid var(--line)}.stats-strip{margin-bottom:56px}.stat-value{font-size:21px}.stat-label{font-size:10px}.section-title{font-size:29px}.feature-layout{grid-template-columns:1fr}.feature-nav{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line);padding:0}.feature-nav button{white-space:nowrap;border-left:0;border-bottom:2px solid transparent}.feature-nav button.is-active{border-left:0;border-bottom-color:var(--brand)}.feature-showcase>div+div{border-left:0;border-top:1px solid var(--line)}.howto-grid,.plans{grid-template-columns:1fr}.howto-step+.howto-step{border-left:0;border-top:1px solid var(--line);padding-left:0}.plan+.plan{border-left:0;border-top:1px solid var(--line)}.site-footer{grid-template-columns:1fr;gap:10px;padding:22px 14px}.connect-form{grid-template-columns:1fr}.pairing-box{align-items:stretch;flex-direction:column}.pairing-code{font-size:21px;word-break:break-all}.settings-tabs,.mode-tabs{overflow:auto}.actions{flex-direction:column}.actions button{width:100%}.admin-shell{width:calc(100% - 28px);padding-top:18px}.admin-topbar{align-items:stretch;flex-direction:column}.admin-key-box{width:100%}.admin-stat-grid{grid-template-columns:repeat(2,1fr)}.admin-stat-card:nth-child(3){border-left:0;padding-left:0}.bot-table{display:block;overflow-x:auto;white-space:nowrap}.auth-topbar{padding:18px 0}.auth-head h1{font-size:25px}.mine-list li{grid-template-columns:1fr}.mine-list li>span:last-child{justify-content:flex-start}
 }
+
+/* Hero note (link kecil di bawah tombol CTA hero) */
+.hero-note{margin:14px 0 0;font-size:12.5px;color:var(--muted)}.hero-note a{color:var(--brand);font-weight:700}
+
+/* Modal "Semua Fitur" (dari hamburger) */
+.features-modal{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center}
+.features-modal-backdrop{position:absolute;inset:0;background:rgba(10,15,12,.5)}
+.features-modal-card{position:relative;width:min(640px,100%);max-height:min(78vh,680px);background:var(--surface);border:1px solid var(--line);border-bottom:0;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -8px 30px rgba(0,0,0,.18)}
+.features-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 18px 14px;border-bottom:1px solid var(--line)}
+.features-modal-head h3{margin:0 0 4px;font:600 17px var(--font-display)}
+.features-modal-head p{margin:0;font-size:12.5px;color:var(--muted)}
+.features-modal-body{overflow:auto;padding:14px 18px 22px;display:grid;gap:16px}
+.features-cat-title{display:flex;align-items:center;justify-content:space-between;font:600 12px var(--font-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--brand);margin-bottom:8px}
+.features-cat-title span{color:var(--muted);font-weight:600;background:var(--surface-2);border-radius:20px;padding:1px 8px;font-family:var(--font-body);text-transform:none;letter-spacing:0}
+.features-cmds{display:flex;flex-wrap:wrap;gap:6px}
+.features-cmds code{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:600 12px var(--font-mono);color:var(--ink)}
+@media(min-width:640px){.features-modal{align-items:center}.features-modal-card{border-radius:16px;border-bottom:1px solid var(--line)}}
