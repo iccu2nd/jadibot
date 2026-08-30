@@ -164,26 +164,14 @@ async function handleSingleMessage(sock, config, raw) {
     const user = global.db.data.users[m.sender]
     if (!m.isOwner && user?.banned) return
 
-    if (!m.isOwner && cmd !== 'verify' && !user?.registered) {
-        // Ini jalan di SETIAP command dari user yang belum verifikasi — kalau
-        // profilePictureUrl() lambat/nge-hang (server WA lambat, privasi PP
-        // dibatasi, dll), dulu gak ada batas waktu sama sekali, jadi bisa
-        // nunda balasan pertama bot ke user baru lumayan lama tanpa kelihatan
-        // kenapa. Sekarang dikasih timeout singkat + fallback: kalau PP gak
-        // kelar dalam waktu itu, tombol verifikasi tetap langsung terkirim
-        // (tanpa gambar PP), bukan nunggu.
-        const pp = await Promise.race([
-            sock.profilePictureUrl(m.sender, 'image').catch(() => null),
-            new Promise(resolve => setTimeout(() => resolve(null), PP_FETCH_TIMEOUT_MS))
-        ])
-        return sock.sendInteractiveButton(m.from, {
-            body: config.text.notRegistered,
-            footer: 'Registration Message',
-            ...(pp ? { image: pp } : {}),
-            buttons: [
-                { type: 'reply', label: 'Verifikasi Sekarang ✅', id: `${prefix || '.'}verify` }
-            ]
-        }, { quoted: m }).catch(() => m.reply(config.text.notRegistered))
+    // Dulu di sini semua command dari user baru diblokir sampai mereka pencet
+    // tombol ".verify" dulu. Sekarang user baru otomatis dianggap terdaftar
+    // (nama WhatsApp mereka dipakai sebagai regName) begitu command pertama
+    // masuk, tanpa nunggu verifikasi apa pun. Command ".verify" dan ".daftar"
+    // masih ada buat yang mau ganti nama pendaftaran secara manual.
+    if (!user.registered) {
+        user.registered = true
+        user.regName = m.pushName || 'User'
     }
 
     try {
